@@ -307,22 +307,6 @@ nav ul li a{ text-decoration:none; color:black;  padding:5px 10px; border-radius
       border-radius: 50%;
     }
 
-    .counts {
-      display:flex;
-      justify-content:center;
-      gap: 12px;
-      margin-top: 0.6rem;
-      color: #4a766e;
-      font-weight: 700;
-    }
-
-    .counts .item {
-      background: rgba(74,118,110,0.07);
-      padding: 6px 10px;
-      border-radius: 12px;
-      font-size: 0.95rem;
-    }
-
     /* FORM */
     form {
       display: block;
@@ -531,12 +515,6 @@ nav ul li a{ text-decoration:none; color:black;  padding:5px 10px; border-radius
     <?php echo htmlspecialchars($nome); ?> ♡
   </div>
 
-  <div class="counts" aria-hidden="true">
-    <div class="item"><?php echo $seguidores_count; ?> Seguidores</div>
-    <div class="item"><?php echo $favoritos_count; ?> Favs</div>
-    <div class="item"><?php echo $fans_count; ?> Fans</div>
-  </div>
-
   <div class="about">
     <h4>Sobre mim</h4>
     <?php if (!empty($bio_foto_db) && file_exists($bio_foto_db)): ?>
@@ -544,6 +522,7 @@ nav ul li a{ text-decoration:none; color:black;  padding:5px 10px; border-radius
 <?php else: ?>
   <img class="bio-photo-preview" id="bio-preview-sidebar" src="imagens/bio/default.jpg" alt="">
 <?php endif; ?>
+
 
     <!-- aqui vai a seleção de arquivo, agora EMBUTIDA na lateral embaixo da foto -->
     <label for="bio_foto_file" class="bio-file-label">Alterar foto</label>

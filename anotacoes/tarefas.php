@@ -1,257 +1,280 @@
+<?php
+// ======= CONEXÃO COM O BANCO =======
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "bd_usuarios";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+  die("Erro na conexão com o banco: " . $conn->connect_error);
+}
+
+// ======= CRIA A TABELA CASO NÃO EXISTA =======
+$conn->query("
+CREATE TABLE IF NOT EXISTS tarefas (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  descricao VARCHAR(255) NOT NULL,
+  concluida TINYINT(1) DEFAULT 0
+)
+");
+
+// ======= ADICIONAR NOVA TAREFA =======
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nova_tarefa"])) {
+  $nova_tarefa = trim($_POST["nova_tarefa"]);
+  if ($nova_tarefa !== "") {
+    $stmt = $conn->prepare("INSERT INTO tarefas (descricao) VALUES (?)");
+    $stmt->bind_param("s", $nova_tarefa);
+    $stmt->execute();
+    $stmt->close();
+  }
+  header("Location: tarefas.php");
+  exit;
+}
+
+// ======= MARCAR/DESMARCAR CONCLUÍDA =======
+if (isset($_GET["toggle"])) {
+  $id = intval($_GET["toggle"]);
+  $conn->query("UPDATE tarefas SET concluida = 1 - concluida WHERE id = $id");
+  header("Location: tarefas.php");
+  exit;
+}
+
+// ======= EXCLUIR TAREFA =======
+if (isset($_GET["delete"])) {
+  $id = intval($_GET["delete"]);
+  $conn->query("DELETE FROM tarefas WHERE id = $id");
+  header("Location: tarefas.php");
+  exit;
+}
+
+// ======= CARREGAR TAREFAS =======
+$result = $conn->query("SELECT * FROM tarefas ORDER BY id DESC");
+$tarefas = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>Tarefas</title>
-  <style>
-    /* Barra toda */
+<meta charset="UTF-8">
+<title>Minhas Tarefas</title>
+<style>
+/* Barra toda */
 ::-webkit-scrollbar {
-  width: 12px; /* largura da barra vertical */
-  height: 12px; /* altura da barra horizontal */
+  width: 12px;
+  height: 12px;
 }
-
-/* Fundo da barra */
 ::-webkit-scrollbar-track {
-  background: #f0f0f0; /* cor do fundo da barra */
+  background: #f0f0f0;
   border-radius: 10px;
 }
-
-/* Parte que se move (thumb) */
 ::-webkit-scrollbar-thumb {
-  background: #3f7c72; /* cor do "polegar" */
+  background: #3f7c72;
   border-radius: 10px;
-  border: 3px solid #f0f0f0; /* dá efeito de espaçamento */
+  border: 3px solid #f0f0f0;
 }
-
-/* Thumb ao passar o mouse */
 ::-webkit-scrollbar-thumb:hover {
   background: #2a5c55;
 }
-            @font-face {
-      font-family: 'SimpleHandmade';
-      src: url(/fonts/SimpleHandmade.ttf);
-    }
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      background-color: #3f7c72ff;
-      font-family:'Roboto',sans-serif;
-      background-color: #3f7c72ff;
-      text-align: center;
-      padding: 0;
-    }
 
-    /* Header */
-    header {
+@font-face {
+  font-family: 'SimpleHandmade';
+  src: url(/fonts/SimpleHandmade.ttf);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #3f7c72ff;
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+  color: #3f7c72ff;
+  padding-top: 100px;
+}
+
+/* Header */
+header {
   position: fixed; top:0; left:0; width:100%; height:70px;
   background:#ffffffcc; display:flex; justify-content:space-between; align-items:center;
   padding:0 2rem; box-shadow:0 2px 5px rgba(0,0,0,0.1); z-index:1000;
 }
-    header .logo img{height:450px;width:auto;display:block; margin-left: -85px;}
+header .logo img {
+  height:450px; width:auto; display:block; margin-left:-85px;
+}
+nav ul {
+  list-style:none; display:flex; align-items:center; gap:20px; margin:0;
+}
+nav ul li a {
+  text-decoration:none; color:black; padding:5px 10px; border-radius:8px; transition:.3s;
+}
 
-    nav ul{list-style:none; display:flex; align-items:center; gap:20px; margin:0;}
-nav ul li a{ text-decoration:none; color:black;  padding:5px 10px; border-radius:8px; transition:.3s;}
+h1 {
+  font-size: 50px;
+  font-family: 'SimpleHandmade';
+  color: #ffffff;
+  margin-bottom: 20px;
+}
 
-    h1 {
-      margin-top: 95px;
-      font-family: 'SimpleHandmade';
-      font-size: 50px;
-      color: #ffffff;
-    }
+/* Container principal */
+.tarefas-container {
+  background-color: #bdebe3ff;
+  border-radius: 10px;
+  border: 2px solid #1e3834ff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  width: 90%;
+  max-width: 900px;
+  margin: 0 auto 60px;
+  padding: 30px 20px;
+}
 
-    .lista-tarefas {
-      background-color: #bdebe3ff;
-      width: 90%;
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 30px;
-      border: 1px solid #1e3834ff;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      text-align: left;
-    }
+/* Campo de nova tarefa */
+form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
 
-    .tarefa {
-      display: flex;
-      align-items: center;
-      margin-bottom: 15px;
-    }
+input[type="text"] {
+  width: 70%;
+  padding: 10px;
+  font-size: 18px;
+  border: 2px solid #1e3834ff;
+  border-radius: 8px;
+  background-color: #f1f6fb;
+  color: #000;
+}
 
-    .tarefa input[type="checkbox"] {
-      margin-right: 15px;
-      transform: scale(1.4);
-      accent-color: #2a5c55;
-    }
+input[type="submit"] {
+  background-color: #2a5c55;
+  color: #ffffff;
+  padding: 12px 25px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+input[type="submit"]:hover {
+  background-color: #1e3834ff;
+}
 
-    .tarefa input[type="text"] {
-      flex: 1;
-      padding: 8px 12px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: 1px solid #2a5c55;
-      background-color: #f1f4f9;
-    }
+/* Lista de tarefas */
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto;
+  max-width: 700px;
+}
 
-    .btn {
-      cursor: pointer;
-      padding: 10px 18px;
-      border-radius: 10px;
-      border: none;
-      margin: 10px 5px;
-      font-weight: bold;
-      color: white;
-      background-color: #2a5c55;
-      transition: background 0.3s;
-    }
+.tarefa {
+  background-color: #ffffff;
+  border: 1px solid #1e3834ff;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  transition: 0.3s;
+  font-family: 'SimpleHandmade';
+  font-size: 25px;
+  color: #3f7c72ff;
+}
 
-    .btn:hover {
-      background-color: #1e3834ff;
-    }
+.tarefa input[type="checkbox"] {
+  transform: scale(1.4);
+  margin-right: 15px;
+  cursor: pointer;
+  accent-color: #2a5c55;
+}
 
-    .btn-excluir {
-      background-color: #bd4a69;
-      margin-left: 10px;
-      font-size: 14px;
-      padding: 6px 12px;
-    }
+.tarefa span {
+  flex-grow: 1;
+  text-align: left;
+  cursor: pointer;
+}
 
-    .btn-excluir:hover {
-      background-color: #e26b88;
-    }
+.tarefa.concluida span {
+  text-decoration: line-through;
+  color: #777;
+}
 
-    .btn-adicionar-tarefa {
-      background-color: #2a5c55;
-      margin-left: 10px;
-      font-size: 14px;
-      padding: 6px 12px;
-    }
+.tarefa button {
+  background-color: #2a5c55;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 10px;
+  transition: background-color 0.3s ease;
+}
 
-    .btn-adicionar-tarefa:hover {
-      background-color: #2a5c55;
-    }
+.tarefa button:hover {
+  background-color: #1e3834ff;
+}
 
-    .btn-salvar {
-      display: block;
-      margin: 40px auto 0;
-      padding: 12px 30px;
-      font-size: 18px;
-      background-color: #2a5c55;
-      color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-      transition: background 0.3s;
-    }
+.btn-salvar {
+  background-color: #2a5c55;
+  color: #ffffff;
+  padding: 12px 30px;
+  border-radius: 10px;
+  border: none;
+  margin-top: 30px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 
-    .btn-salvar:hover {
-      background-color: #1e3834ff;
-    }
-  </style>
+.btn-salvar:hover {
+  background-color: #1e3834ff;
+}
+</style>
 </head>
 <body>
-  <header>
-    <div class="logo"><img src="/imagens/logoatual.png" alt="Logo"></div>
-    <nav>
-      <ul>
-          <li><a href="/anotacoes/index.html">Voltar</a></li>
-      </ul>
-    </nav>
-  </header>
-  <h1>Tarefas do Dia</h1>
 
-  <div class="lista-tarefas" id="lista-tarefas">
-    <!-- Tarefas iniciais -->
-    <div class="tarefa">
-      <input type="checkbox" />
-      <td><textarea placeholder="O que vou fazer?"></textarea></td>
-      <button class="btn-excluir">❌</button>
-      <button class="btn-adicionar-tarefa">➕</button>
-    </div>
-    <div class="tarefa">
-      <input type="checkbox" />
-      <td><textarea placeholder="O que vou fazer?"></textarea></td>
-      <button class="btn-excluir">❌</button>
-      <button class="btn-adicionar-tarefa">➕</button>
-    </div>
-    <div class="tarefa">
-      <input type="checkbox" />
-      <input type="text" placeholder="Ex: Organizar materiais" />
-      <button class="btn-excluir">❌</button>
-      <button class="btn-adicionar-tarefa">➕</button>
-    </div>
-  </div>
+<header>
+  <div class="logo"><img src="/imagens/logoatual.png" alt="Logo"></div>
+  <nav>
+    <ul>
+      <li><a href="/anotacoes/index.php">Voltar</a></li>
+    </ul>
+  </nav>
+</header>
 
-  <button class="btn-salvar" id="btn-salvar">💾 Salvar</button>
+<h1>Meu Checklist</h1>
 
-  <script>
-    const lista = document.getElementById('lista-tarefas');
-    const btnSalvar = document.getElementById('btn-salvar');
+<div class="tarefas-container">
+  <form method="POST" action="">
+    <input type="text" name="nova_tarefa" placeholder="Digite uma nova tarefa..." required>
+    <input type="submit" value="Adicionar">
+  </form>
 
-    function criarTarefa(text = '', checked = false) {
-      const tarefaDiv = document.createElement('div');
-      tarefaDiv.classList.add('tarefa');
+  <ul>
+    <?php if (empty($tarefas)): ?>
+      <p style="font-family:'SimpleHandmade';font-size:25px;color:#2a5c55;">Nenhuma tarefa ainda 💚</p>
+    <?php else: ?>
+      <?php foreach ($tarefas as $t): ?>
+        <li class="tarefa <?= $t['concluida'] ? 'concluida' : '' ?>">
+          <input type="checkbox" onchange="window.location='?toggle=<?= $t['id'] ?>'" <?= $t['concluida'] ? 'checked' : '' ?>>
+          <span><?= htmlspecialchars($t['descricao']) ?></span>
+          <button onclick="window.location='?delete=<?= $t['id'] ?>'">Excluir</button>
+        </li>
+      <?php endforeach; ?>
+    <?php endif; ?>
+  </ul>
+</div>
 
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.checked = checked;
-
-      const inputTexto = document.createElement('input');
-      inputTexto.type = 'text';
-      inputTexto.placeholder = 'Nova tarefa...';
-      inputTexto.value = text;
-
-      const btnExcluir = document.createElement('button');
-      btnExcluir.textContent = '❌';
-      btnExcluir.classList.add('btn-excluir');
-      btnExcluir.onclick = () => tarefaDiv.remove();
-
-      const btnAdicionarTarefa = document.createElement('button');
-      btnAdicionarTarefa.textContent = '➕';
-      btnAdicionarTarefa.classList.add('btn-adicionar-tarefa');
-      btnAdicionarTarefa.onclick = () => {
-        const novaTarefa = criarTarefa();
-        tarefaDiv.insertAdjacentElement('afterend', novaTarefa);
-        novaTarefa.querySelector('input[type="text"]').focus();
-      };
-
-      tarefaDiv.appendChild(checkbox);
-      tarefaDiv.appendChild(inputTexto);
-      tarefaDiv.appendChild(btnExcluir);
-      tarefaDiv.appendChild(btnAdicionarTarefa);
-
-      return tarefaDiv;
-    }
-
-    // Carregar tarefas salvas ao iniciar a página
-    window.addEventListener('load', () => {
-      const tarefasSalvas = JSON.parse(localStorage.getItem('minhasTarefas'));
-      lista.innerHTML = '';
-
-      if (tarefasSalvas && tarefasSalvas.length) {
-        tarefasSalvas.forEach(tarefa => {
-          lista.appendChild(criarTarefa(tarefa.texto, tarefa.marcada));
-        });
-      } else {
-        lista.appendChild(criarTarefa('Estudar matemática'));
-        lista.appendChild(criarTarefa('Fazer trabalho de história'));
-        lista.appendChild(criarTarefa('Organizar materiais'));
-      }
-    });
-
-    // Salvar tarefas no localStorage
-    btnSalvar.addEventListener('click', () => {
-      const tarefas = [];
-      document.querySelectorAll('.lista-tarefas .tarefa').forEach(tarefaDiv => {
-        const texto = tarefaDiv.querySelector('input[type="text"]').value;
-        const marcada = tarefaDiv.querySelector('input[type="checkbox"]').checked;
-        tarefas.push({ texto, marcada });
-      });
-      localStorage.setItem('minhasTarefas', JSON.stringify(tarefas));
-      alert('Tarefas salvas com sucesso! 💾');
-    });
-  </script>
+<button class="btn-salvar" onclick="alert('Tudo já é salvo automaticamente 💾')">Salvar</button>
 
 </body>
 </html>

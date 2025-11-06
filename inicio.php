@@ -516,7 +516,7 @@ nav .search-bar button:hover {
   const paginas = {
     "anotações": "/anotacoes/index.php",
     "anotacoes": "/anotacoes/index.php",
-    "flashcards": "/flashcard/index.html",
+    "flashcards": "/flashcard.html/index.html",
     "plano": "/Plano_estudos/plano_estudos.php",
     "plano de estudos": "/Plano_estudos/plano_estudos.php",
     "arquivos": "/arquivos/db.php",

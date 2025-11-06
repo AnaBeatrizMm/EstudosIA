@@ -202,7 +202,7 @@ nav ul li a{ text-decoration:none; color:black;  padding:5px 10px; border-radius
   <div class="logo"><img src="/imagens/logoatual.png" alt="Logo"></div>
   <nav>
     <ul>
-        <li><a href="inicio.php">Voltar à página de Início</a></li>
+        <li><a href="/inicio.php">Voltar ao Início</a></li>
     </ul>
   </nav>
 </header>
@@ -214,7 +214,7 @@ nav ul li a{ text-decoration:none; color:black;  padding:5px 10px; border-radius
       <img src="/anotacoes/imagens/309561a566d949a44d7277cd8ffab713.jpg" alt="Caderno Agenda" />
       <span>Agenda</span>
     </a>
-    <a class="caderno" href="financas.php">
+    <a class="caderno" href="financias.php">
       <img src="/anotacoes/imagens/882fc562350cf5717e4999b7303e7646.jpg" alt="Caderno Finanças" />
       <span>Finanças</span>
     </a>
