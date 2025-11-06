@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 03/11/2025 às 14:41
+-- Tempo de geração: 06/11/2025 às 15:34
 -- Versão do servidor: 10.4.28-MariaDB
 -- Versão do PHP: 8.2.4
 
@@ -71,9 +71,15 @@ INSERT INTO `amizades` (`id`, `id_usuario1`, `id_usuario2`, `data_criacao`) VALU
 
 CREATE TABLE `anotacoes` (
   `id` int(11) NOT NULL,
-  `conteudo` longtext NOT NULL,
-  `data_criacao` timestamp NOT NULL DEFAULT current_timestamp()
+  `conteudo` longtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `anotacoes`
+--
+
+INSERT INTO `anotacoes` (`id`, `conteudo`) VALUES
+(4, 'dw<b>dmwkje</b>wkjew<font color=\"#583c3c\"><font size=\"5\">jeknxmnzmxnz,aksjlw</font>qi</font>euwerouw3pr');
 
 -- --------------------------------------------------------
 
@@ -184,10 +190,15 @@ CREATE TABLE `financas` (
   `id` int(11) NOT NULL,
   `data` date DEFAULT NULL,
   `descricao` varchar(255) DEFAULT NULL,
-  `valor` decimal(10,2) DEFAULT NULL,
-  `tipo` varchar(20) DEFAULT NULL,
-  `notas` text DEFAULT NULL
+  `valor` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `financas`
+--
+
+INSERT INTO `financas` (`id`, `data`, `descricao`, `valor`) VALUES
+(2, '2025-11-13', 'GFGFGFGFGFGFGFGFGFGFGFGF', 0.00);
 
 -- --------------------------------------------------------
 
@@ -346,6 +357,27 @@ CREATE TABLE `sugestoes_amizade` (
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `tarefas`
+--
+
+CREATE TABLE `tarefas` (
+  `id` int(11) NOT NULL,
+  `descricao` text NOT NULL,
+  `concluida` tinyint(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `tarefas`
+--
+
+INSERT INTO `tarefas` (`id`, `descricao`, `concluida`) VALUES
+(3, 'sdsdsd', 1),
+(4, 'uyyyyyyyyyyyyyyyyy', 1),
+(5, 'yyyyyyyyyyyyyyyy', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `usuarios`
 --
 
@@ -381,7 +413,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `biografia`, `foto`, `arvore_escolhida`, `ultimo_login`, `token`, `expira_token`, `codigo_verificacao`, `verificado`, `username`, `apelido`, `data_nascimento`, `escola`, `foto_pessoal`, `preferencias`, `tags`, `favoritos`, `data_criacao`, `bio_foto`, `banner`, `aniversario`) VALUES
-(4, 'Bia Soares', 'beatriz@gmail.com', '$2y$10$27rg7J1YQ9hSdb59AhTUle94ITQWOuvS6ILvpl7d0MODLB/ExkXbu', 'Study vlogs ', 'imagens/usuarios/68da98eb13394.png', NULL, '2025-08-18 09:19:03', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'meu namorado lindo, peixes, capivara,sobrenatural', '2025-09-24 11:33:45', 'imagens/bio/68da98eb13749.jfif', NULL, '2008-03-17'),
+(4, 'Bia Soares', 'beatriz@gmail.com', '$2y$10$27rg7J1YQ9hSdb59AhTUle94ITQWOuvS6ILvpl7d0MODLB/ExkXbu', 'Study vlogs ', 'imagens/usuarios690caed3a1d22.png', NULL, '2025-08-18 09:19:03', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'meu namorado lindo, peixes, capivara,sobrenatural', '2025-09-24 11:33:45', 'imagens/bio/690caed3a7b65.jpg', 'imagens/usuarios/690caed3a98aa.jpg', '2008-03-17'),
 (13, 'Marques', 'ana@gmail.com', '$2y$10$qK9NpLu6OL0OxxbpLGug9e28WLqGG5QFGpgvpxJBXoy4Gfoa51FJS', '', 'imagens/usuarios/68d8225203d96.jpg', NULL, '2025-08-18 09:19:03', NULL, NULL, NULL, 0, '', NULL, NULL, NULL, NULL, NULL, 'Culinária,Programação', '', '2025-09-24 11:33:45', NULL, NULL, NULL),
 (14, 'wenderson', 'wenderson.souza@gmail.com', '$2y$10$JTjk3KlPbsViCn9Yd9gjCOoDmmLkOp/TEA3pK2q4XkcTusKZxEzN.', '', 'imagens/usuarios/68d2ab46456c1.jpg', NULL, '2025-08-18 09:19:03', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-24 11:33:45', NULL, NULL, NULL),
 (89, 'Usuário Teste 1', 'teste1@email.com', '123456', NULL, NULL, NULL, '2025-09-27 21:37:23', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-27 21:37:23', NULL, NULL, NULL),
@@ -533,6 +565,12 @@ ALTER TABLE `sugestoes_amizade`
   ADD KEY `fk_sugerido` (`id_sugerido`);
 
 --
+-- Índices de tabela `tarefas`
+--
+ALTER TABLE `tarefas`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Índices de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
@@ -567,7 +605,7 @@ ALTER TABLE `amizades`
 -- AUTO_INCREMENT de tabela `anotacoes`
 --
 ALTER TABLE `anotacoes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `arquivos`
@@ -603,7 +641,7 @@ ALTER TABLE `eventos`
 -- AUTO_INCREMENT de tabela `financas`
 --
 ALTER TABLE `financas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de tabela `mensagens`
@@ -634,6 +672,12 @@ ALTER TABLE `posts`
 --
 ALTER TABLE `registro_estudo`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de tabela `tarefas`
+--
+ALTER TABLE `tarefas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `verificacoes`
