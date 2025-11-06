@@ -28,16 +28,16 @@ exit;
             exit;
         } else {
             echo "<script>
-                localStorage.setItem('mensagemLogin', 'Senha incorreta!');
-                window.location.href = 'index.php';   // ✅ corrigido
-            </script>";
+            localStorage.setItem('mensagemErro', 'Senha incorreta! Tente novamente.');
+            window.location.href = 'login.php';
+        </script>";
             exit;
         }
     } else {
         echo "<script>
-            localStorage.setItem('mensagemLogin', 'E-mail não cadastrado!');
-            window.location.href = 'index.php';   // ✅ corrigido
-        </script>";
+        localStorage.setItem('mensagemErro', 'E-mail não cadastrado!');
+        window.location.href = 'login.php';
+    </script>";
         exit;
     }
 }

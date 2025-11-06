@@ -124,6 +124,26 @@
   opacity: 1;
   transform: translate(-50%, 0);
 }
+.mensagem-erro {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -20px);
+  background: #e74c3c; /* vermelho */
+  color: white;
+  padding: 18px 28px;
+  border-radius: 10px;
+  font-size: 18px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  opacity: 0;
+  transition: all 0.5s ease;
+  z-index: 9999;
+}
+
+.mensagem-erro.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
   </style>
 </head>
 <body>
@@ -149,9 +169,15 @@
       <input type="password" id="senha" name="senha" placeholder="Senha" required />
     </div>
     <button class="btn" type="submit">Entrar</button>
+    <div style="text-align:center; margin-top:10px;">
+  <a href="google_login.php" class="btn" style="background:#db4437;">
+    <img src="https://developers.google.com/identity/images/g-logo.png" style="height:18px; vertical-align:middle; margin-right:8px;">
+    Entrar com Google
+  </a>
+</div>
 </form>
 
-        <div class="aux">Esqueceu a senha? <a href="#">Recuperar</a></div>
+        <div class="aux">Esqueceu a senha? <a href="/recuperar.php">Recuperar</a></div>
         <div class="aux">Não tem conta? <a id="toRegister">Cadastre-se</a></div>
       </section>
 
@@ -280,9 +306,19 @@ window.addEventListener('load', () => {
 
     localStorage.removeItem('mensagemSucesso');
   }
+ // mensagem de erro
+ const erro = localStorage.getItem('mensagemErro');
+  if (erro) {
+    const msgDiv = document.getElementById('mensagemErro');
+    msgDiv.textContent = erro;
+    msgDiv.classList.add('show');
+    setTimeout(() => msgDiv.classList.remove('show'), 4000);
+    localStorage.removeItem('mensagemErro');
+  }
 });
 })();
 </script>
 <div id="mensagemSucesso" class="mensagem-sucesso"></div>
+<div id="mensagemErro" class="mensagem-erro"></div>
 </body>
 </html>
