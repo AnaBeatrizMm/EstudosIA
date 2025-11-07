@@ -1,4 +1,13 @@
 <?php
+session_start();
+
+// ===================== VERIFICAR LOGIN =====================
+if (!isset($_SESSION['usuario_id'])) {
+  header("Location: /login.php");
+  exit;
+}
+$usuario_id = $_SESSION['usuario_id'];
+
 // ===================== CONFIGURAÇÃO DO BANCO =====================
 $servername = "localhost";
 $username = "root";
@@ -19,11 +28,11 @@ if ($conn->connect_error) {
 // ===================== EXCLUIR REGISTRO =====================
 if (isset($_GET['excluir'])) {
   $idExcluir = intval($_GET['excluir']);
-  $stmt = $conn->prepare("DELETE FROM financas WHERE id = ?");
-  $stmt->bind_param("i", $idExcluir);
+  $stmt = $conn->prepare("DELETE FROM financas WHERE id = ? AND usuario_id = ?");
+  $stmt->bind_param("ii", $idExcluir, $usuario_id);
   $stmt->execute();
   $stmt->close();
-  echo "<script>alert('🗑️ Registro excluído com sucesso!'); window.location='financias.php';</script>";
+  echo "<script>alert('🗑️ Registro excluído com sucesso!'); window.location='financas.php';</script>";
   exit;
 }
 
@@ -33,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['data'])) {
   $descricoes = $_POST['descricao'];
   $valores = $_POST['valor'];
 
-  $stmt = $conn->prepare("INSERT INTO financas (`data`, descricao, valor) VALUES (?, ?, ?)");
+  $stmt = $conn->prepare("INSERT INTO financas (`data`, descricao, valor, usuario_id) VALUES (?, ?, ?, ?)");
   if (!$stmt) {
     $saveError = "Erro no prepare: " . $conn->error;
   } else {
@@ -45,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['data'])) {
       if (trim($d) === "" && trim($desc) === "" && trim($val) === "") continue;
 
       $valFloat = is_numeric($val) ? (float)$val : 0.0;
-      $stmt->bind_param("ssd", $d, $desc, $valFloat);
+      $stmt->bind_param("ssdi", $d, $desc, $valFloat, $usuario_id);
       if (!$stmt->execute()) {
         $saveError = "Erro ao inserir: " . $stmt->error;
         break;
@@ -66,8 +75,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['data'])) {
 // ===================== CARREGAR DADOS =====================
 $financas = [];
 $listError = "";
-$sql = "SELECT id, `data`, descricao, valor FROM financas ORDER BY `data` DESC, id DESC";
+$sql = "SELECT id, `data`, descricao, valor 
+        FROM financas 
+        WHERE usuario_id = $usuario_id 
+        ORDER BY `data` DESC, id DESC";
 $result = $conn->query($sql);
+
 if ($result === false) {
   $listError = "Erro na consulta: " . $conn->error;
 } else {
@@ -77,6 +90,7 @@ if ($result === false) {
 }
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>

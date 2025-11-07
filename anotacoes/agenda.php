@@ -1,4 +1,13 @@
 <?php
+session_start();
+
+// ===================== VERIFICAR LOGIN =====================
+if (!isset($_SESSION['usuario_id'])) {
+  header("Location: /login.php");
+  exit;
+}
+$usuario_id = $_SESSION['usuario_id'];
+
 // ===================== CONEXÃO COM O BANCO =====================
 $servername = "localhost";
 $username = "root";
@@ -12,8 +21,8 @@ if ($conn->connect_error) {
 
 // ===================== SALVAR DADOS =====================
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  // Apaga todos os registros antigos para atualizar a agenda
-  $conn->query("DELETE FROM agenda");
+  // Apaga todos os registros antigos desse usuário
+  $conn->query("DELETE FROM agenda WHERE usuario_id = $usuario_id");
 
   $dias = ['segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado', 'domingo'];
 
@@ -21,8 +30,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $compromisso = $_POST["compromisso_$dia"] ?? '';
     $horario = $_POST["horario_$dia"] ?? '';
     if (!empty($compromisso) || !empty($horario)) {
-      $stmt = $conn->prepare("INSERT INTO agenda (dia, compromisso, horario) VALUES (?, ?, ?)");
-      $stmt->bind_param("sss", $dia, $compromisso, $horario);
+      $stmt = $conn->prepare("INSERT INTO agenda (dia, compromisso, horario, usuario_id) VALUES (?, ?, ?, ?)");
+      $stmt->bind_param("sssi", $dia, $compromisso, $horario, $usuario_id);
       $stmt->execute();
       $stmt->close();
     }
@@ -31,23 +40,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // Salvar notas gerais
   $notas = $_POST["notas"] ?? '';
   if (!empty($notas)) {
-    $stmt = $conn->prepare("INSERT INTO agenda (dia, notas) VALUES ('notas', ?)");
-    $stmt->bind_param("s", $notas);
+    $stmt = $conn->prepare("INSERT INTO agenda (dia, notas, usuario_id) VALUES ('notas', ?, ?)");
+    $stmt->bind_param("si", $notas, $usuario_id);
     $stmt->execute();
     $stmt->close();
   }
 
-  echo "<script>alert('✔️ Agenda salva com sucesso!');</script>";
+  echo "<script>alert('💾 Agenda salva com sucesso!');</script>";
 }
 
 // ===================== CARREGAR DADOS =====================
 $agenda = [];
-$result = $conn->query("SELECT * FROM agenda");
+$result = $conn->query("SELECT * FROM agenda WHERE usuario_id = $usuario_id");
 while ($row = $result->fetch_assoc()) {
   $agenda[$row['dia']] = $row;
 }
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
