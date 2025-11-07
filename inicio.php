@@ -424,20 +424,52 @@ nav .search-bar button:hover {
   opacity: 1;
   transform: translateY(10px); /* desliza levemente para baixo */
 }
+.notification {
+    position: relative;
+    cursor: pointer;
+}
+
+.notif-badge {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background: red;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.notif-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 120%;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 250px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    padding: 0.5rem;
+    z-index: 2000;
+}
+
 .notif-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
 }
 
 .notif-avatar {
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  object-fit: cover;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
 }
   </style>
 </head>
@@ -456,6 +488,7 @@ nav .search-bar button:hover {
 <div class="notification" id="notifBtn">
   <i class="fa-solid fa-bell"></i>
   <div class="notif-dropdown" id="notifDropdown">
+  <span class="notif-count" id="notifCount">0</span> <!-- badge -->
     <p>Carregando...</p>
   </div>
 </div>
@@ -672,6 +705,46 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+document.addEventListener("DOMContentLoaded", () => {
+    const notifBtn = document.getElementById("notifBtn");
+    const notifDropdown = document.getElementById("notifDropdown");
+
+    // Cria badge
+    let badge = document.createElement('span');
+    badge.classList.add('notif-badge');
+    notifBtn.appendChild(badge);
+
+    function atualizarNotificacoes() {
+        fetch('notificacoes_sininho.php')
+        .then(res => res.json())
+        .then(data => {
+            notifDropdown.innerHTML = data.html;
+            badge.textContent = data.count > 0 ? data.count : '';
+        })
+        .catch(() => {
+            notifDropdown.innerHTML = "<p>Erro ao carregar.</p>";
+            badge.textContent = '';
+        });
+    }
+
+    notifBtn.addEventListener('click', () => {
+        notifBtn.classList.toggle('active');
+        notifDropdown.style.display = notifBtn.classList.contains('active') ? 'block' : 'none';
+        atualizarNotificacoes();
+    });
+
+    document.addEventListener('click', e => {
+        if (!notifBtn.contains(e.target) && !notifDropdown.contains(e.target)) {
+            notifDropdown.style.display = 'none';
+            notifBtn.classList.remove('active');
+        }
+    });
+
+    // Atualiza automaticamente a cada 30s
+    atualizarNotificacoes();
+    setInterval(atualizarNotificacoes, 30000);
+});
+
 </script>
 </body>
 </html>

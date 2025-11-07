@@ -216,12 +216,15 @@ header a{color:var(--dark); text-decoration:none; font-weight:700;}
   <div class="sidebar">
     <h3>Sugestões</h3>
     <?php foreach($sugestoes as $s): ?>
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-        <img src="<?= htmlspecialchars($s['foto'] ?: 'imagens/usuarios/default.jpg') ?>" style="width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);">
-        <div><?= htmlspecialchars($s['nome']) ?></div>
-c
-      </div>
-    <?php endforeach; ?>
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+    <img src="<?= htmlspecialchars($s['foto'] ?: 'imagens/usuarios/default.jpg') ?>" style="width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);">
+    <div style="flex:1;"><?= htmlspecialchars($s['nome']) ?></div>
+    <button onclick="adicionarAmigo(<?= intval($s['id']) ?>)" 
+            style="background:#3f7c72;color:#fff;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-weight:700;">
+      Adicionar
+    </button>
+  </div>
+<?php endforeach; ?>
 
     <hr style="margin:14px 0;">
     <h3>Notificações</h3>
@@ -329,12 +332,23 @@ function excluirPost(postId){
 }
 
 function adicionarAmigo(destinatario){
-  fetch('adicionar_amigo.php',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'destinatario='+destinatario})
-    .then(r=>r.json()).then(data=>{
+  fetch('adicionar_amigo.php',{
+    method:'POST',
+    headers:{'Content-Type':'application/x-www-form-urlencoded'},
+    body:'destinatario='+destinatario
+  })
+  .then(r => r.json())
+  .then(data => {
+    if(data.status === 'sucesso'){
       alert(data.mensagem);
-      location.reload();
-    });
+      // Opcional: remove a sugestão após adicionar
+      atualizarSugestoes(); 
+    } else {
+      alert(data.mensagem || 'Erro ao adicionar amigo');
+    }
+  });
 }
+
 
 function responderSolicitacao(id,resposta){
   fetch('responder_solicitacao.php',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'id_solicitacao='+id+'&resposta='+resposta})

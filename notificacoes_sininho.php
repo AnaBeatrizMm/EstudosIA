@@ -8,11 +8,11 @@ if (!$usuario_id) {
     exit;
 }
 
-// Pega notificações não lidas de amizade
-$sql = "SELECT n.id AS notif_id, n.mensagem, u.nome, u.foto 
-        FROM notificacoes n 
-        LEFT JOIN usuarios u ON n.usuario_id = u.id 
-        WHERE n.usuario_id = ? AND n.lida = 0 AND n.tipo = 'amizade'
+// Pega notificações não lidas
+$sql = "SELECT n.id AS notif_id, n.mensagem, u.nome, u.foto
+        FROM notificacoes n
+        LEFT JOIN usuarios u ON n.usuario_id = u.id
+        WHERE n.usuario_id = ? AND n.lida = 0
         ORDER BY n.data_criacao DESC
         LIMIT 25";
 
@@ -21,20 +21,26 @@ $stmt->bind_param("i", $usuario_id);
 $stmt->execute();
 $res = $stmt->get_result();
 
-if ($res->num_rows === 0) {
-    echo "<p>Sem notificações novas</p>";
-    exit;
-}
+$count = $res->num_rows; // número de notificações
+$html = '';
 
-while($row = $res->fetch_assoc()){
-    $nome = htmlspecialchars($row['nome']);
-    $foto = (!empty($row['foto']) && file_exists($row['foto'])) ? $row['foto'] : 'imagens/usuarios/default.jpg';
-    $mensagem = htmlspecialchars($row['mensagem']);
-    echo "<div class='notif-item'>
-            <img src='$foto' class='notif-avatar'>
-            <span><strong>$nome</strong>: $mensagem</span>
-          </div>";
+if ($count === 0) {
+    $html = "<p>Sem notificações novas</p>";
+} else {
+    while($row = $res->fetch_assoc()){
+        $nome = htmlspecialchars($row['nome']);
+        $foto = (!empty($row['foto']) && file_exists($row['foto'])) ? $row['foto'] : 'imagens/usuarios/default.jpg';
+        $mensagem = htmlspecialchars($row['mensagem']);
+        $html .= "<div class='notif-item'>
+                    <img src='$foto' class='notif-avatar'>
+                    <span><strong>$nome</strong>: $mensagem</span>
+                  </div>";
+    }
 }
 
 $stmt->close();
+
+// Retorna direto como JSON
+header('Content-Type: application/json');
+echo json_encode(['html' => $html, 'count' => $count], JSON_UNESCAPED_UNICODE);
 ?>
