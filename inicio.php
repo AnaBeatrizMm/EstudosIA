@@ -400,6 +400,45 @@ nav .search-bar button:hover {
 ::-webkit-scrollbar-thumb:hover {
   background: #2a5c55;
 }
+/* Notificação flutuante abaixo do sininho */
+.toast-notif {
+  position: absolute;
+  top: 40px; /* agora aparece abaixo do sininho */
+  right: 0;
+  background: #bdebe3ff;
+  color: #1e3834ff;
+  padding: 10px 18px;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  font-family: 'SimpleHandmade', cursive;
+  font-size: 18px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(0);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  white-space: nowrap;
+  z-index: 3000;
+}
+
+.toast-notif.show {
+  opacity: 1;
+  transform: translateY(10px); /* desliza levemente para baixo */
+}
+.notif-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.notif-avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+}
   </style>
 </head>
 <body>
@@ -495,21 +534,44 @@ nav .search-bar button:hover {
   });
 </script>
 <script>
-  const notifBtn = document.getElementById("notifBtn");
-  notifBtn.addEventListener("click", () => {
-    notifBtn.classList.toggle("active");
+const notifBtnEl = document.getElementById("notifBtn");
 
-    if (notifBtn.classList.contains("active")) {
-      fetch("notificacoes.php")
-        .then(res => res.text())
-        .then(html => {
-          document.getElementById("notifDropdown").innerHTML = html;
-        })
-        .catch(() => {
-          document.getElementById("notifDropdown").innerHTML = "<p>Erro ao carregar.</p>";
-        });
-    }
-  });
+const mensagens = [
+  `Olá, <?php echo htmlspecialchars($nome_usuario); ?>! Que tal conferir suas anotações diárias?`,
+  `Ei, <?php echo htmlspecialchars($nome_usuario); ?>, bora revisar um flashcard rápido?`,
+  `<?php echo htmlspecialchars($nome_usuario); ?>, que tal dar uma olhada no seu plano de estudos?`,
+  `Não se esqueça, <?php echo htmlspecialchars($nome_usuario); ?>, suas tarefas estão te esperando!`,
+  `Que tal explorar novos conteúdos, <?php echo htmlspecialchars($nome_usuario); ?>?`,
+  `O que você acha de passarmos um tempo juntos, <?php echo htmlspecialchars($nome_usuario); ?>? Abra o cronômetro!`,
+  `Alguma dúvida? Pergunte a nossa IA!`,
+];
+
+function mostrarNotif(msg) {
+  const toast = document.createElement("div");
+  toast.classList.add("toast-notif");
+  toast.textContent = msg;
+  notifBtnEl.appendChild(toast);
+
+  setTimeout(() => toast.classList.add("show"), 50);
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 500);
+  }, 5000);
+}
+
+// Notificação a cada 10 minutos
+setInterval(() => {
+  const msg = mensagens[Math.floor(Math.random() * mensagens.length)];
+  mostrarNotif(msg);
+}, 60000);
+
+// Primeira notificação após 5s
+setTimeout(() => {
+  const msg = mensagens[Math.floor(Math.random() * mensagens.length)];
+  mostrarNotif(msg);
+}, 5000);
+
 </script>
 <script>
   // Rotas do site (palavra -> página)
@@ -579,6 +641,37 @@ nav .search-bar button:hover {
       suggestions.style.display = "none";
     }
   });
+document.addEventListener("DOMContentLoaded", () => {
+    const notifBtn = document.getElementById("notifBtn");
+    const notifDropdown = document.getElementById("notifDropdown");
+
+    notifBtn.addEventListener("click", () => {
+        notifBtn.classList.toggle("active");
+
+        if (notifBtn.classList.contains("active")) {
+            fetch("notificacoes_sininho.php")
+              .then(res => res.text())
+              .then(html => {
+                  notifDropdown.innerHTML = html;
+                  notifDropdown.style.display = "block";
+              })
+              .catch(() => {
+                  notifDropdown.innerHTML = "<p>Erro ao carregar.</p>";
+                  notifDropdown.style.display = "block";
+              });
+        } else {
+            notifDropdown.style.display = "none";
+        }
+    });
+
+    // Fecha o dropdown ao clicar fora
+    document.addEventListener("click", e => {
+        if (!notifBtn.contains(e.target) && !notifDropdown.contains(e.target)) {
+            notifDropdown.style.display = "none";
+            notifBtn.classList.remove("active");
+        }
+    });
+});
 </script>
 </body>
 </html>

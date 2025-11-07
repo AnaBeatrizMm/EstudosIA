@@ -21,7 +21,7 @@ if (!$id_solicitacao || !in_array($resposta, ['aceita','recusada'])) {
 
 // Busca solicitação e garante que o usuário é o destinatário
 $stmt = $conn->prepare("
-    SELECT s.id, s.id_remetente, s.id_destinatario, n.id AS notif_id
+    SELECT s.id, s.de_usuario_id, s.para_usuario_id, n.id AS notif_id
     FROM solicitacoes_amizade s
     LEFT JOIN notificacoes n ON n.referencia_id = s.id AND n.usuario_id = ?
     WHERE s.id = ?
@@ -38,7 +38,7 @@ $sol = $res->fetch_assoc();
 $stmt->close();
 
 // Confirma que o usuário é destinatário
-if ($sol['id_destinatario'] != $usuario_id) {
+if ($sol['para_usuario_id'] != $usuario_id) {
     echo json_encode(['status'=>'erro','mensagem'=>'Você não pode responder a esta solicitação']);
     exit();
 }
@@ -47,7 +47,7 @@ if ($sol['id_destinatario'] != $usuario_id) {
 if ($resposta === 'aceita') {
     // Cria amizade
     $stmt = $conn->prepare("INSERT INTO amizades (id_usuario1, id_usuario2) VALUES (?, ?)");
-    $stmt->bind_param("ii", $sol['id_remetente'], $sol['id_destinatario']);
+    $stmt->bind_param("ii", $sol['de_usuario_id'], $sol['para_usuario_id']);
     $stmt->execute();
     $stmt->close();
 }
@@ -69,5 +69,6 @@ echo json_encode([
     'status'=>'sucesso',
     'mensagem'=> $resposta === 'aceita' ? 'Solicitação aceita' : 'Solicitação recusada',
     'notif_id'=> $id_solicitacao,
-    'novo_amigo_id'=> $resposta === 'aceita' ? $sol['id_remetente'] : null
+    'novo_amigo_id'=> $resposta === 'aceita' ? $sol['de_usuario_id'] : null
 ]);
+?>

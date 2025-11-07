@@ -1,229 +1,184 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Chat IA</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Karst', sans-serif;
-      background-color: rgb(243, 228, 201);
-      display: flex;
-      height: 100vh;
-    }
-    .container-chat {
-      display: flex;
-      width: 100%;
-    }
-    .sidebar {
-      width: 250px;
-      background-color: rgb(192, 98, 98);
-      padding: 20px;
-      color: white;
-      overflow-y: auto;
-    }
-    .sidebar h2 {
-      margin-bottom: 15px;
-      font-size: 20px;
-    }
-    .sidebar ul {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .sidebar li {
-      background-color: rgb(139, 80, 80);
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .chat-area {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 20px;
-    }
-    .chat-box {
-      flex: 1;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      padding-right: 10px;
-    }
-    .mensagem {
-      max-width: 70%;
-      padding: 12px 18px;
-      border-radius: 15px;
-      font-size: 16px;
-    }
-    .mensagem.usuario {
-      align-self: flex-end;
-      background-color: rgb(192, 98, 98);
-      color: white;
-    }
-    .mensagem.ia {
-      align-self: flex-start;
-      background-color: rgb(139, 80, 80);
-      color: white;
-    }
-    .input-area {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    .input-area input {
-      flex: 1;
-      padding: 12px;
-      border-radius: 10px;
-      border: none;
-      font-size: 16px;
-    }
-    .input-area button {
-      background-color: rgb(192, 98, 98);
-      border: none;
-      border-radius: 10px;
-      padding: 12px 20px;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .input-area button:hover {
-      background-color: rgb(139, 80, 80);
-    }
-    .botoes-topo {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>EstudosIA — Chat Completo</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg: rgb(243, 228, 201);
+  --accent: rgb(192, 98, 98);
+  --accent-2: rgb(139, 80, 80);
+  --white: #ffffff;
+  --muted: #6b5a52;
+  --radius: 14px;
+  --gap: 14px;
 }
-
-.botoes-topo button {
-  background-color: rgb(233, 185, 185);
-  color: rgb(80, 45, 45);
-  border: none;
-  padding: 10px 20px;
-  border-radius: 15px;
-  font-size: 16px;
-  font-family: 'Karst', sans-serif;
-  cursor: pointer;
-  transition: 0.3s ease;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-}
-
-.botoes-topo button:hover {
-  background-color: rgb(192, 98, 98);
-  color: white;
-}
-  </style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'Inter',system-ui,sans-serif;background:linear-gradient(180deg,var(--bg),#fff);color:#222;padding:32px;display:flex;align-items:center;justify-content:center;min-height:100vh;}
+.card{width:980px;max-width:96vw;background:var(--white);border-radius:20px;box-shadow:0 10px 30px rgba(30,20,10,0.12);overflow:hidden;display:grid;grid-template-columns:320px 1fr;}
+.sidebar{background:linear-gradient(180deg,var(--accent),var(--accent-2));padding:22px;color:var(--white);display:flex;flex-direction:column;gap:18px;}
+.logo{font-family:'Playfair Display',serif;font-size:22px;letter-spacing:0.4px;font-weight:600;}
+.subtitle{font-size:13px;opacity:0.9}
+.history{background: rgba(255,255,255,0.06);padding:10px;border-radius:12px;flex:1;overflow:auto;}
+.history h4{margin:0 0 8px 0;font-size:13px}
+.past-item{padding:8px 10px;border-radius:10px;background:rgba(255,255,255,0.06);margin-bottom:8px;cursor:pointer;font-size:13px;line-height:1.25;}
+.past-item small{opacity:0.85}
+.controls{display:flex;gap:8px}
+.btn{padding:8px 12px;border-radius:10px;border:none;cursor:pointer;font-weight:600}
+.btn-ghost{background:transparent;color:var(--white);border:1px solid rgba(255,255,255,0.12)}
+.btn-clear{background:var(--white);color:var(--accent-2)}
+.main{padding:24px;display:flex;flex-direction:column;gap:12px;}
+.chat-area{background:linear-gradient(180deg,#fff,#fff);border-radius:12px;padding:18px;height:520px;overflow:auto;border:1px solid rgba(10,10,10,0.03);}
+.msg{max-width:78%;margin-bottom:12px;padding:12px 14px;border-radius:12px;line-height:1.35}
+.user{margin-left:auto;background:var(--bg);border:1px solid rgba(0,0,0,0.04)}
+.bot{background:linear-gradient(180deg,#fff,#f8f4ef);border:1px solid rgba(0,0,0,0.04)}
+.meta{font-size:12px;color:var(--muted);margin-bottom:6px}
+.input-area{display:flex;flex-direction:column;gap:6px;padding-top:6px}
+.examples{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.example-btn{background:var(--accent);color:var(--white);border:none;padding:6px 10px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;transition:0.2s}
+.example-btn:hover{opacity:0.85}
+textarea{flex:1;resize:none;padding:12px 14px;border-radius:12px;border:1px solid rgba(0,0,0,0.06);min-height:56px;font-size:14px}
+.send-btn{background:var(--accent);color:var(--white);border:none;padding:12px 16px;border-radius:12px;font-weight:700;cursor:pointer}
+.small-muted{font-size:12px;color:var(--muted)}
+@media(max-width:880px){.card{grid-template-columns:1fr}.sidebar{order:2}.main{order:1}.chat-area{height:420px}}
+</style>
 </head>
 <body>
-  <div class="container-chat">
-    <div class="sidebar">
-      <h2>Histórico</h2>
-      <ul id="listaPerguntas"></ul>
-      <div class="botoes-topo">
-        <button id="novo-chat">Novo Chat</button>
-        <button onclick="window.location.href='inicio.php'">Voltar ao Início</button>
-      </div>
-      </div>
-    <div class="chat-area">
-      <div class="chat-box" id="chatBox"></div>
-      <div class="input-area">
-        <input type="text" id="perguntaInput" placeholder="Digite sua pergunta..." />
-        <button onclick="enviarPergunta()">Enviar</button>
-      </div>
-    </div>
-  </div>
+<div class="card" role="application">
+<aside class="sidebar">
+<div><div class="logo">EstudosIA</div><div class="subtitle">Simulação IA offline</div></div>
+<div class="history" id="history">
+<h4>Histórico de perguntas</h4>
+<div id="pastList"></div>
+</div>
+<div class="controls">
+<button class="btn btn-ghost" id="clearBtn">Limpar</button>
+</div>
+</aside>
+<main class="main">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<div><div style="font-weight:700;font-size:16px">Chat — EstudosIA</div><div class="small-muted">Respostas detalhadas por matéria</div></div>
+<div class="small-muted">Offline • Simulação</div>
+</div>
+<div class="chat-area" id="chat"></div>
+<div class="input-area">
+<div class="examples" id="exampleBtns"></div>
+<textarea id="questionInput" placeholder="Digite sua pergunta aqui" aria-label="Pergunta"></textarea>
+<button class="send-btn" id="sendBtn">Enviar</button>
+</div>
+</main>
+</div>
+<script>
+const TOPICS=[
+  {materia:'Matemática',perguntas:[
+    {q:'Quanto é 7 + 8?',r:'7 + 8 = 15'},
+    {q:'Quanto é 9 × 6?',r:'9 × 6 = 54'},
+    {q:'Qual é o dobro de 25?',r:'O dobro de 25 é 50'},
+    {q:'Quanto é 100 ÷ 4?',r:'100 ÷ 4 = 25'},
+    {q:'O que é um número primo?',r:'Um número primo só pode ser dividido por 1 e por ele mesmo'},
+    {q:'Qual é o menor número primo?',r:'O menor número primo é 2'},
+    {q:'Quanto é 12²?',r:'12² = 144'},
+    {q:'O que é uma fração?',r:'Uma fração representa partes de um todo'},
+    {q:'Quanto é ¾ de 100?',r:'¾ de 100 é 75'},
+    {q:'O que é um triângulo equilátero?',r:'Triângulo com os três lados iguais'}
+  ]},
+  {materia:'Português',perguntas:[
+    {q:'O que é um substantivo?',r:'É a palavra que nomeia seres, objetos, lugares ou sentimentos'},
+    {q:'O que é um verbo?',r:'Indica ação, estado ou fenômeno da natureza'},
+    {q:'Dê um exemplo de adjetivo.',r:'Bonito, alto, inteligente'},
+    {q:'O que é sujeito na frase?',r:'É quem pratica ou sofre a ação do verbo'},
+    {q:'O que é predicado?',r:'É o que se diz sobre o sujeito'},
+    {q:'Qual é o plural de cidadão?',r:'Cidadãos'},
+    {q:'O que é uma oração?',r:'Um enunciado que contém um verbo'},
+    {q:'Qual é o sinônimo de feliz?',r:'Alegre'},
+    {q:'Qual é o antônimo de triste?',r:'Feliz'},
+    {q:'O que é uma crase?',r:'Fusão da preposição “a” com o artigo “a”'}
+  ]},
+  {materia:'Geografia',perguntas:[
+    {q:'Qual é o maior país do mundo?',r:'Rússia'},
+    {q:'Qual é o menor país do mundo?',r:'Vaticano'},
+    {q:'Qual é o rio mais extenso do Brasil?',r:'Rio Amazonas'},
+    {q:'Qual é o bioma predominante no nordeste brasileiro?',r:'Caatinga'},
+    {q:'O que é um continente?',r:'Grande extensão de terra separada por oceanos'},
+    {q:'Quantos continentes existem?',r:'Seis ou sete, dependendo da classificação'},
+    {q:'Qual é o continente onde fica o Brasil?',r:'América do Sul'},
+    {q:'O que é latitude?',r:'Distância em graus do Equador'},
+    {q:'O que é longitude?',r:'Distância em graus do meridiano de Greenwich'},
+    {q:'Qual é o nome do planeta onde vivemos?',r:'Terra'}
+  ]}
+];
 
-  <script>
-    let historico = [];
+const allQuestions=[];
+TOPICS.forEach(cat=>cat.perguntas.forEach(p=>allQuestions.push(p.q)));
+const exampleBtnsEl=document.getElementById('exampleBtns');
 
-    // Mostrar pergunta inicial se houver
-    const perguntaInicial = localStorage.getItem("perguntaInicial");
-    if (perguntaInicial) {
-      adicionarMensagem(perguntaInicial, "usuario");
-      gerarResposta(perguntaInicial);
-      localStorage.removeItem("perguntaInicial");
-    }
-
-    function adicionarMensagem(texto, autor) {
-      const div = document.createElement("div");
-      div.className = `mensagem ${autor}`;
-      div.innerText = texto;
-      document.getElementById("chatBox").appendChild(div);
-
-      historico.push({ texto, autor });
-      atualizarLista();
-    }
-
-    function gerarResposta(pergunta) {
-      const resposta = `Simulando resposta para: "${pergunta}"`;
-      setTimeout(() => adicionarMensagem(resposta, "ia"), 500);
-    }
-
-    function enviarPergunta() {
-      const input = document.getElementById("perguntaInput");
-      const pergunta = input.value.trim();
-      if (pergunta !== "") {
-        input.value = "";
-        adicionarMensagem(pergunta, "usuario");
-        gerarResposta(pergunta);
-      }
-    }
-
-    function atualizarLista() {
-      const lista = document.getElementById("listaPerguntas");
-      lista.innerHTML = "";
-      historico
-        .filter(msg => msg.autor === "usuario")
-        .forEach((msg, i) => {
-          const li = document.createElement("li");
-          li.innerText = msg.texto.slice(0, 40);
-          li.onclick = () => alert(msg.texto);
-          lista.appendChild(li);
-        });
-    }
-
-    function criarNovoChat() {
-  const novoId = Date.now().toString();
-  localStorage.setItem("chatAtual", novoId); // apenas cria novo id
-  location.reload(); // recarrega o chat com o novo id
-}
-document.addEventListener("DOMContentLoaded", () => {
-  const chatId = localStorage.getItem("chatAtual");
-  const conversas = JSON.parse(localStorage.getItem("conversas") || "{}");
-  const chatBox = document.querySelector(".chat-box");
-
-  if (chatId && conversas[chatId]) {
-    conversas[chatId].forEach(mensagem => {
-      const div = document.createElement("div");
-      div.classList.add("mensagem", mensagem.tipo);
-      div.textContent = mensagem.texto;
-      chatBox.appendChild(div);
-    });
-  }
-
-  document.getElementById("novo-chat").addEventListener("click", () => {
-    const novoId = Date.now().toString();
-    localStorage.setItem("chatAtual", novoId);
-
-    // Garante que a estrutura de conversas existe
-    const conversas = JSON.parse(localStorage.getItem("conversas") || "{}");
-    conversas[novoId] = [];
-    localStorage.setItem("conversas", JSON.stringify(conversas));
-
-    window.location.reload(); // Recarrega a página limpa
+function showRandomExamples(){
+  exampleBtnsEl.innerHTML='';
+  const shuffled=allQuestions.sort(()=>0.5-Math.random());
+  const selected=shuffled.slice(0,4);
+  selected.forEach(text=>{
+    const btn=document.createElement('button');
+    btn.className='example-btn';
+    btn.textContent=text;
+    btn.addEventListener('click',()=>{document.getElementById('questionInput').value=text;document.getElementById('questionInput').focus();});
+    exampleBtnsEl.appendChild(btn);
   });
+}
+
+showRandomExamples();
+setInterval(showRandomExamples,20000);
+
+const chatEl=document.getElementById('chat');
+const pastListEl=document.getElementById('pastList');
+const inputEl=document.getElementById('questionInput');
+const sendBtn=document.getElementById('sendBtn');
+const clearBtn=document.getElementById('clearBtn');
+let history=[];
+
+function addMessage(text,type){
+  const div=document.createElement('div');
+  div.className='msg '+type;
+  div.textContent=text;
+  chatEl.appendChild(div);
+  chatEl.scrollTop=chatEl.scrollHeight;
+}
+
+function findAnswer(question){
+  for(const cat of TOPICS){
+    for(const p of cat.perguntas){
+      if(question.toLowerCase().includes(p.q.toLowerCase())) return p.r;
+    }
+  }
+  return 'Ainda não tenho essa resposta, tente outra pergunta.';
+}
+
+function addHistory(q){
+  history.push(q);
+  pastListEl.innerHTML='';
+  history.slice(-10).forEach(q=>{
+    const div=document.createElement('div');
+    div.className='past-item';
+    div.textContent=q;
+    div.addEventListener('click',()=>{inputEl.value=q;inputEl.focus();});
+    pastListEl.appendChild(div);
+  });
+}
+
+sendBtn.addEventListener('click',()=>{
+  const q=inputEl.value.trim();
+  if(!q) return;
+  addMessage(q,'user');
+  const a=findAnswer(q);
+  addMessage(a,'bot');
+  addHistory(q);
+  inputEl.value='';
+  inputEl.focus();
 });
-  </script>
+inputEl.addEventListener('keypress',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendBtn.click();}});
+clearBtn.addEventListener('click',()=>{history=[];pastListEl.innerHTML='';chatEl.innerHTML='';});
+</script>
 </body>
 </html>

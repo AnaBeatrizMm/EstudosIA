@@ -13,7 +13,7 @@ if ($conn->connect_error) die("Erro: " . $conn->connect_error);
 
 body {
   font-family: Arial, sans-serif;
-  background: rgb(243,228,201);
+  background: #3f7c72ff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,7 +30,7 @@ body {
 }
 
 h2 {
-  color: rgb(139,80,80);
+  color: #3f7c72ff;
   font-family: 'raesha';
   margin-bottom: 20px;
 }
@@ -39,18 +39,18 @@ input {
   width: 80%;
   padding: 12px;
   margin: 10px 0;
-  border: 2px solid rgb(192,98,98);
+  border: 2px solid #3f7c72ff;
   border-radius: 25px;
   font-size: 1rem;
   outline: none;
 }
 
-input:focus { border-color: rgb(139,80,80); }
+input:focus { border-color: #1e3834ff; }
 
 button {
   width: 50%;
   padding: 12px;
-  background-color: rgb(192,98,98);
+  background-color: #3f7c72ff;
   color: white;
   border: none;
   border-radius: 25px;
@@ -59,7 +59,7 @@ button {
   margin-top: 10px;
 }
 
-button:hover { background-color: rgb(139,80,80); }
+button:hover { background-color: #1e3834ff; }
 
 .mensagem {
   margin-top: 15px;
@@ -92,7 +92,12 @@ button:hover { background-color: rgb(139,80,80); }
           if ($_SERVER["REQUEST_METHOD"] === "POST") {
               $nova_senha = password_hash($_POST["nova_senha"], PASSWORD_DEFAULT);
               $conn->query("UPDATE usuarios SET senha='$nova_senha', token=NULL, expira_token=NULL WHERE token='$token'");
-              echo "<div class='mensagem sucesso'>Senha alterada com sucesso!</div>";
+              echo "<div class='mensagem sucesso'>Senha alterada com sucesso! Você será redirecionado.</div>";
+              echo "<script>
+                      setTimeout(function(){
+                        window.location.href = 'login.php';
+                      }, 3500);
+                    </script>";
           } else {
               echo '
               <form method="POST">

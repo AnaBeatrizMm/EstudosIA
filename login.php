@@ -170,8 +170,8 @@
     </div>
     <button class="btn" type="submit">Entrar</button>
     <div style="text-align:center; margin-top:10px;">
-  <a href="google_login.php" class="btn" style="background:#db4437;">
-    <img src="https://developers.google.com/identity/images/g-logo.png" style="height:18px; vertical-align:middle; margin-right:8px;">
+  <a href="google_login.php" class="btn" style="background: #32363dff;text-decoration:none;width:100%; height: 50px;align-items:center; justify-content:center;text-align:center;">
+    <img src="/imagens/google-removebg-preview.png" style="height:30px; vertical-align:middle; margin-right:8px;">
     Entrar com Google
   </a>
 </div>
@@ -191,7 +191,14 @@
     <input type="password" name="senha" placeholder="Senha" required />
     <input type="password" name="senha2" placeholder="Confirmar senha" required />
     <button class="btn" type="submit">Registrar</button>
+    
 </form>
+<div style="text-align:center; margin-top:10px;">
+  <a href="google_login.php" class="btn" style="background: #32363dff;text-decoration:none;width:100%; height: 50px;align-items:center; justify-content:center;text-align:center;">
+    <img src="/imagens/google-removebg-preview.png" style="height:30px; vertical-align:middle; margin-right:8px;">
+    Cadastrar-se com Google
+  </a>
+</div>
         <div class="aux">Já tem conta? <a id="toLogin">Entrar</a></div>
       </section>
 

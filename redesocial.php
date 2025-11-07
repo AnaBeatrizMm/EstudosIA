@@ -87,10 +87,10 @@ $sugestoes = $res->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 
 // Notificações amizade
-$sql_n = "SELECT n.id AS notif_id, n.mensagem, n.referencia_id, s.id_remetente, u.nome, u.foto
+$sql_n = "SELECT n.id AS notif_id, n.mensagem, n.referencia_id, s.de_usuario_id, u.nome, u.foto
           FROM notificacoes n
           LEFT JOIN solicitacoes_amizade s ON n.referencia_id = s.id
-          LEFT JOIN usuarios u ON s.id_remetente = u.id
+          LEFT JOIN usuarios u ON s.de_usuario_id = u.id
           WHERE n.usuario_id = ? AND n.lida = 0 AND n.tipo = 'amizade'
           ORDER BY n.data_criacao DESC";
 $stmt = $conn->prepare($sql_n);
@@ -219,7 +219,7 @@ header a{color:var(--dark); text-decoration:none; font-weight:700;}
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
         <img src="<?= htmlspecialchars($s['foto'] ?: 'imagens/usuarios/default.jpg') ?>" style="width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);">
         <div><?= htmlspecialchars($s['nome']) ?></div>
-        <button style="margin-left:auto;padding:6px 10px;border-radius:8px;background:var(--primary);color:#fff;border:none;font-weight:700;cursor:pointer;" onclick="adicionarAmigo(<?= $s['id'] ?>)">Adicionar</button>
+c
       </div>
     <?php endforeach; ?>
 

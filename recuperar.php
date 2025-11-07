@@ -25,10 +25,10 @@ if (isset($_POST['email'])) {
         // Gera link e exibe direto na tela
         $link = "http://localhost:8000/redefinir.php?token=".$token;
         $mensagem = "
-        <div style='background:#fff;padding:20px;border-radius:10px;text-align:center;'>
-            <h3 style='color:#c06262;'>Recuperação de Senha</h3>
-            <p>Olá, <strong>{$nome}</strong>! Aqui está seu link para redefinir a senha:</p>
-            <p><a href='{$link}' style='background-color:#c06262;color:white;padding:10px 20px;border-radius:5px;text-decoration:none;'>Redefinir Senha</a></p>
+        <div style='background:#3f7c72ff;padding:20px;border-radius:10px;text-align:center;'>
+            <h3 style='color:#3f7c72ff;'>Recuperação de Senha</h3>
+            <p style='color:#fff;'>Olá, <strong>{$nome}</strong>! Aqui está seu link para redefinir a senha:</p>
+            <p><a href='{$link}' style='background-color:#fff;color:#3f7c72ff;padding:10px 20px;border-radius:5px;text-decoration:none;'>Redefinir Senha</a></p>
             <p style='font-size:13px;color:#666;'>O link expira em 30 minutos.</p>
         </div>";
     } else {
@@ -46,7 +46,7 @@ if (isset($_POST['email'])) {
 @font-face { font-family: raesha; src: url('fonts/Raesha.ttf') format('truetype'); }
 body {
   font-family: Arial, sans-serif;
-  background: rgb(243,228,201);
+  background: #3f7c72ff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -60,21 +60,21 @@ body {
   text-align: center;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
-h2 { color: rgb(139,80,80); font-family: 'raesha'; margin-bottom: 20px; }
+h2 { color: #3f7c72ff; font-family: 'raesha'; margin-bottom: 20px; }
 input {
   width: 80%;
   padding: 12px;
   margin: 10px 0;
-  border: 2px solid rgb(192,98,98);
+  border: 2px solid #3f7c72ff;
   border-radius: 25px;
   font-size: 1rem;
   outline: none;
 }
-input:focus { border-color: rgb(139,80,80); }
+input:focus { border-color: #1e3834ff; }
 button {
   width: 50%;
   padding: 12px;
-  background-color: rgb(192,98,98);
+  background-color: #3f7c72ff;
   color:white;
   border:none;
   border-radius:25px;
@@ -82,7 +82,7 @@ button {
   cursor:pointer;
   margin-top:10px;
 }
-button:hover { background-color: rgb(139,80,80); }
+button:hover { background-color: #1e3834ff; }
 .mensagem {
   margin: 15px 0;
 }
