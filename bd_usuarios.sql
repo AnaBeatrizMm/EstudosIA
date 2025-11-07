@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 07/11/2025 às 10:07
--- Versão do servidor: 10.4.32-MariaDB
--- Versão do PHP: 8.2.12
+-- Tempo de geração: 07/11/2025 às 12:27
+-- Versão do servidor: 10.4.28-MariaDB
+-- Versão do PHP: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,6 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `agenda` (
   `id` int(11) NOT NULL,
+  `usuario_id` int(11) DEFAULT NULL,
   `dia` varchar(20) NOT NULL,
   `compromisso` varchar(255) DEFAULT NULL,
   `horario` time DEFAULT NULL,
@@ -39,8 +40,18 @@ CREATE TABLE `agenda` (
 -- Despejando dados para a tabela `agenda`
 --
 
-INSERT INTO `agenda` (`id`, `dia`, `compromisso`, `horario`, `notas`) VALUES
-(2, 'segunda', 'sdsddsds', '23:03:00', NULL);
+INSERT INTO `agenda` (`id`, `usuario_id`, `dia`, `compromisso`, `horario`, `notas`) VALUES
+(3, 1, 'segunda', 'Estudar', '09:09:00', NULL),
+(4, 1, 'terca', 'Ler', '15:00:00', NULL),
+(5, 1, 'quarta', 'Oração', '22:30:00', NULL),
+(6, 4, 'segunda', 'Estudar Inglês', '20:00:00', NULL),
+(7, 4, 'terca', 'Ler \"O alpinista\"', '13:00:00', NULL),
+(8, 4, 'quarta', 'Dentista', '16:30:00', NULL),
+(9, 4, 'quinta', 'Costureira', '17:00:00', NULL),
+(10, 4, 'sexta', 'Crochê', '15:00:00', NULL),
+(11, 4, 'sabado', 'Chorar', '20:00:00', NULL),
+(12, 4, 'domingo', 'Enem', '12:00:00', NULL),
+(13, 4, 'notas', NULL, NULL, 'Uma semana feliz.');
 
 -- --------------------------------------------------------
 
@@ -63,6 +74,25 @@ INSERT INTO `amizades` (`id`, `id_usuario1`, `id_usuario2`, `data_criacao`) VALU
 (1, 4, 13, '2025-10-06 11:12:37'),
 (3, 13, 14, '2025-10-06 13:41:15'),
 (4, 93, 13, '2025-11-07 08:39:53');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `anotacoes`
+--
+
+CREATE TABLE `anotacoes` (
+  `id` int(11) NOT NULL,
+  `usuario_id` int(11) DEFAULT NULL,
+  `conteudo` longtext NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `anotacoes`
+--
+
+INSERT INTO `anotacoes` (`id`, `usuario_id`, `conteudo`) VALUES
+(3, 4, '<font color=\"#ff0000\" size=\"5\"><b>Matemática</b></font><div><font size=\"5\" color=\"#363030\">1+1=2</font></div><div><font size=\"5\" color=\"#363030\">2+2=4</font></div>');
 
 -- --------------------------------------------------------
 
@@ -142,10 +172,7 @@ CREATE TABLE `curtidas` (
 
 INSERT INTO `curtidas` (`id`, `id_post`, `id_usuario`, `data_criacao`) VALUES
 (1, 25, 13, '2025-10-06 11:10:23'),
-(2, 25, 4, '2025-10-06 11:33:09'),
-(3, 29, 4, '2025-10-06 13:47:49'),
-(4, 29, 13, '2025-11-06 11:58:26'),
-(6, 30, 13, '2025-11-06 20:23:28');
+(2, 25, 4, '2025-10-06 11:33:09');
 
 -- --------------------------------------------------------
 
@@ -197,6 +224,17 @@ CREATE TABLE `financas` (
   `tipo` enum('Entrada','Saída') NOT NULL,
   `data_registro` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `financas`
+--
+
+INSERT INTO `financas` (`id`, `usuario_id`, `data`, `descricao`, `valor`, `tipo`, `data_registro`) VALUES
+(1, 1, '2025-11-20', 'Livro de Matemática', 29.90, 'Entrada', '2025-11-07 10:34:49'),
+(2, 1, '2025-11-24', 'Cinema', 50.00, 'Entrada', '2025-11-07 10:35:16'),
+(3, 4, '2025-11-10', 'Pagar a costureira', 30.00, 'Entrada', '2025-11-07 11:12:45'),
+(4, 4, '2025-11-20', 'Vestido shain', 130.00, 'Entrada', '2025-11-07 11:13:01'),
+(5, 4, '2025-11-29', 'Maio', 29.90, 'Entrada', '2025-11-07 11:13:21');
 
 -- --------------------------------------------------------
 
@@ -254,6 +292,36 @@ INSERT INTO `notificacoes` (`id`, `usuario_id`, `mensagem`, `tipo`, `referencia_
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `planejamento`
+--
+
+CREATE TABLE `planejamento` (
+  `id` int(11) NOT NULL,
+  `usuario_id` int(11) DEFAULT NULL,
+  `dia` varchar(50) NOT NULL,
+  `texto` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `planejamento`
+--
+
+INSERT INTO `planejamento` (`id`, `usuario_id`, `dia`, `texto`) VALUES
+(1, 1, 'Segunda-feira', 'Ler '),
+(2, 1, 'Terça-feira', 'Dentista'),
+(3, 1, 'Quarta-feira', 'Costureira'),
+(4, 1, 'Quinta-feira', 'Chorar'),
+(5, 4, 'Segunda-feira', 'Ler'),
+(6, 4, 'Terça-feira', 'Dentista'),
+(7, 4, 'Quarta-feira', 'Costureira'),
+(8, 4, 'Quinta-feira', 'Cozinhar uma receita do Tik Tok'),
+(9, 4, 'Sexta-feira', 'Estudar Inglês'),
+(10, 4, 'Sábado', 'Sair para jantar'),
+(11, 4, 'Domingo', 'Enem');
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `planos`
 --
 
@@ -297,9 +365,7 @@ INSERT INTO `posts` (`id`, `usuario_id`, `conteudo`, `imagem`, `data_criacao`, `
 (11, 2, 'fsf', 'uploads/1759362018_Slakkj.jpeg', '2025-10-01 23:40:18', '2025-10-03 10:25:53'),
 (12, 3, 'sou rebelde', NULL, '2025-10-02 00:52:43', '2025-10-03 10:25:53'),
 (21, 13, 'qafs, que ódio', '', '2025-10-06 10:44:35', '2025-10-06 07:44:35'),
-(25, 13, 'y', 'imagens/posts/68e3a39c30c11.jfif', '2025-10-06 11:10:20', '2025-10-06 08:10:20'),
-(29, 4, 'Uma tarde do hora com a best. #capiamigas', 'imagens/posts/68e3c87f3d01e.webp', '2025-10-06 13:47:43', '2025-10-06 10:47:43'),
-(30, 4, 'Eu e minha bebezona da boca inchada querida. #airmandadedasanabeatrizes', 'imagens/posts/68e3c92381944.webp', '2025-10-06 13:50:27', '2025-10-06 10:50:27');
+(25, 13, 'y', 'imagens/posts/68e3a39c30c11.jfif', '2025-10-06 11:10:20', '2025-10-06 08:10:20');
 
 -- --------------------------------------------------------
 
@@ -333,6 +399,7 @@ INSERT INTO `solicitacoes_amizade` (`id`, `de_usuario_id`, `para_usuario_id`, `s
 
 CREATE TABLE `tarefas` (
   `id` int(11) NOT NULL,
+  `usuario_id` int(11) DEFAULT NULL,
   `descricao` varchar(255) NOT NULL,
   `concluida` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -341,8 +408,13 @@ CREATE TABLE `tarefas` (
 -- Despejando dados para a tabela `tarefas`
 --
 
-INSERT INTO `tarefas` (`id`, `descricao`, `concluida`) VALUES
-(1, 'jjjjjjjjjjjjjjjjj', 1);
+INSERT INTO `tarefas` (`id`, `usuario_id`, `descricao`, `concluida`) VALUES
+(2, 1, 'Tarefa do TCC', 0),
+(3, 1, 'Assistir documentário \"Paris is Burning\"', 0),
+(4, 1, 'Fazer o banco de dados', 1),
+(5, 4, 'Ler', 0),
+(6, 4, 'Fazer tarefa de matemática', 1),
+(7, 4, 'Resolver os meus adereços de formatura', 1);
 
 -- --------------------------------------------------------
 
@@ -385,7 +457,7 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `biografia`, `foto`, `arvore_escolhida`, `ultimo_login`, `token`, `expira_token`, `codigo_verificacao`, `verificado`, `username`, `apelido`, `data_nascimento`, `escola`, `foto_pessoal`, `preferencias`, `tags`, `favoritos`, `data_criacao`, `bio_foto`, `banner`, `aniversario`, `avatar`, `online`) VALUES
 (1, 'Ana Marques Cezar', 'anacezar@gmail.com', '$2y$10$tRGB685hxsuEW8mdF/xllOowNZKDibI3FduI1L2sUolsXidbLJ6JO', NULL, 'imagens/usuarios/default.jpg', NULL, '2025-11-06 10:43:13', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-06 10:43:13', NULL, NULL, NULL, 'default.png', 0),
-(4, 'Bia Soares', 'beatriz@gmail.com', '$2y$10$27rg7J1YQ9hSdb59AhTUle94ITQWOuvS6ILvpl7d0MODLB/ExkXbu', 'Study vlogs ', 'imagens/usuarios68e3c84b1e642.png', NULL, '2025-08-18 09:19:03', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'meu namorado lindo, peixes, capivara,sobrenatural', '2025-09-24 11:33:45', 'imagens/bio/68e3c84b1ea07.png', 'imagens/usuarios/68e3c84b1ebca.webp', '2008-03-17', 'default.png', 0),
+(4, 'Bia Soares', 'beatriz@gmail.com', '$2y$10$27rg7J1YQ9hSdb59AhTUle94ITQWOuvS6ILvpl7d0MODLB/ExkXbu', 'Study vlogs ', 'imagens/usuarios690dcb04900f9.png', NULL, '2025-08-18 09:19:03', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'meu namorado lindo, peixes, capivara,sobrenatural', '2025-09-24 11:33:45', 'imagens/bio/690dcb049041c.jpg', 'imagens/usuarios/690dcb04905e1.jpg', '2008-03-17', 'default.png', 0),
 (13, 'Marques', 'ana@gmail.com', '$2y$10$zPWncJg1miTRLlP.xPZk9efuZPyqymZu793GKnPDUc3fBeQpLdB6.', 'AnaBanana', 'imagens/usuarios/68d8225203d96.jpg', NULL, '2025-08-18 09:19:03', NULL, NULL, NULL, 0, '', NULL, NULL, NULL, NULL, NULL, 'Culinária,Programação', 'Gatos, Stardew Valley, Café, Uva Verde', '2025-09-24 11:33:45', 'imagens/bio/68e3a32fb59ab.jfif', 'imagens/usuarios/68e3a32fb5b51.jfif', '2007-10-10', 'default.png', 0),
 (14, 'wenderson', 'wenderson.souza@gmail.com', '$2y$10$JTjk3KlPbsViCn9Yd9gjCOoDmmLkOp/TEA3pK2q4XkcTusKZxEzN.', '', 'imagens/usuarios/68d2ab46456c1.jpg', NULL, '2025-10-06 08:46:56', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-24 11:33:45', NULL, NULL, NULL, 'default.png', 0),
 (89, 'Usuário Teste 1', 'teste1@email.com', '$2y$10$mhwR8xWl79e89JPhVYO4WuImgdM/SUfxi/nNh7i9ljY4zbq7E0Owe', NULL, NULL, NULL, '2025-09-27 21:37:23', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-27 21:37:23', NULL, NULL, NULL, 'default.png', 0),
@@ -396,26 +468,6 @@ INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `biografia`, `foto`, `ar
 --
 -- Índices para tabelas despejadas
 --
--- --------------------------------------------------------
--- Estrutura da tabela `tempos`
--- --------------------------------------------------------
-
-CREATE TABLE IF NOT EXISTS `tempos` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `id_usuario` INT(11) NOT NULL,
-  `tempo` VARCHAR(20) NOT NULL,          -- Armazena o tempo em formato "HH:MM:SS"
-  `criado_em` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `fk_usuario_tempo` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
--- Exemplo de inserção de teste
--- --------------------------------------------------------
-INSERT INTO `tempos` (`id_usuario`, `tempo`) VALUES
-(1, '00:05:42'),
-(1, '00:12:18'),
-(2, '00:08:10');
 
 --
 -- Índices de tabela `agenda`
@@ -429,6 +481,12 @@ ALTER TABLE `agenda`
 ALTER TABLE `amizades`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `uniq_pair` (`id_usuario1`,`id_usuario2`);
+
+--
+-- Índices de tabela `anotacoes`
+--
+ALTER TABLE `anotacoes`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Índices de tabela `arquivos`
@@ -490,6 +548,12 @@ ALTER TABLE `notificacoes`
   ADD KEY `id_usuario` (`usuario_id`);
 
 --
+-- Índices de tabela `planejamento`
+--
+ALTER TABLE `planejamento`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Índices de tabela `planos`
 --
 ALTER TABLE `planos`
@@ -531,13 +595,19 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de tabela `agenda`
 --
 ALTER TABLE `agenda`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de tabela `amizades`
 --
 ALTER TABLE `amizades`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de tabela `anotacoes`
+--
+ALTER TABLE `anotacoes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `arquivos`
@@ -573,7 +643,7 @@ ALTER TABLE `eventos`
 -- AUTO_INCREMENT de tabela `financas`
 --
 ALTER TABLE `financas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `lancamentos`
@@ -592,6 +662,12 @@ ALTER TABLE `mensagens`
 --
 ALTER TABLE `notificacoes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de tabela `planejamento`
+--
+ALTER TABLE `planejamento`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de tabela `planos`
@@ -615,7 +691,7 @@ ALTER TABLE `solicitacoes_amizade`
 -- AUTO_INCREMENT de tabela `tarefas`
 --
 ALTER TABLE `tarefas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
