@@ -109,19 +109,101 @@ $stmt->close();
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 :root{--bg:#bdebe3ff;--primary:#3f7c72ff;--white:#fff;--dark:#1e3834ff;}
-body{font-family:Inter,Arial; background:var(--bg); margin:0; padding:0;}
-header{background:var(--white); padding:12px 20px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 2px 10px rgba(0,0,0,0.08); position:sticky; top:0; z-index:10;}
-header a{color:var(--dark); text-decoration:none; font-weight:700;}
-.usuario{display:flex; align-items:center; gap:12px;}
-.usuario img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);}
-.wrap{max-width:1200px;margin:24px auto;display:flex;gap:20px;padding:0 12px;}
+body{font-family:Inter,Arial; background:var(--bg); margin:0; padding:0;background: url('https://i.pinimg.com/736x/08/e4/35/08e435bf1c146132594f8488b41b883a.jpg') no-repeat center center fixed;background-size: cover;}
+header {
+  background: var(--white);
+  padding: 10px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Contêiner das bolinhas */
+.bolinhas {
+  display: flex;
+  gap: 35px;
+  align-items: center;
+}
+
+/* Cada bolinha */
+.bolinhas a {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+}
+
+/* Imagem da bolinha */
+.bolinhas a img {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #3f7c72ff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Efeito fofo ao passar o mouse */
+.bolinhas a:hover img {
+  transform: scale(1.15);
+  box-shadow: 0 0 10px rgba(63, 124, 114, 0.5);
+}
+
+/* Texto flutuante ao passar o mouse */
+.bolinhas a span {
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translate(-50%, 10px);
+  background: rgba(63, 124, 114, 0.9);
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 8px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+/* Animação suave ao passar o mouse */
+.bolinhas a:hover span {
+  opacity: 1;
+  transform: translate(-50%, -5px);
+}
+
+/* Foto do usuário */
+.usuario img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #3f7c72ff;
+  transition: transform 0.2s ease;
+}
+
+.usuario img:hover {
+  transform: scale(1.1);
+}
+.wrap{max-width:1100px;margin:24px auto;display:flex;gap:20px;padding:0 12px;}
 .feed{flex:2.6;display:flex;flex-direction:column;gap:18px;}
-.sidebar{flex:1;background:var(--white);border-radius:12px;padding:14px;box-shadow:0 6px 18px rgba(0,0,0,0.06);height:fit-content;}
-.card{background:var(--white);padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.06);}
-#novo-post textarea{width:100%;min-height:80px;border-radius:10px;padding:10px;border:1px solid #ddd;resize:vertical;}
+.sidebar{flex:1;background:var(--white);border-radius:12px;padding:14px;box-shadow:0 6px 18px rgba(0,0,0,0.06);height:fit-content;border: 12px solid 	#8FBC8F; /* borda visível */}
+.card{background:#fff;padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.06);border: 12px solid 	#8FBC8F; /* borda visível */}
+#novo-post textarea{width:97%;min-height:80px;border-radius:10px;padding:10px;border:1px solid #ddd;resize:vertical;}
 #novo-post .file-label{display:inline-block;margin-top:10px;background:var(--primary);color:var(--white);padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:700;}
 #novo-post button{float:right;margin-top:10px;background:var(--primary);color:var(--white);padding:8px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700;}
-.post{border-radius:12px;padding:16px;background:var(--white);position:relative;}
+.post {
+  border-radius: 12px;
+  padding: 16px;
+  background: #fff;
+  position: relative;
+  border: 12px solid 	#8FBC8F; /* borda visível */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* toque de profundidade */
+}
 .post .user{display:flex;align-items:center;gap:12px;cursor:pointer;}
 .post .user img{width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);}
 .post p{margin:12px 0;white-space:pre-wrap;color:#222;}
@@ -146,12 +228,58 @@ header a{color:var(--dark); text-decoration:none; font-weight:700;}
 <body>
 
 <header>
-    <a href="inicio.php">Início</a>
-    <div class="usuario">
-        <img src="<?= htmlspecialchars($_SESSION['usuario_foto'] ?: 'imagens/usuarios/default.jpg') ?>" alt="">
-        <div>Bem-vindo(a), <strong><?= htmlspecialchars($_SESSION['usuario_nome']) ?></strong></div>
-    </div>
+  <div class="bolinhas">
+    <a href="estudos.php">
+      <img src="https://i.pinimg.com/1200x/e4/6d/1a/e46d1add185e813f4cc36b417128647f.jpg" alt="Estudos">
+      <span>Estudos</span>
+    </a>
+
+    <a href="jogos.php">
+      <img src="/imagens/renomear.jfif" alt="Jogos">
+      <span>Jogos</span>
+    </a>
+
+    <a href="filmes.php">
+      <img src="https://i.pinimg.com/736x/33/39/9d/33399df9faacc5de9e3928f52fabbacf.jpg" alt="Filmes e Séries">
+      <span>Filmes e Séries</span>
+    </a>
+
+    <a href="desenhos.php">
+      <img src="https://i.pinimg.com/736x/c0/c5/1d/c0c51db66d48aa18dc34ed1f89d68419.jpg" alt="Desenhos">
+      <span>Desenhos</span>
+    </a>
+
+    <a href="animes.php">
+      <img src="https://i.pinimg.com/736x/e2/d2/19/e2d219c83bd9741d6f35a8daab064355.jpg" alt="Animes">
+      <span>Animes</span>
+    </a>
+
+    <a href="comida.php">
+      <img src="https://i.pinimg.com/736x/45/f9/25/45f9250c4b1be495775d8c836c325a81.jpg" alt="Comida">
+      <span>Comida</span>
+    </a>
+
+    <a href="costura.php">
+      <img src="https://i.pinimg.com/1200x/7a/0f/d6/7a0fd63c19604cd60b7ac8d97db730c2.jpg" alt="Costura/Crochê">
+      <span>Costura/Crochê</span>
+    </a>
+
+    <a href="pintura.php">
+      <img src="https://i.pinimg.com/736x/a3/a3/28/a3a328afff89c2721b8b0e2f9b0eba37.jpg" alt="Pintura">
+      <span>Pintura</span>
+    </a>
+
+    <a href="musica.php">
+      <img src="https://i.pinimg.com/736x/bb/91/e0/bb91e06701db02de0d2fd2305be68d8c.jpg" alt="Música">
+      <span>Música</span>
+    </a>
+  </div>
+
+  <div class="usuario">
+    <img src="<?= htmlspecialchars($_SESSION['usuario_foto'] ?: 'imagens/usuarios/default.jpg') ?>" alt="Foto do usuário">
+  </div>
 </header>
+
 
 <div class="wrap">
   <div class="feed">
@@ -244,11 +372,8 @@ header a{color:var(--dark); text-decoration:none; font-weight:700;}
         <div>Sem notificações.</div>
       <?php endif; ?>
     </div>
-
-    <hr style="margin:14px 0;">
-    <h3>Amigos Online</h3>
     <div id="amigos-online">
-      Carregando...
+        <img src="/imagens/BMO1.png" alt="bmo" style="width: 225px;">
     </div>
   </div>
 </div>
@@ -382,6 +507,12 @@ function abrirModal(usuarioId) {
       console.error(err);
     });
 }
+// Atualiza posts, comentários, notificações e amigos online a cada 10 segundos
+setInterval(() => {
+  atualizarFeed();
+  atualizarNotificacoes();
+  atualizarAmigosOnline();
+}, 10000);
 </script>
 </body>
 </html>
