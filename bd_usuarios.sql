@@ -396,6 +396,26 @@ INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `biografia`, `foto`, `ar
 --
 -- Índices para tabelas despejadas
 --
+-- --------------------------------------------------------
+-- Estrutura da tabela `tempos`
+-- --------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `tempos` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `id_usuario` INT(11) NOT NULL,
+  `tempo` VARCHAR(20) NOT NULL,          -- Armazena o tempo em formato "HH:MM:SS"
+  `criado_em` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_usuario_tempo` (`id_usuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+-- Exemplo de inserção de teste
+-- --------------------------------------------------------
+INSERT INTO `tempos` (`id_usuario`, `tempo`) VALUES
+(1, '00:05:42'),
+(1, '00:12:18'),
+(2, '00:08:10');
 
 --
 -- Índices de tabela `agenda`
