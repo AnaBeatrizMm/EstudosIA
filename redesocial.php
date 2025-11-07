@@ -105,6 +105,8 @@ $stmt->close();
 <head>
 <meta charset="UTF-8">
 <title>Rede Social</title>
+<link rel="icon" type="image/png" href="/anotacoes/imagens/icon site.png" sizes="612x612">
+<link rel="stylesheet" href="estilo.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>

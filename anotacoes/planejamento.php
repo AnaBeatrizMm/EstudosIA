@@ -1,4 +1,13 @@
 <?php
+session_start();
+
+// ===================== VERIFICAR LOGIN =====================
+if (!isset($_SESSION['usuario_id'])) {
+  header("Location: /login.php");
+  exit;
+}
+$usuario_id = $_SESSION['usuario_id'];
+
 // ===================== CONEXÃO COM O BANCO =====================
 $servername = "localhost";
 $username = "root";
@@ -12,8 +21,8 @@ if ($conn->connect_error) {
 
 // ===================== SALVAR PLANEJAMENTO =====================
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  // Apaga o planejamento antigo
-  $conn->query("DELETE FROM planejamento");
+  // Apaga o planejamento antigo deste usuário
+  $conn->query("DELETE FROM planejamento WHERE usuario_id = $usuario_id");
 
   // Recebe os dados do formulário
   $dias = $_POST["dia"] ?? [];
@@ -23,8 +32,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $dia = $dias[$i];
     $texto = $textos[$i];
     if (!empty($texto)) {
-      $stmt = $conn->prepare("INSERT INTO planejamento (dia, texto) VALUES (?, ?)");
-      $stmt->bind_param("ss", $dia, $texto);
+      $stmt = $conn->prepare("INSERT INTO planejamento (dia, texto, usuario_id) VALUES (?, ?, ?)");
+      $stmt->bind_param("ssi", $dia, $texto, $usuario_id);
       $stmt->execute();
       $stmt->close();
     }
@@ -35,17 +44,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // ===================== CARREGAR PLANEJAMENTO =====================
 $planejamento = [];
-$result = $conn->query("SELECT * FROM planejamento");
+$result = $conn->query("SELECT * FROM planejamento WHERE usuario_id = $usuario_id");
 while ($row = $result->fetch_assoc()) {
   $planejamento[$row['dia']] = $row['texto'];
 }
+
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <title>Planejamento</title>
+  <link rel="icon" type="image/png" href="/anotacoes/imagens/icon site.png" sizes="612x612">
+  <link rel="stylesheet" href="estilo.css">
   <style>
     /* Barra toda */
 ::-webkit-scrollbar {
@@ -176,57 +189,26 @@ nav ul li a{ text-decoration:none; color:black;  padding:5px 10px; border-radius
   <h1>Planejamento Semanal</h1>
   
   <form method="POST">
-    <table id="tabela-planejamento">
-      <tr><th>Dia</th><th>Planejamento</th></tr>
-      <?php
-        $dias = ['Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado','Domingo'];
-        foreach ($dias as $dia) {
-          $texto = $planejamento[$dia] ?? '';
-          echo "
-            <tr>
-              <td><input type='hidden' name='dia[]' value='$dia'>$dia</td>
-              <td><textarea name='texto[]' placeholder='O que vou fazer?'>$texto</textarea></td>
-            </tr>
-          ";
-        }
-      ?>
-
   <table id="tabela-planejamento">
-    <tr>
-      <th>Dia</th>
-      <th>Planejamento</th>
-    </tr>
-    <tr>
-      <td>Segunda-feira</td>
-      <td><textarea placeholder="O que vou fazer?"></textarea></td>
-    </tr>
-    <tr>
-      <td>Terça-feira</td>
-      <td><textarea placeholder="O que vou fazer?"></textarea></td>
-    </tr>
-    <tr>
-      <td>Quarta-feira</td>
-      <td><textarea placeholder="O que vou fazer?"></textarea></td>
-    </tr>
-    <tr>
-      <td>Quinta-feira</td>
-      <td><textarea placeholder="O que vou fazer?"></textarea></td>
-    </tr>
-    <tr>
-      <td>Sexta-feira</td>
-      <td><textarea placeholder="O que vou fazer?"></textarea></td>
-    </tr>
-    <tr>
-      <td>Sábado</td>
-      <td><textarea placeholder="O que vou fazer?"></textarea></td>
-    </tr>
-    <tr>
-      <td>Domingo</td>
-      <td><textarea placeholder="O que vou fazer?"></textarea></td>
-    </tr>
+    <tr><th>Dia</th><th>Planejamento</th></tr>
+    <?php
+      $dias = ['Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado','Domingo'];
+      foreach ($dias as $dia) {
+        $texto = $planejamento[$dia] ?? '';
+        echo "
+          <tr>
+            <td><input type='hidden' name='dia[]' value='$dia'>$dia</td>
+            <td><textarea name='texto[]' placeholder='O que vou fazer?'>$texto</textarea></td>
+          </tr>
+        ";
+      }
+    ?>
   </table>
 
-  <button class="btn" onclick="salvarPlanejamento()">💾 Salvar</button>
+  <!-- Botão centralizado embaixo da tabela -->
+  <button class="btn" type="submit">💾 Salvar</button>
+</form>
+
 
   <script>
     function salvarPlanejamento() {

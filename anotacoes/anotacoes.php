@@ -1,5 +1,5 @@
 <?php
-// === Conexão com o banco ===
+session_start();
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -10,14 +10,21 @@ if ($conn->connect_error) {
   die("Erro de conexão: " . $conn->connect_error);
 }
 
+// Pegando o id do usuário logado
+$usuario_id = $_SESSION['usuario_id'] ?? null;
+if (!$usuario_id) {
+  die("Erro: usuário não autenticado.");
+}
+
 // === Salvar anotação ===
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $conteudo = $_POST['conteudo'];
 
   // Apaga o anterior e salva o novo
   $conn->query("DELETE FROM anotacoes");
-  $stmt = $conn->prepare("INSERT INTO anotacoes (conteudo) VALUES (?)");
-  $stmt->bind_param("s", $conteudo);
+  $usuario_id = $_SESSION['usuario_id']; // supondo que você já guarda o id do usuário logado
+  $stmt = $conn->prepare("INSERT INTO anotacoes (conteudo, usuario_id) VALUES (?, ?)");
+  $stmt->bind_param("si", $conteudo, $usuario_id);
   $stmt->execute();
   $stmt->close();
 
@@ -27,7 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 // === Carregar anotação existente ===
 $conteudo_salvo = "";
-$res = $conn->query("SELECT conteudo FROM anotacoes LIMIT 1");
+$usuario_id = $_SESSION['usuario_id'];
+$res = $conn->query("SELECT conteudo FROM anotacoes WHERE usuario_id = $usuario_id LIMIT 1");
 if ($res && $res->num_rows > 0) {
   $conteudo_salvo = $res->fetch_assoc()['conteudo'];
 }
@@ -39,6 +47,8 @@ $conn->close();
 <head>
   <meta charset="UTF-8">
   <title>Caderno de Anotações</title>
+  <link rel="icon" type="image/png" href="/anotacoes/imagens/icon site.png" sizes="612x612">
+  <link rel="stylesheet" href="estilo.css">
   <style>
     /* === SEU CSS AJUSTADO === */
 ::-webkit-scrollbar { width: 12px; height: 12px; }

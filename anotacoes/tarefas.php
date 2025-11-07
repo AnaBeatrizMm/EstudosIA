@@ -1,4 +1,13 @@
 <?php
+session_start();
+
+// ===================== VERIFICAR LOGIN =====================
+if (!isset($_SESSION['usuario_id'])) {
+  header("Location: /login.php");
+  exit;
+}
+$usuario_id = $_SESSION['usuario_id'];
+
 // ======= CONEXÃO COM O BANCO =======
 $servername = "localhost";
 $username = "root";
@@ -15,7 +24,8 @@ $conn->query("
 CREATE TABLE IF NOT EXISTS tarefas (
   id INT AUTO_INCREMENT PRIMARY KEY,
   descricao VARCHAR(255) NOT NULL,
-  concluida TINYINT(1) DEFAULT 0
+  concluida TINYINT(1) DEFAULT 0,
+  usuario_id INT NULL
 )
 ");
 
@@ -23,8 +33,8 @@ CREATE TABLE IF NOT EXISTS tarefas (
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nova_tarefa"])) {
   $nova_tarefa = trim($_POST["nova_tarefa"]);
   if ($nova_tarefa !== "") {
-    $stmt = $conn->prepare("INSERT INTO tarefas (descricao) VALUES (?)");
-    $stmt->bind_param("s", $nova_tarefa);
+    $stmt = $conn->prepare("INSERT INTO tarefas (descricao, usuario_id) VALUES (?, ?)");
+    $stmt->bind_param("si", $nova_tarefa, $usuario_id);
     $stmt->execute();
     $stmt->close();
   }
@@ -35,7 +45,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["nova_tarefa"])) {
 // ======= MARCAR/DESMARCAR CONCLUÍDA =======
 if (isset($_GET["toggle"])) {
   $id = intval($_GET["toggle"]);
-  $conn->query("UPDATE tarefas SET concluida = 1 - concluida WHERE id = $id");
+  $stmt = $conn->prepare("UPDATE tarefas SET concluida = 1 - concluida WHERE id = ? AND usuario_id = ?");
+  $stmt->bind_param("ii", $id, $usuario_id);
+  $stmt->execute();
+  $stmt->close();
   header("Location: tarefas.php");
   exit;
 }
@@ -43,22 +56,32 @@ if (isset($_GET["toggle"])) {
 // ======= EXCLUIR TAREFA =======
 if (isset($_GET["delete"])) {
   $id = intval($_GET["delete"]);
-  $conn->query("DELETE FROM tarefas WHERE id = $id");
+  $stmt = $conn->prepare("DELETE FROM tarefas WHERE id = ? AND usuario_id = ?");
+  $stmt->bind_param("ii", $id, $usuario_id);
+  $stmt->execute();
+  $stmt->close();
   header("Location: tarefas.php");
   exit;
 }
 
 // ======= CARREGAR TAREFAS =======
-$result = $conn->query("SELECT * FROM tarefas ORDER BY id DESC");
-$tarefas = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+$stmt = $conn->prepare("SELECT id, descricao, concluida FROM tarefas WHERE usuario_id = ? ORDER BY id DESC");
+$stmt->bind_param("i", $usuario_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$tarefas = $result->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
 
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <title>Minhas Tarefas</title>
+<link rel="icon" type="image/png" href="/anotacoes/imagens/icon site.png" sizes="612x612">
+<link rel="stylesheet" href="estilo.css">
 <style>
 /* Barra toda */
 ::-webkit-scrollbar {
