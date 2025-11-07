@@ -188,6 +188,8 @@ if (isset($_FILES['banner_file']) && $_FILES['banner_file']['error'] === UPLOAD_
 <head>
   <meta charset="UTF-8">
   <title>Editar Perfil</title>
+  <link rel="icon" type="image/png" href="/anotacoes/imagens/icon site.png" sizes="612x612">
+  <link rel="stylesheet" href="estilo.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link href="https://unpkg.com/cropperjs@1.5.13/dist/cropper.min.css" rel="stylesheet"/>
   <style>

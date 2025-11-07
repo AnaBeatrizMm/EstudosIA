@@ -138,6 +138,8 @@ function humanSize($bytes){
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Upload PDF</title>
+<link rel="icon" type="image/png" href="/anotacoes/imagens/icon site.png" sizes="612x612">
+<link rel="stylesheet" href="estilo.css">
 
 <!-- ========================= ESTILO COMPLETO ========================= -->
 <style>

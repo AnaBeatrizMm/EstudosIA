@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Login | EstudosIA</title>
+  <link rel="icon" type="image/png" href="/anotacoes/imagens/icon site.png" sizes="612x612">
+  <link rel="stylesheet" href="estilo.css">
   <style>
     @font-face { font-family: 'SimpleHandmade'; src: url(/fonts/SimpleHandmade.ttf); }
     :root{
