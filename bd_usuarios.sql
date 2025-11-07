@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 07/11/2025 às 12:27
+-- Tempo de geração: 07/11/2025 às 16:08
 -- Versão do servidor: 10.4.28-MariaDB
 -- Versão do PHP: 8.2.4
 
@@ -92,7 +92,7 @@ CREATE TABLE `anotacoes` (
 --
 
 INSERT INTO `anotacoes` (`id`, `usuario_id`, `conteudo`) VALUES
-(3, 4, '<font color=\"#ff0000\" size=\"5\"><b>Matemática</b></font><div><font size=\"5\" color=\"#363030\">1+1=2</font></div><div><font size=\"5\" color=\"#363030\">2+2=4</font></div>');
+(4, 4, '<br>');
 
 -- --------------------------------------------------------
 
@@ -365,7 +365,10 @@ INSERT INTO `posts` (`id`, `usuario_id`, `conteudo`, `imagem`, `data_criacao`, `
 (11, 2, 'fsf', 'uploads/1759362018_Slakkj.jpeg', '2025-10-01 23:40:18', '2025-10-03 10:25:53'),
 (12, 3, 'sou rebelde', NULL, '2025-10-02 00:52:43', '2025-10-03 10:25:53'),
 (21, 13, 'qafs, que ódio', '', '2025-10-06 10:44:35', '2025-10-06 07:44:35'),
-(25, 13, 'y', 'imagens/posts/68e3a39c30c11.jfif', '2025-10-06 11:10:20', '2025-10-06 08:10:20');
+(25, 13, 'y', 'imagens/posts/68e3a39c30c11.jfif', '2025-10-06 11:10:20', '2025-10-06 08:10:20'),
+(32, 4, 'Eu to estudando muito', '', '2025-11-07 11:37:54', '2025-11-07 08:37:54'),
+(33, 4, 'O mundo deve ser comandado por santas capivaras comunistas.', '', '2025-11-07 11:38:23', '2025-11-07 08:38:23'),
+(34, 94, 'Comendo batata.', '', '2025-11-07 11:39:34', '2025-11-07 08:39:34');
 
 -- --------------------------------------------------------
 
@@ -412,7 +415,7 @@ INSERT INTO `tarefas` (`id`, `usuario_id`, `descricao`, `concluida`) VALUES
 (2, 1, 'Tarefa do TCC', 0),
 (3, 1, 'Assistir documentário \"Paris is Burning\"', 0),
 (4, 1, 'Fazer o banco de dados', 1),
-(5, 4, 'Ler', 0),
+(5, 4, 'Ler', 1),
 (6, 4, 'Fazer tarefa de matemática', 1),
 (7, 4, 'Resolver os meus adereços de formatura', 1);
 
@@ -457,13 +460,14 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `biografia`, `foto`, `arvore_escolhida`, `ultimo_login`, `token`, `expira_token`, `codigo_verificacao`, `verificado`, `username`, `apelido`, `data_nascimento`, `escola`, `foto_pessoal`, `preferencias`, `tags`, `favoritos`, `data_criacao`, `bio_foto`, `banner`, `aniversario`, `avatar`, `online`) VALUES
 (1, 'Ana Marques Cezar', 'anacezar@gmail.com', '$2y$10$tRGB685hxsuEW8mdF/xllOowNZKDibI3FduI1L2sUolsXidbLJ6JO', NULL, 'imagens/usuarios/default.jpg', NULL, '2025-11-06 10:43:13', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-06 10:43:13', NULL, NULL, NULL, 'default.png', 0),
-(4, 'Bia Soares', 'beatriz@gmail.com', '$2y$10$27rg7J1YQ9hSdb59AhTUle94ITQWOuvS6ILvpl7d0MODLB/ExkXbu', 'Study vlogs ', 'imagens/usuarios690dcb04900f9.png', NULL, '2025-08-18 09:19:03', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'meu namorado lindo, peixes, capivara,sobrenatural', '2025-09-24 11:33:45', 'imagens/bio/690dcb049041c.jpg', 'imagens/usuarios/690dcb04905e1.jpg', '2008-03-17', 'default.png', 0),
+(4, 'Bia Soares', 'beatriz@gmail.com', '$2y$10$27rg7J1YQ9hSdb59AhTUle94ITQWOuvS6ILvpl7d0MODLB/ExkXbu', 'Capivara vlogs ', 'imagens/usuarios690df95d1605b.png', NULL, '2025-08-18 09:19:03', 'fa3e5d053506dcf4d3986f4f48736a96', '2025-11-07 15:02:40', NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'meu namorado lindo, peixes, capivara,sobrenatural', '2025-09-24 11:33:45', 'imagens/bio/690dcb049041c.jpg', 'imagens/usuarios/690dcb04905e1.jpg', '2008-03-17', 'default.png', 0),
 (13, 'Marques', 'ana@gmail.com', '$2y$10$zPWncJg1miTRLlP.xPZk9efuZPyqymZu793GKnPDUc3fBeQpLdB6.', 'AnaBanana', 'imagens/usuarios/68d8225203d96.jpg', NULL, '2025-08-18 09:19:03', NULL, NULL, NULL, 0, '', NULL, NULL, NULL, NULL, NULL, 'Culinária,Programação', 'Gatos, Stardew Valley, Café, Uva Verde', '2025-09-24 11:33:45', 'imagens/bio/68e3a32fb59ab.jfif', 'imagens/usuarios/68e3a32fb5b51.jfif', '2007-10-10', 'default.png', 0),
 (14, 'wenderson', 'wenderson.souza@gmail.com', '$2y$10$JTjk3KlPbsViCn9Yd9gjCOoDmmLkOp/TEA3pK2q4XkcTusKZxEzN.', '', 'imagens/usuarios/68d2ab46456c1.jpg', NULL, '2025-10-06 08:46:56', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-24 11:33:45', NULL, NULL, NULL, 'default.png', 0),
 (89, 'Usuário Teste 1', 'teste1@email.com', '$2y$10$mhwR8xWl79e89JPhVYO4WuImgdM/SUfxi/nNh7i9ljY4zbq7E0Owe', NULL, NULL, NULL, '2025-09-27 21:37:23', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-27 21:37:23', NULL, NULL, NULL, 'default.png', 0),
 (90, 'Usuário Teste 2', 'teste2@email.com', '123456', NULL, NULL, NULL, '2025-09-27 21:37:23', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-27 21:37:23', NULL, NULL, NULL, 'default.png', 0),
 (92, 'Ana Marques', 'anabeatrizmarquescezar@gmail.com', '', NULL, NULL, NULL, '2025-11-06 11:34:45', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-06 11:34:45', NULL, NULL, NULL, 'default.png', 0),
-(93, 'Ana Beatriz', 'beatrizava@gmail.com', '$2y$10$znQAINvoqEDoaKmq9N9k6u2Q0Zy2uN2WqMI7xjFErHOKk5qJkhIS.', NULL, 'imagens/usuarios/default.jpg', NULL, '2025-11-07 05:16:28', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-07 05:16:28', NULL, NULL, NULL, 'default.png', 0);
+(93, 'Ana Beatriz', 'beatrizava@gmail.com', '$2y$10$znQAINvoqEDoaKmq9N9k6u2Q0Zy2uN2WqMI7xjFErHOKk5qJkhIS.', NULL, 'imagens/usuarios/default.jpg', NULL, '2025-11-07 05:16:28', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-07 05:16:28', NULL, NULL, NULL, 'default.png', 0),
+(94, 'Ana Beatriz Soares', 'anabeatrizsoaresteixeira03@gmail.com', '', NULL, NULL, NULL, '2025-11-07 08:39:13', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-07 08:39:13', NULL, NULL, NULL, 'default.png', 0);
 
 --
 -- Índices para tabelas despejadas
@@ -607,7 +611,7 @@ ALTER TABLE `amizades`
 -- AUTO_INCREMENT de tabela `anotacoes`
 --
 ALTER TABLE `anotacoes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `arquivos`
@@ -679,7 +683,7 @@ ALTER TABLE `planos`
 -- AUTO_INCREMENT de tabela `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT de tabela `solicitacoes_amizade`
@@ -697,7 +701,7 @@ ALTER TABLE `tarefas`
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 
 --
 -- Restrições para tabelas despejadas
