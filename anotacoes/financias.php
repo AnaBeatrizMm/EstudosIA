@@ -96,6 +96,8 @@ $conn->close();
 <head>
   <meta charset="utf-8">
   <title>Finanças - Controle</title>
+  <link rel="icon" type="image/png" href="/anotacoes/imagens/icon site.png" sizes="612x612">
+  <link rel="stylesheet" href="estilo.css">
 
   <style>
     /* Barra de rolagem personalizada */

@@ -24,6 +24,8 @@ if (isset($_SESSION['usuario_id'])) {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Questões Diárias</title>
+<link rel="icon" type="image/png" href="/anotacoes/imagens/icon site.png" sizes="612x612">
+<link rel="stylesheet" href="estilo.css">
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}

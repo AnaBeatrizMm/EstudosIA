@@ -42,6 +42,8 @@ if (isset($_POST['email'])) {
 <head>
 <meta charset="UTF-8">
 <title>Recuperar Senha</title>
+<link rel="icon" type="image/png" href="/anotacoes/imagens/icon site.png" sizes="612x612">
+<link rel="stylesheet" href="estilo.css">
 <style>
 @font-face { font-family: raesha; src: url('fonts/Raesha.ttf') format('truetype'); }
 body {
