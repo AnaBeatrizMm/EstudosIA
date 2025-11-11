@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 11/11/2025 às 16:27
+-- Tempo de geração: 11/11/2025 às 16:31
 -- Versão do servidor: 10.4.28-MariaDB
 -- Versão do PHP: 8.2.4
 
@@ -29,18 +29,13 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `agenda` (
   `id` int(11) NOT NULL,
+  `usuario_id` int(11) NOT NULL,
   `dia` varchar(20) NOT NULL,
-  `compromisso` varchar(255) DEFAULT NULL,
-  `horario` time DEFAULT NULL,
-  `notas` text DEFAULT NULL
+  `compromisso` text DEFAULT NULL,
+  `horario` varchar(50) DEFAULT NULL,
+  `notas` text DEFAULT NULL,
+  `data_criacao` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `agenda`
---
-
-INSERT INTO `agenda` (`id`, `dia`, `compromisso`, `horario`, `notas`) VALUES
-(2, 'segunda', 'sdsddsds', '23:03:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -63,6 +58,19 @@ INSERT INTO `amizades` (`id`, `id_usuario1`, `id_usuario2`, `data_criacao`) VALU
 (1, 4, 13, '2025-10-06 11:12:37'),
 (3, 13, 14, '2025-10-06 13:41:15'),
 (4, 93, 13, '2025-11-07 08:39:53');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `anotacoes`
+--
+
+CREATE TABLE `anotacoes` (
+  `id` int(11) NOT NULL,
+  `usuario_id` int(11) NOT NULL,
+  `conteudo` longtext DEFAULT NULL,
+  `data_criacao` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -190,8 +198,7 @@ CREATE TABLE `financas` (
   `data` date NOT NULL,
   `descricao` varchar(255) NOT NULL,
   `valor` decimal(10,2) NOT NULL,
-  `tipo` enum('Entrada','Saída') NOT NULL,
-  `data_registro` timestamp NOT NULL DEFAULT current_timestamp()
+  `data_criacao` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -247,6 +254,20 @@ INSERT INTO `notificacoes` (`id`, `usuario_id`, `mensagem`, `tipo`, `referencia_
 (1, 1, 'enviou uma solicitação de amizade', 'amizade', 1, 0, '2025-11-06 20:17:46'),
 (4, 90, 'Você recebeu uma solicitação de amizade', 'amizade', 6, 0, '2025-11-07 15:04:40'),
 (6, 1, 'Você recebeu uma solicitação de amizade', 'amizade', 8, 0, '2025-11-07 17:52:24');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `planejamento`
+--
+
+CREATE TABLE `planejamento` (
+  `id` int(11) NOT NULL,
+  `usuario_id` int(11) NOT NULL,
+  `dia` varchar(20) NOT NULL,
+  `texto` text DEFAULT NULL,
+  `data_criacao` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -340,35 +361,10 @@ INSERT INTO `solicitacoes_amizade` (`id`, `de_usuario_id`, `para_usuario_id`, `s
 CREATE TABLE `tarefas` (
   `id` int(11) NOT NULL,
   `descricao` varchar(255) NOT NULL,
-  `concluida` tinyint(1) DEFAULT 0
+  `concluida` tinyint(1) DEFAULT 0,
+  `usuario_id` int(11) NOT NULL,
+  `data_criacao` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `tarefas`
---
-
-INSERT INTO `tarefas` (`id`, `descricao`, `concluida`) VALUES
-(1, 'jjjjjjjjjjjjjjjjj', 1);
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `tempos`
---
-
-CREATE TABLE `tempos` (
-  `id` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `tempo` varchar(20) NOT NULL,
-  `criado_em` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `tempos`
---
-
-INSERT INTO `tempos` (`id`, `id_usuario`, `tempo`, `criado_em`) VALUES
-(4, 1, '00:00:02', '2025-11-11 14:34:26');
 
 -- --------------------------------------------------------
 
@@ -411,7 +407,7 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `biografia`, `foto`, `arvore_escolhida`, `ultimo_login`, `token`, `expira_token`, `codigo_verificacao`, `verificado`, `username`, `apelido`, `data_nascimento`, `escola`, `foto_pessoal`, `preferencias`, `tags`, `favoritos`, `data_criacao`, `bio_foto`, `banner`, `aniversario`, `avatar`, `online`) VALUES
 (1, 'Ana Marques Cezar', 'anacezar@gmail.com', '$2y$10$tRGB685hxsuEW8mdF/xllOowNZKDibI3FduI1L2sUolsXidbLJ6JO', NULL, 'imagens/usuarios/default.jpg', NULL, '2025-11-06 10:43:13', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-06 10:43:13', NULL, NULL, NULL, 'default.png', 0),
-(4, 'Bia Soares', 'beatriz@gmail.com', '$2y$10$27rg7J1YQ9hSdb59AhTUle94ITQWOuvS6ILvpl7d0MODLB/ExkXbu', 'Study vlogs ', 'imagens/usuarios68e3c84b1e642.png', NULL, '2025-08-18 09:19:03', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'meu namorado lindo, peixes, capivara,sobrenatural', '2025-09-24 11:33:45', 'imagens/bio/68e3c84b1ea07.png', 'imagens/usuarios/68e3c84b1ebca.webp', '2008-03-17', 'default.png', 0),
+(4, 'Bia Soares', 'beatriz@gmail.com', '$2y$10$27rg7J1YQ9hSdb59AhTUle94ITQWOuvS6ILvpl7d0MODLB/ExkXbu', 'Study vlogs ', 'imagens/usuarios6913469619ece.png', NULL, '2025-08-18 09:19:03', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'meu namorado lindo, peixes, capivara,sobrenatural', '2025-09-24 11:33:45', 'imagens/bio/691346961a3e7.jpg', 'imagens/usuarios/691346961a5cb.jpg', '2008-03-17', 'default.png', 0),
 (13, 'Marques', 'ana@gmail.com', '$2y$10$zPWncJg1miTRLlP.xPZk9efuZPyqymZu793GKnPDUc3fBeQpLdB6.', 'AnaBanana', 'imagens/usuarios690de51c81de3.png', NULL, '2025-08-18 09:19:03', NULL, NULL, NULL, 0, '', NULL, NULL, NULL, NULL, NULL, 'Culinária,Programação', 'Gatos, Stardew Valley, Café, Uva Verde', '2025-09-24 11:33:45', 'imagens/bio/690de50df02b6.jpg', 'imagens/usuarios/690de50df1ed4.jpg', '2007-10-10', 'default.png', 0),
 (14, 'wenderson', 'wenderson.souza@gmail.com', '$2y$10$JTjk3KlPbsViCn9Yd9gjCOoDmmLkOp/TEA3pK2q4XkcTusKZxEzN.', '', 'imagens/usuarios/68d2ab46456c1.jpg', NULL, '2025-10-06 08:46:56', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-24 11:33:45', NULL, NULL, NULL, 'default.png', 0),
 (89, 'Usuário Teste 1', 'teste1@email.com', '$2y$10$mhwR8xWl79e89JPhVYO4WuImgdM/SUfxi/nNh7i9ljY4zbq7E0Owe', NULL, NULL, NULL, '2025-09-27 21:37:23', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-27 21:37:23', NULL, NULL, NULL, 'default.png', 0),
@@ -435,6 +431,12 @@ ALTER TABLE `agenda`
 ALTER TABLE `amizades`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `uniq_pair` (`id_usuario1`,`id_usuario2`);
+
+--
+-- Índices de tabela `anotacoes`
+--
+ALTER TABLE `anotacoes`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Índices de tabela `arquivos`
@@ -471,8 +473,7 @@ ALTER TABLE `eventos`
 -- Índices de tabela `financas`
 --
 ALTER TABLE `financas`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `usuario_id` (`usuario_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Índices de tabela `lancamentos`
@@ -494,6 +495,12 @@ ALTER TABLE `mensagens`
 ALTER TABLE `notificacoes`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_usuario` (`usuario_id`);
+
+--
+-- Índices de tabela `planejamento`
+--
+ALTER TABLE `planejamento`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Índices de tabela `planos`
@@ -522,13 +529,6 @@ ALTER TABLE `tarefas`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices de tabela `tempos`
---
-ALTER TABLE `tempos`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_usuario_tempo` (`id_usuario`);
-
---
 -- Índices de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
@@ -544,13 +544,19 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de tabela `agenda`
 --
 ALTER TABLE `agenda`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `amizades`
 --
 ALTER TABLE `amizades`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de tabela `anotacoes`
+--
+ALTER TABLE `anotacoes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `arquivos`
@@ -607,6 +613,12 @@ ALTER TABLE `notificacoes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+-- AUTO_INCREMENT de tabela `planejamento`
+--
+ALTER TABLE `planejamento`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de tabela `planos`
 --
 ALTER TABLE `planos`
@@ -628,13 +640,7 @@ ALTER TABLE `solicitacoes_amizade`
 -- AUTO_INCREMENT de tabela `tarefas`
 --
 ALTER TABLE `tarefas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT de tabela `tempos`
---
-ALTER TABLE `tempos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
