@@ -346,11 +346,55 @@ body{font-family:Arial,sans-serif;background:#f4fdfb;margin:0;padding:20px;text-
   background-color: #2d5e56;
 }
 
+header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 70px;
+      background: #ffffffcc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
 
+    header .logo img {
+      height: 450px;
+      width: auto;
+      display: block;
+      margin-left: -85px;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin: 0;
+      margin-right: 50px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: black;
+      padding: 5px 10px;
+      border-radius: 8px;
+      transition: .3s;
+    }
 </style>
 </head>
 <body>
-
+<header>
+    <div class="logo"><img src="/imagens/logoatual.png" alt="Logo"></div>
+    <nav>
+      <ul>
+        <li><a href="/inicio.php">Voltar</a></li>
+      </ul>
+    </nav>
+  </header>
 <img class="robo" src="/videos/Robo_dormindo.gif" alt="Robo Dormindo">
 
 <div class="cronometro">
