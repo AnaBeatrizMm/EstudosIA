@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // ===================== CARREGAR DADOS =====================
 $agenda = [];
-$result = $conn->query("SELECT * FROM agenda WHERE usuario_id = $usuario_id");
+$result = $conn->query("SELECT * FROM agenda WHERE usuario_id = " . $usuario_id);
 while ($row = $result->fetch_assoc()) {
   $agenda[$row['dia']] = $row;
 }
