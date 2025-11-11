@@ -662,90 +662,57 @@ setTimeout(() => {
     }
   }
 
-  input.addEventListener("input", atualizarSugestoes);
-  btn.addEventListener("click", navegar);
-  input.addEventListener("keypress", e => {
-    if (e.key === "Enter") {
-      navegar();
-    }
-  });
+  document.addEventListener("DOMContentLoaded", () => {
+  const notifBtn = document.getElementById("notifBtn");
+  const notifDropdown = document.getElementById("notifDropdown");
 
-  // Fechar sugestões ao clicar fora
-  document.addEventListener("click", e => {
-    if (!input.contains(e.target) && !suggestions.contains(e.target)) {
-      suggestions.style.display = "none";
-    }
-  });
-document.addEventListener("DOMContentLoaded", () => {
-    const notifBtn = document.getElementById("notifBtn");
-    const notifDropdown = document.getElementById("notifDropdown");
+  // Cria o badge (bolinha com número)
+  const badge = document.createElement("span");
+  badge.classList.add("notif-badge");
+  notifBtn.appendChild(badge);
 
-    notifBtn.addEventListener("click", () => {
-        notifBtn.classList.toggle("active");
-
-        if (notifBtn.classList.contains("active")) {
-            fetch("notificacoes_sininho.php")
-              .then(res => res.text())
-              .then(html => {
-                  notifDropdown.innerHTML = html;
-                  notifDropdown.style.display = "block";
-              })
-              .catch(() => {
-                  notifDropdown.innerHTML = "<p>Erro ao carregar.</p>";
-                  notifDropdown.style.display = "block";
-              });
+  function atualizarNotificacoes() {
+    fetch("notificacoes_sininho.php")
+      .then(res => res.json())
+      .then(data => {
+        if (!data || data.count === 0) {
+          notifDropdown.innerHTML = ""; // não mostra nada
+          badge.style.display = "none"; // esconde número
         } else {
-            notifDropdown.style.display = "none";
+          notifDropdown.innerHTML = data.html; // mostra notificações
+          badge.textContent = data.count;
+          badge.style.display = "inline";
         }
-    });
+      })
+      .catch(() => {
+        notifDropdown.innerHTML = "";
+        badge.style.display = "none";
+      });
+  }
 
-    // Fecha o dropdown ao clicar fora
-    document.addEventListener("click", e => {
-        if (!notifBtn.contains(e.target) && !notifDropdown.contains(e.target)) {
-            notifDropdown.style.display = "none";
-            notifBtn.classList.remove("active");
-        }
-    });
-});
-document.addEventListener("DOMContentLoaded", () => {
-    const notifBtn = document.getElementById("notifBtn");
-    const notifDropdown = document.getElementById("notifDropdown");
+  notifBtn.addEventListener("click", () => {
+    notifBtn.classList.toggle("active");
+    notifDropdown.style.display = notifBtn.classList.contains("active")
+      ? "block"
+      : "none";
 
-    // Cria badge
-    let badge = document.createElement('span');
-    badge.classList.add('notif-badge');
-    notifBtn.appendChild(badge);
-
-    function atualizarNotificacoes() {
-        fetch('notificacoes_sininho.php')
-        .then(res => res.json())
-        .then(data => {
-            notifDropdown.innerHTML = data.html;
-            badge.textContent = data.count > 0 ? data.count : '';
-        })
-        .catch(() => {
-            notifDropdown.innerHTML = "<p>Erro ao carregar.</p>";
-            badge.textContent = '';
-        });
+    if (notifBtn.classList.contains("active")) {
+      atualizarNotificacoes();
     }
+  });
 
-    notifBtn.addEventListener('click', () => {
-        notifBtn.classList.toggle('active');
-        notifDropdown.style.display = notifBtn.classList.contains('active') ? 'block' : 'none';
-        atualizarNotificacoes();
-    });
+  document.addEventListener("click", (e) => {
+    if (!notifBtn.contains(e.target) && !notifDropdown.contains(e.target)) {
+      notifDropdown.style.display = "none";
+      notifBtn.classList.remove("active");
+    }
+  });
 
-    document.addEventListener('click', e => {
-        if (!notifBtn.contains(e.target) && !notifDropdown.contains(e.target)) {
-            notifDropdown.style.display = 'none';
-            notifBtn.classList.remove('active');
-        }
-    });
-
-    // Atualiza automaticamente a cada 30s
-    atualizarNotificacoes();
-    setInterval(atualizarNotificacoes, 30000);
+  // Atualiza automaticamente a cada 30s
+  atualizarNotificacoes();
+  setInterval(atualizarNotificacoes, 30000);
 });
+
 
 </script>
 </body>
