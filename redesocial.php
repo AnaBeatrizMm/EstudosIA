@@ -225,6 +225,22 @@ header {
 .notif img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);}
 .notif .actions{margin-left:auto;display:flex;gap:8px;}
 @media(max-width:1000px){.wrap{flex-direction:column}.sidebar{order:2}}
+nav ul {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      margin: 0;
+      margin-right: -500px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: black;
+      padding: 5px 10px;
+      border-radius: 8px;
+      transition: .3s;
+      margin-right: -700px;
+    }
 </style>
 </head>
 <body>
@@ -280,6 +296,11 @@ header {
   <div class="usuario">
     <img src="<?= htmlspecialchars($_SESSION['usuario_foto'] ?: 'imagens/usuarios/default.jpg') ?>" alt="Foto do usuário">
   </div>
+  <nav>
+      <ul>
+        <li><a href="/inicio.php">Voltar</a></li>
+      </ul>
+    </nav>
 </header>
 
 

@@ -11,8 +11,9 @@
   font-family: 'SimpleHandmade';
   src: url(/fonts/SimpleHandmade.ttf);
 }
-
+* { box-sizing: border-box; }
 body {
+  font-family: 'Roboto', sans-serif;
   background: white;
   color: #333;
 }
