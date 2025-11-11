@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 11/11/2025 às 15:33
+-- Tempo de geração: 11/11/2025 às 16:27
 -- Versão do servidor: 10.4.28-MariaDB
 -- Versão do PHP: 8.2.4
 
@@ -368,9 +368,7 @@ CREATE TABLE `tempos` (
 --
 
 INSERT INTO `tempos` (`id`, `id_usuario`, `tempo`, `criado_em`) VALUES
-(1, 1, '00:05:42', '2025-11-11 14:31:32'),
-(2, 1, '00:12:18', '2025-11-11 14:31:32'),
-(3, 2, '00:08:10', '2025-11-11 14:31:32');
+(4, 1, '00:00:02', '2025-11-11 14:34:26');
 
 -- --------------------------------------------------------
 
@@ -636,7 +634,7 @@ ALTER TABLE `tarefas`
 -- AUTO_INCREMENT de tabela `tempos`
 --
 ALTER TABLE `tempos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
