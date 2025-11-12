@@ -178,6 +178,13 @@ header {
   transform: translate(-50%, -5px);
 }
 
+/* Agrupa foto e botão Voltar */
+.usuario-area {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
 /* Foto do usuário */
 .usuario img {
   width: 48px;
@@ -191,6 +198,7 @@ header {
 .usuario img:hover {
   transform: scale(1.1);
 }
+
 .wrap{max-width:1100px;margin:24px auto;display:flex;gap:20px;padding:0 12px;}
 .feed{flex:2.6;display:flex;flex-direction:column;gap:18px;}
 .sidebar{flex:1;background:var(--white);border-radius:12px;padding:14px;box-shadow:0 6px 18px rgba(0,0,0,0.06);height:fit-content;border: 12px solid 	#8FBC8F; /* borda visível */}
@@ -225,20 +233,67 @@ header {
 .notif img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);}
 .notif .actions{margin-left:auto;display:flex;gap:8px;}
 @media(max-width:1000px){.wrap{flex-direction:column}.sidebar{order:2}}
+/* Estilo da ul */
+/* UL de voltar */
 nav ul {
-      list-style: none;
-      display: flex;
-      align-items: center;
-      margin: 0;
-    }
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
 
-    nav ul li a {
-      text-decoration: none;
-      color: black;
-      padding: 5px 10px;
-      border-radius: 8px;
-      transition: .3s;
-    }
+nav ul li a {
+  text-decoration: none;
+  color: black;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+.modal-perfil {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: aparecer 0.25s ease;
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-perfil .conteudo-perfil {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 85%;
+  overflow-y: auto;
+  box-shadow: 0 4px 25px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+.modal-perfil .fechar {
+  position: absolute;
+  top: 10px; right: 15px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #444;
+  transition: 0.2s;
+}
+
+.modal-perfil .fechar:hover {
+  color: #b33;
+}
 </style>
 </head>
 <body>
@@ -291,17 +346,52 @@ nav ul {
     </a>
   </div>
 
+  <div class="usuario-area">
   <div class="usuario">
-    <img src="<?= htmlspecialchars($_SESSION['usuario_foto'] ?: 'imagens/usuarios/default.jpg') ?>" alt="Foto do usuário">
-  </div>
-  <nav>
+  <img 
+  src="<?= htmlspecialchars($_SESSION['usuario_foto'] ?: 'imagens/usuarios/default.jpg') ?>" 
+  alt="Foto do usuário" 
+  onclick="abrirModal(<?= (int)$_SESSION['usuario_id'] ?>)" 
+  style="cursor:pointer;">
+</div>
+
+    <nav>
       <ul>
         <li><a href="/inicio.php">Voltar</a></li>
       </ul>
     </nav>
+  </div>
 </header>
 
+<!-- Modal de edição do usuário -->
+<div id="modal-editar-usuario" style="
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.5);
+  align-items:center;
+  justify-content:center;
+  z-index:2000;
+">
+  <div style="
+    background:white;
+    border-radius:12px;
+    width:90%;
+    max-width:600px;
+    height:80%;
+    position:relative;
+    box-shadow:0 0 15px rgba(0,0,0,0.3);
+    overflow:hidden;
+  ">
+    <button onclick="fecharModalEditarUsuario()" 
+            style="position:absolute;top:10px;right:12px;background:none;border:none;font-size:22px;cursor:pointer;">&times;</button>
 
+    <iframe id="iframe-editar-usuario" 
+            src="" 
+            style="width:100%;height:100%;border:none;border-radius:12px;"></iframe>
+  </div>
+</div>
 <div class="wrap">
   <div class="feed">
     <div class="card" id="novo-post">
@@ -541,5 +631,75 @@ setInterval(() => {
   }, 60000);
 </script>
 </script>
+<script>
+function abrirPerfilUsuario(usuarioId) {
+  fetch('perfil_ajax.php?id=' + usuarioId)
+    .then(res => res.text())
+    .then(html => {
+      // cria o modal
+      const modal = document.createElement('div');
+      modal.className = 'modal-perfil';
+      modal.innerHTML = `
+        <div class="conteudo-perfil">
+          <button class="fechar" onclick="this.closest('.modal-perfil').remove()">&times;</button>
+          ${html}
+        </div>
+      `;
+      document.body.appendChild(modal);
+
+      // fecha clicando fora
+      modal.addEventListener('click', e => {
+        if (e.target.classList.contains('modal-perfil')) modal.remove();
+      });
+    })
+    .catch(err => console.error('Erro ao carregar perfil:', err));
+}
+</script>
+</script>
+<script>
+let ultimoPostId = <?= !empty($posts) ? $posts[0]['post_id'] : 0 ?>;
+
+function carregarNovosPosts() {
+  fetch('buscar_posts.php?ultimo_id=' + ultimoPostId)
+    .then(r => r.json())
+    .then(data => {
+      if (data.status === 'sucesso' && data.posts.length > 0) {
+        const feed = document.querySelector('.feed');
+        data.posts.forEach(post => {
+          const novo = document.createElement('div');
+          novo.className = 'post card';
+          novo.id = 'post-' + post.post_id;
+          novo.innerHTML = `
+            <div class="user">
+              <img src="${post.foto || 'imagens/usuarios/default.jpg'}" alt="">
+              <strong>${escapeHtml(post.nome)}</strong>
+            </div>
+            <p>${escapeHtml(post.conteudo)}</p>
+            ${post.imagem ? `<img class="content-img" src="${post.imagem}" alt="">` : ''}
+          `;
+          feed.prepend(novo);
+          ultimoPostId = Math.max(ultimoPostId, post.post_id);
+        });
+      }
+    })
+    .catch(err => console.error('Erro ao buscar novos posts:', err));
+}
+
+// Atualiza a cada 5 segundos
+setInterval(carregarNovosPosts, 5000);
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+</script>
+<script>
+  // Atualiza a página automaticamente a cada 1 minuto (60.000 ms)
+  setInterval(function() {
+    location.reload();
+  }, 60000);
+</script>
+
 </body>
 </html>
