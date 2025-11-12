@@ -650,6 +650,7 @@ function abrirPerfilUsuario(usuarioId) {
 }
 </script>
 </script>
+<script>
 let ultimoPostId = <?= !empty($posts) ? $posts[0]['post_id'] : 0 ?>;
 
 function carregarNovosPosts() {
@@ -686,6 +687,13 @@ function escapeHtml(text) {
   div.textContent = text;
   return div.innerHTML;
 }
+</script>
+<script>
+  // Atualiza a página automaticamente a cada 1 minuto (60.000 ms)
+  setInterval(function() {
+    location.reload();
+  }, 60000);
+</script>
 
 </body>
 </html>
