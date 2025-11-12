@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 11/11/2025 às 16:31
+-- Tempo de geração: 12/11/2025 às 16:34
 -- Versão do servidor: 10.4.28-MariaDB
 -- Versão do PHP: 8.2.4
 
@@ -85,6 +85,34 @@ CREATE TABLE `arquivos` (
   `tamanho` int(11) NOT NULL,
   `data_envio` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `chat_grupo`
+--
+
+CREATE TABLE `chat_grupo` (
+  `id` int(11) NOT NULL,
+  `usuario` varchar(100) NOT NULL,
+  `mensagem` text DEFAULT NULL,
+  `arquivo` varchar(255) DEFAULT NULL,
+  `data_envio` datetime DEFAULT current_timestamp(),
+  `resposta_para` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `chat_grupo`
+--
+
+INSERT INTO `chat_grupo` (`id`, `usuario`, `mensagem`, `arquivo`, `data_envio`, `resposta_para`) VALUES
+(1, 'Convidado', 'rrrrrrrrrrrrrrrrr', NULL, '2025-11-12 11:49:55', NULL),
+(2, 'Convidado', 'bebezao da boca enchada\r\n', NULL, '2025-11-12 11:50:14', NULL),
+(3, 'Convidado', '', 'uploads/Apresentação De Davi Riguetti (ダヴィ・リゲッティによるプレゼンテーション).mp4', '2025-11-12 11:51:03', NULL),
+(4, 'Convidado', '', 'uploads/wallpaper.jpg', '2025-11-12 11:55:04', NULL),
+(5, 'Convidado', 'tipo\r\n', NULL, '2025-11-12 12:05:10', NULL),
+(6, 'Convidado', 'oie', NULL, '2025-11-12 12:11:06', NULL),
+(7, 'Convidado', 'OPA\r\n', NULL, '2025-11-12 12:15:56', NULL);
 
 -- --------------------------------------------------------
 
@@ -325,7 +353,10 @@ INSERT INTO `posts` (`id`, `usuario_id`, `conteudo`, `imagem`, `data_criacao`, `
 (25, 13, 'y', 'imagens/posts/68e3a39c30c11.jfif', '2025-10-06 11:10:20', '2025-10-06 08:10:20'),
 (29, 4, 'Uma tarde do hora com a best. #capiamigas', 'imagens/posts/68e3c87f3d01e.webp', '2025-10-06 13:47:43', '2025-10-06 10:47:43'),
 (30, 4, 'Eu e minha bebezona da boca inchada querida. #airmandadedasanabeatrizes', 'imagens/posts/68e3c92381944.webp', '2025-10-06 13:50:27', '2025-10-06 10:50:27'),
-(38, 13, 'Eu hoje de madrugada mexendo no tcc', 'imagens/posts/690df2ebc9a1a.jpg', '2025-11-07 13:23:55', '2025-11-07 10:23:55');
+(38, 13, 'Eu hoje de madrugada mexendo no tcc', 'imagens/posts/690df2ebc9a1a.jpg', '2025-11-07 13:23:55', '2025-11-07 10:23:55'),
+(39, 4, 'vou me matar', '', '2025-11-12 14:38:02', '2025-11-12 11:38:02'),
+(40, 4, 'g', '', '2025-11-12 15:18:55', '2025-11-12 12:18:55'),
+(41, 4, 'y', '', '2025-11-12 15:28:38', '2025-11-12 12:28:38');
 
 -- --------------------------------------------------------
 
@@ -364,6 +395,19 @@ CREATE TABLE `tarefas` (
   `concluida` tinyint(1) DEFAULT 0,
   `usuario_id` int(11) NOT NULL,
   `data_criacao` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `tempos`
+--
+
+CREATE TABLE `tempos` (
+  `id` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `tempo` varchar(20) NOT NULL,
+  `criado_em` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -442,6 +486,12 @@ ALTER TABLE `anotacoes`
 -- Índices de tabela `arquivos`
 --
 ALTER TABLE `arquivos`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Índices de tabela `chat_grupo`
+--
+ALTER TABLE `chat_grupo`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -529,6 +579,13 @@ ALTER TABLE `tarefas`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Índices de tabela `tempos`
+--
+ALTER TABLE `tempos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_usuario_tempo` (`id_usuario`);
+
+--
 -- Índices de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
@@ -563,6 +620,12 @@ ALTER TABLE `anotacoes`
 --
 ALTER TABLE `arquivos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT de tabela `chat_grupo`
+--
+ALTER TABLE `chat_grupo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de tabela `comentarios`
@@ -628,7 +691,7 @@ ALTER TABLE `planos`
 -- AUTO_INCREMENT de tabela `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT de tabela `solicitacoes_amizade`
@@ -640,6 +703,12 @@ ALTER TABLE `solicitacoes_amizade`
 -- AUTO_INCREMENT de tabela `tarefas`
 --
 ALTER TABLE `tarefas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `tempos`
+--
+ALTER TABLE `tempos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -668,15 +737,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
--- --------------------------------------------------------
--- Estrutura da tabela tempos
--- --------------------------------------------------------
-
-CREATE TABLE IF NOT EXISTS tempos (
-  id INT(11) NOT NULL AUTO_INCREMENT,
-  id_usuario INT(11) NOT NULL,
-  tempo VARCHAR(20) NOT NULL,          -- Armazena o tempo em formato "HH:MM:SS"
-  criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  KEY fk_usuario_tempo (id_usuario)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
