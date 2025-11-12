@@ -534,6 +534,12 @@ setInterval(() => {
   atualizarNotificacoes();
   atualizarAmigosOnline();
 }, 10000);
+<script>
+  // Atualiza a página automaticamente a cada 1 minuto (60.000 ms)
+  setInterval(function() {
+    location.reload();
+  }, 60000);
+</script>
 </script>
 </body>
 </html>
