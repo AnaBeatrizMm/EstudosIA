@@ -230,7 +230,6 @@ nav ul {
       display: flex;
       align-items: center;
       margin: 0;
-      margin-right: -500px;
     }
 
     nav ul li a {
@@ -239,7 +238,6 @@ nav ul {
       padding: 5px 10px;
       border-radius: 8px;
       transition: .3s;
-      margin-right: -700px;
     }
 </style>
 </head>

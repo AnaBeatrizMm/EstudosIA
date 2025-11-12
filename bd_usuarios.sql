@@ -668,3 +668,15 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+-- --------------------------------------------------------
+-- Estrutura da tabela tempos
+-- --------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS tempos (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  id_usuario INT(11) NOT NULL,
+  tempo VARCHAR(20) NOT NULL,          -- Armazena o tempo em formato "HH:MM:SS"
+  criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY fk_usuario_tempo (id_usuario)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
