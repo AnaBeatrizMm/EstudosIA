@@ -650,5 +650,42 @@ function abrirPerfilUsuario(usuarioId) {
 }
 </script>
 </script>
+let ultimoPostId = <?= !empty($posts) ? $posts[0]['post_id'] : 0 ?>;
+
+function carregarNovosPosts() {
+  fetch('buscar_posts.php?ultimo_id=' + ultimoPostId)
+    .then(r => r.json())
+    .then(data => {
+      if (data.status === 'sucesso' && data.posts.length > 0) {
+        const feed = document.querySelector('.feed');
+        data.posts.forEach(post => {
+          const novo = document.createElement('div');
+          novo.className = 'post card';
+          novo.id = 'post-' + post.post_id;
+          novo.innerHTML = `
+            <div class="user">
+              <img src="${post.foto || 'imagens/usuarios/default.jpg'}" alt="">
+              <strong>${escapeHtml(post.nome)}</strong>
+            </div>
+            <p>${escapeHtml(post.conteudo)}</p>
+            ${post.imagem ? `<img class="content-img" src="${post.imagem}" alt="">` : ''}
+          `;
+          feed.prepend(novo);
+          ultimoPostId = Math.max(ultimoPostId, post.post_id);
+        });
+      }
+    })
+    .catch(err => console.error('Erro ao buscar novos posts:', err));
+}
+
+// Atualiza a cada 5 segundos
+setInterval(carregarNovosPosts, 5000);
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
 </body>
 </html>
