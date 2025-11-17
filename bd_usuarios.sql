@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 17/11/2025 às 15:05
+-- Tempo de geração: 17/11/2025 às 15:38
 -- Versão do servidor: 10.4.28-MariaDB
 -- Versão do PHP: 8.2.4
 
@@ -94,25 +94,155 @@ CREATE TABLE `arquivos` (
 
 CREATE TABLE `chat_grupo` (
   `id` int(11) NOT NULL,
-  `usuario` varchar(100) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `mensagem` text DEFAULT NULL,
-  `arquivo` varchar(255) DEFAULT NULL,
-  `data_envio` datetime DEFAULT current_timestamp(),
-  `resposta_para` varchar(100) DEFAULT NULL
+  `arquivo` varchar(500) DEFAULT NULL,
+  `resposta_para` int(11) DEFAULT NULL,
+  `data_envio` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `chat_grupo`
 --
 
-INSERT INTO `chat_grupo` (`id`, `usuario`, `mensagem`, `arquivo`, `data_envio`, `resposta_para`) VALUES
-(1, 'Convidado', 'rrrrrrrrrrrrrrrrr', NULL, '2025-11-12 11:49:55', NULL),
-(2, 'Convidado', 'bebezao da boca enchada\r\n', NULL, '2025-11-12 11:50:14', NULL),
-(3, 'Convidado', '', 'uploads/Apresentação De Davi Riguetti (ダヴィ・リゲッティによるプレゼンテーション).mp4', '2025-11-12 11:51:03', NULL),
-(4, 'Convidado', '', 'uploads/wallpaper.jpg', '2025-11-12 11:55:04', NULL),
-(5, 'Convidado', 'tipo\r\n', NULL, '2025-11-12 12:05:10', NULL),
-(6, 'Convidado', 'oie', NULL, '2025-11-12 12:11:06', NULL),
-(7, 'Convidado', 'OPA\r\n', NULL, '2025-11-12 12:15:56', NULL);
+INSERT INTO `chat_grupo` (`id`, `user_id`, `mensagem`, `arquivo`, `resposta_para`, `data_envio`) VALUES
+(1, 4, 'sdafsaefsd', NULL, NULL, '2025-11-17 11:19:18'),
+(2, 4, 'dghdhgdgf', NULL, 1, '2025-11-17 11:19:22');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `chat_grupo_animes`
+--
+
+CREATE TABLE `chat_grupo_animes` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `mensagem` text DEFAULT NULL,
+  `arquivo` varchar(500) DEFAULT NULL,
+  `resposta_para` int(11) DEFAULT NULL,
+  `data_envio` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `chat_grupo_comida`
+--
+
+CREATE TABLE `chat_grupo_comida` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `mensagem` text DEFAULT NULL,
+  `arquivo` varchar(500) DEFAULT NULL,
+  `resposta_para` int(11) DEFAULT NULL,
+  `data_envio` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `chat_grupo_costura`
+--
+
+CREATE TABLE `chat_grupo_costura` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `mensagem` text DEFAULT NULL,
+  `arquivo` varchar(500) DEFAULT NULL,
+  `resposta_para` int(11) DEFAULT NULL,
+  `data_envio` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `chat_grupo_desenhos`
+--
+
+CREATE TABLE `chat_grupo_desenhos` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `mensagem` text DEFAULT NULL,
+  `arquivo` varchar(500) DEFAULT NULL,
+  `resposta_para` int(11) DEFAULT NULL,
+  `data_envio` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `chat_grupo_desenhos`
+--
+
+INSERT INTO `chat_grupo_desenhos` (`id`, `user_id`, `mensagem`, `arquivo`, `resposta_para`, `data_envio`) VALUES
+(1, 4, 'ddsfgsfg', NULL, NULL, '2025-11-17 11:24:02');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `chat_grupo_filmes`
+--
+
+CREATE TABLE `chat_grupo_filmes` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `mensagem` text DEFAULT NULL,
+  `arquivo` varchar(500) DEFAULT NULL,
+  `resposta_para` int(11) DEFAULT NULL,
+  `data_envio` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `chat_grupo_jogos`
+--
+
+CREATE TABLE `chat_grupo_jogos` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `mensagem` text DEFAULT NULL,
+  `arquivo` varchar(500) DEFAULT NULL,
+  `resposta_para` int(11) DEFAULT NULL,
+  `data_envio` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `chat_grupo_musica`
+--
+
+CREATE TABLE `chat_grupo_musica` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `mensagem` text DEFAULT NULL,
+  `arquivo` varchar(500) DEFAULT NULL,
+  `resposta_para` int(11) DEFAULT NULL,
+  `data_envio` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `chat_grupo_pintura`
+--
+
+CREATE TABLE `chat_grupo_pintura` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `mensagem` text DEFAULT NULL,
+  `arquivo` varchar(500) DEFAULT NULL,
+  `resposta_para` int(11) DEFAULT NULL,
+  `data_envio` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `chat_grupo_pintura`
+--
+
+INSERT INTO `chat_grupo_pintura` (`id`, `user_id`, `mensagem`, `arquivo`, `resposta_para`, `data_envio`) VALUES
+(1, 4, 'fsdsafsadg', NULL, NULL, '2025-11-17 11:28:51'),
+(2, 4, 'dggsfdrhg', NULL, 1, '2025-11-17 11:28:55');
 
 -- --------------------------------------------------------
 
@@ -492,7 +622,73 @@ ALTER TABLE `arquivos`
 -- Índices de tabela `chat_grupo`
 --
 ALTER TABLE `chat_grupo`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `resposta_para` (`resposta_para`);
+
+--
+-- Índices de tabela `chat_grupo_animes`
+--
+ALTER TABLE `chat_grupo_animes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `resposta_para` (`resposta_para`);
+
+--
+-- Índices de tabela `chat_grupo_comida`
+--
+ALTER TABLE `chat_grupo_comida`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `resposta_para` (`resposta_para`);
+
+--
+-- Índices de tabela `chat_grupo_costura`
+--
+ALTER TABLE `chat_grupo_costura`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `resposta_para` (`resposta_para`);
+
+--
+-- Índices de tabela `chat_grupo_desenhos`
+--
+ALTER TABLE `chat_grupo_desenhos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `resposta_para` (`resposta_para`);
+
+--
+-- Índices de tabela `chat_grupo_filmes`
+--
+ALTER TABLE `chat_grupo_filmes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `resposta_para` (`resposta_para`);
+
+--
+-- Índices de tabela `chat_grupo_jogos`
+--
+ALTER TABLE `chat_grupo_jogos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `resposta_para` (`resposta_para`);
+
+--
+-- Índices de tabela `chat_grupo_musica`
+--
+ALTER TABLE `chat_grupo_musica`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `resposta_para` (`resposta_para`);
+
+--
+-- Índices de tabela `chat_grupo_pintura`
+--
+ALTER TABLE `chat_grupo_pintura`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `resposta_para` (`resposta_para`);
 
 --
 -- Índices de tabela `comentarios`
@@ -625,7 +821,55 @@ ALTER TABLE `arquivos`
 -- AUTO_INCREMENT de tabela `chat_grupo`
 --
 ALTER TABLE `chat_grupo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de tabela `chat_grupo_animes`
+--
+ALTER TABLE `chat_grupo_animes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `chat_grupo_comida`
+--
+ALTER TABLE `chat_grupo_comida`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `chat_grupo_costura`
+--
+ALTER TABLE `chat_grupo_costura`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `chat_grupo_desenhos`
+--
+ALTER TABLE `chat_grupo_desenhos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de tabela `chat_grupo_filmes`
+--
+ALTER TABLE `chat_grupo_filmes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `chat_grupo_jogos`
+--
+ALTER TABLE `chat_grupo_jogos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `chat_grupo_musica`
+--
+ALTER TABLE `chat_grupo_musica`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de tabela `chat_grupo_pintura`
+--
+ALTER TABLE `chat_grupo_pintura`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `comentarios`
@@ -720,6 +964,69 @@ ALTER TABLE `usuarios`
 --
 -- Restrições para tabelas despejadas
 --
+
+--
+-- Restrições para tabelas `chat_grupo`
+--
+ALTER TABLE `chat_grupo`
+  ADD CONSTRAINT `chat_grupo_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`),
+  ADD CONSTRAINT `chat_grupo_ibfk_2` FOREIGN KEY (`resposta_para`) REFERENCES `chat_grupo` (`id`);
+
+--
+-- Restrições para tabelas `chat_grupo_animes`
+--
+ALTER TABLE `chat_grupo_animes`
+  ADD CONSTRAINT `chat_grupo_animes_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`),
+  ADD CONSTRAINT `chat_grupo_animes_ibfk_2` FOREIGN KEY (`resposta_para`) REFERENCES `chat_grupo_animes` (`id`);
+
+--
+-- Restrições para tabelas `chat_grupo_comida`
+--
+ALTER TABLE `chat_grupo_comida`
+  ADD CONSTRAINT `chat_grupo_comida_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`),
+  ADD CONSTRAINT `chat_grupo_comida_ibfk_2` FOREIGN KEY (`resposta_para`) REFERENCES `chat_grupo_comida` (`id`);
+
+--
+-- Restrições para tabelas `chat_grupo_costura`
+--
+ALTER TABLE `chat_grupo_costura`
+  ADD CONSTRAINT `chat_grupo_costura_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`),
+  ADD CONSTRAINT `chat_grupo_costura_ibfk_2` FOREIGN KEY (`resposta_para`) REFERENCES `chat_grupo_costura` (`id`);
+
+--
+-- Restrições para tabelas `chat_grupo_desenhos`
+--
+ALTER TABLE `chat_grupo_desenhos`
+  ADD CONSTRAINT `chat_grupo_desenhos_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`),
+  ADD CONSTRAINT `chat_grupo_desenhos_ibfk_2` FOREIGN KEY (`resposta_para`) REFERENCES `chat_grupo_desenhos` (`id`);
+
+--
+-- Restrições para tabelas `chat_grupo_filmes`
+--
+ALTER TABLE `chat_grupo_filmes`
+  ADD CONSTRAINT `chat_grupo_filmes_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`),
+  ADD CONSTRAINT `chat_grupo_filmes_ibfk_2` FOREIGN KEY (`resposta_para`) REFERENCES `chat_grupo_filmes` (`id`);
+
+--
+-- Restrições para tabelas `chat_grupo_jogos`
+--
+ALTER TABLE `chat_grupo_jogos`
+  ADD CONSTRAINT `chat_grupo_jogos_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`),
+  ADD CONSTRAINT `chat_grupo_jogos_ibfk_2` FOREIGN KEY (`resposta_para`) REFERENCES `chat_grupo_jogos` (`id`);
+
+--
+-- Restrições para tabelas `chat_grupo_musica`
+--
+ALTER TABLE `chat_grupo_musica`
+  ADD CONSTRAINT `chat_grupo_musica_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`),
+  ADD CONSTRAINT `chat_grupo_musica_ibfk_2` FOREIGN KEY (`resposta_para`) REFERENCES `chat_grupo_musica` (`id`);
+
+--
+-- Restrições para tabelas `chat_grupo_pintura`
+--
+ALTER TABLE `chat_grupo_pintura`
+  ADD CONSTRAINT `chat_grupo_pintura_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`),
+  ADD CONSTRAINT `chat_grupo_pintura_ibfk_2` FOREIGN KEY (`resposta_para`) REFERENCES `chat_grupo_pintura` (`id`);
 
 --
 -- Restrições para tabelas `notificacoes`
