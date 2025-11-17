@@ -423,7 +423,8 @@ nav ul li a {
 
         <div class="post-actions">
           <button onclick="curtirPost(<?= $post['post_id'] ?>)" title="Curtir">
-            <i class="fa-regular fa-heart" id="icon-heart-<?= $post['post_id'] ?>"></i>
+          <i class="<?= $post['ja_curti'] ? 'fa-solid' : 'fa-regular' ?> fa-heart"
+            id="icon-heart-<?= $post['post_id'] ?>"></i>
             <span id="curtidas-<?= $post['post_id'] ?>"><?= $post['total_curtidas'] ?></span>
           </button>
 
@@ -499,14 +500,23 @@ nav ul li a {
 <script>
 function fecharModal(){ document.getElementById('modal').style.display = 'none'; }
 
-function curtirPost(postId){
-  fetch('curtir_ajax.php?post_id='+postId)
-    .then(r=>r.json()).then(data=>{
-      if(data.status==='sucesso'){
-        document.getElementById('curtidas-'+postId).innerText = data.total;
-        const icon = document.getElementById('icon-heart-'+postId);
-        icon.className = data.ja_curti ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
-      } else alert('Erro ao curtir');
+function curtirPost(id) {
+    fetch("curtir.php?id=" + id)
+    .then(r => r.json())
+    .then(data => {
+        if (data.ok) {
+            document.getElementById("curtidas-" + id).innerText = data.curtidas;
+
+            let icon = document.getElementById("icon-heart-" + id);
+
+            if (data.curtiu === 1) {
+                icon.classList.remove("fa-regular");
+                icon.classList.add("fa-solid");
+            } else {
+                icon.classList.remove("fa-solid");
+                icon.classList.add("fa-regular");
+            }
+        }
     });
 }
 function abrirPerfil(usuarioId) {
@@ -624,12 +634,10 @@ setInterval(() => {
   atualizarNotificacoes();
   atualizarAmigosOnline();
 }, 10000);
-<script>
   // Atualiza a página automaticamente a cada 1 minuto (60.000 ms)
   setInterval(function() {
-    location.reload();
+    location.reload()
   }, 60000);
-</script>
 </script>
 <script>
 function abrirPerfilUsuario(usuarioId) {
