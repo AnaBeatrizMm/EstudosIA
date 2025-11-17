@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Batalha do Cavaleiro - Jogo de Aventura</title>
+  <link rel="icon" type="image/png" href="/anotacoes/imagens/icon site.png" sizes="612x612">
+  <link rel="stylesheet" href="estilo.css">
 
   <style>
     /* ===== NOVO ESTILO PARA CABEÇALHO E CRONÔMETRO ===== */
