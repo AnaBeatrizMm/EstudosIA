@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 17/11/2025 às 14:16
+-- Tempo de geração: 17/11/2025 às 15:05
 -- Versão do servidor: 10.4.28-MariaDB
 -- Versão do PHP: 8.2.4
 
@@ -94,161 +94,25 @@ CREATE TABLE `arquivos` (
 
 CREATE TABLE `chat_grupo` (
   `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `usuario` varchar(100) NOT NULL,
   `mensagem` text DEFAULT NULL,
   `arquivo` varchar(255) DEFAULT NULL,
-  `resposta_para` int(11) DEFAULT NULL,
-  `data_envio` datetime DEFAULT current_timestamp()
+  `data_envio` datetime DEFAULT current_timestamp(),
+  `resposta_para` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `chat_grupo`
 --
 
-INSERT INTO `chat_grupo` (`id`, `user_id`, `mensagem`, `arquivo`, `resposta_para`, `data_envio`) VALUES
-(13, 4, 'oie', NULL, NULL, '2025-11-17 08:46:11'),
-(14, 4, 'bom dia', NULL, 13, '2025-11-17 08:46:18'),
-(15, 4, 'oie', NULL, NULL, '2025-11-17 08:49:28'),
-(16, 4, 'tipo', NULL, 15, '2025-11-17 08:49:37'),
-(17, 13, 'oie', NULL, NULL, '2025-11-17 08:59:16'),
-(18, 13, 'bom dia', NULL, 13, '2025-11-17 08:59:30'),
-(19, 13, 'opiupiuop', 'uploads_chat/691b0f06563ef-wallpaper.jpg', NULL, '2025-11-17 09:03:18'),
-(20, 13, 'eita', 'uploads_chat/691b0fc52946a-Apresentação De Davi Riguetti (ダヴィ・リゲッティによるプレゼンテーション).mp4', NULL, '2025-11-17 09:06:29');
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `chat_grupo_animes`
---
-
-CREATE TABLE `chat_grupo_animes` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `mensagem` text NOT NULL,
-  `arquivo` varchar(255) DEFAULT NULL,
-  `resposta_para` int(11) DEFAULT NULL,
-  `data_envio` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `chat_grupo_animes`
---
-
-INSERT INTO `chat_grupo_animes` (`id`, `user_id`, `mensagem`, `arquivo`, `resposta_para`, `data_envio`) VALUES
-(1, 13, 'wedwqfrwet', NULL, NULL, '2025-11-17 09:30:10'),
-(2, 13, 'hgfghfgh', NULL, 1, '2025-11-17 09:30:14');
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `chat_grupo_comida`
---
-
-CREATE TABLE `chat_grupo_comida` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `mensagem` text DEFAULT NULL,
-  `arquivo` varchar(255) DEFAULT NULL,
-  `resposta_para` int(11) DEFAULT NULL,
-  `data_envio` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `chat_grupo_comida`
---
-
-INSERT INTO `chat_grupo_comida` (`id`, `user_id`, `mensagem`, `arquivo`, `resposta_para`, `data_envio`) VALUES
-(6, 13, 'hghjghk', NULL, NULL, '2025-11-17 09:42:52');
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `chat_grupo_costura`
---
-
-CREATE TABLE `chat_grupo_costura` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `mensagem` text NOT NULL,
-  `arquivo` varchar(255) DEFAULT NULL,
-  `resposta_para` int(11) DEFAULT NULL,
-  `data_envio` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `chat_grupo_costura`
---
-
-INSERT INTO `chat_grupo_costura` (`id`, `user_id`, `mensagem`, `arquivo`, `resposta_para`, `data_envio`) VALUES
-(1, 13, '56', NULL, NULL, '2025-11-17 09:42:58');
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `chat_grupo_desenhos`
---
-
-CREATE TABLE `chat_grupo_desenhos` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `mensagem` text DEFAULT NULL,
-  `arquivo` varchar(255) DEFAULT NULL,
-  `resposta_para` int(11) DEFAULT NULL,
-  `data_envio` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `chat_grupo_desenhos`
---
-
-INSERT INTO `chat_grupo_desenhos` (`id`, `user_id`, `mensagem`, `arquivo`, `resposta_para`, `data_envio`) VALUES
-(2, 13, 'dfdfdf', NULL, 1, '2025-11-17 09:25:48');
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `chat_grupo_filmes`
---
-
-CREATE TABLE `chat_grupo_filmes` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `mensagem` text DEFAULT NULL,
-  `arquivo` varchar(255) DEFAULT NULL,
-  `resposta_para` int(11) DEFAULT NULL,
-  `data_envio` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `chat_grupo_filmes`
---
-
-INSERT INTO `chat_grupo_filmes` (`id`, `user_id`, `mensagem`, `arquivo`, `resposta_para`, `data_envio`) VALUES
-(3, 13, 'thtjhyj', NULL, NULL, '2025-11-17 09:20:12'),
-(4, 13, 'hthtth', NULL, 3, '2025-11-17 09:20:17');
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `chat_grupo_jogos`
---
-
-CREATE TABLE `chat_grupo_jogos` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `mensagem` text NOT NULL,
-  `arquivo` varchar(255) DEFAULT NULL,
-  `resposta_para` int(11) DEFAULT NULL,
-  `data_envio` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `chat_grupo_jogos`
---
-
-INSERT INTO `chat_grupo_jogos` (`id`, `user_id`, `mensagem`, `arquivo`, `resposta_para`, `data_envio`) VALUES
-(1, 13, 'ewewrwr', NULL, NULL, '2025-11-17 09:15:49'),
-(3, 13, 'dwdw', 'uploads/1763381763_WhatsApp Image 2025-11-12 at 11.51.54.jpeg', NULL, '2025-11-17 09:16:03');
+INSERT INTO `chat_grupo` (`id`, `usuario`, `mensagem`, `arquivo`, `data_envio`, `resposta_para`) VALUES
+(1, 'Convidado', 'rrrrrrrrrrrrrrrrr', NULL, '2025-11-12 11:49:55', NULL),
+(2, 'Convidado', 'bebezao da boca enchada\r\n', NULL, '2025-11-12 11:50:14', NULL),
+(3, 'Convidado', '', 'uploads/Apresentação De Davi Riguetti (ダヴィ・リゲッティによるプレゼンテーション).mp4', '2025-11-12 11:51:03', NULL),
+(4, 'Convidado', '', 'uploads/wallpaper.jpg', '2025-11-12 11:55:04', NULL),
+(5, 'Convidado', 'tipo\r\n', NULL, '2025-11-12 12:05:10', NULL),
+(6, 'Convidado', 'oie', NULL, '2025-11-12 12:11:06', NULL),
+(7, 'Convidado', 'OPA\r\n', NULL, '2025-11-12 12:15:56', NULL);
 
 -- --------------------------------------------------------
 
@@ -269,8 +133,7 @@ CREATE TABLE `comentarios` (
 --
 
 INSERT INTO `comentarios` (`id`, `id_post`, `id_usuario`, `conteudo`, `data_criacao`) VALUES
-(1, 25, 13, 'oii', '2025-10-06 11:10:26'),
-(3, 41, 4, 'poiiu', '2025-11-17 12:02:21');
+(1, 25, 13, 'oii', '2025-10-06 11:10:26');
 
 -- --------------------------------------------------------
 
@@ -590,7 +453,7 @@ INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `biografia`, `foto`, `ar
 (1, 'Ana Marques Cezar', 'anacezar@gmail.com', '$2y$10$tRGB685hxsuEW8mdF/xllOowNZKDibI3FduI1L2sUolsXidbLJ6JO', NULL, 'imagens/usuarios/default.jpg', NULL, '2025-11-06 10:43:13', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-06 10:43:13', NULL, NULL, NULL, 'default.png', 0),
 (4, 'Bia Soares', 'beatriz@gmail.com', '$2y$10$27rg7J1YQ9hSdb59AhTUle94ITQWOuvS6ILvpl7d0MODLB/ExkXbu', 'Study vlogs ', 'imagens/usuarios6913469619ece.png', NULL, '2025-08-18 09:19:03', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'meu namorado lindo, peixes, capivara,sobrenatural', '2025-09-24 11:33:45', 'imagens/bio/691346961a3e7.jpg', 'imagens/usuarios/691346961a5cb.jpg', '2008-03-17', 'default.png', 0),
 (13, 'Marques', 'ana@gmail.com', '$2y$10$zPWncJg1miTRLlP.xPZk9efuZPyqymZu793GKnPDUc3fBeQpLdB6.', 'AnaBanana', 'imagens/usuarios690de51c81de3.png', NULL, '2025-08-18 09:19:03', NULL, NULL, NULL, 0, '', NULL, NULL, NULL, NULL, NULL, 'Culinária,Programação', 'Gatos, Stardew Valley, Café, Uva Verde', '2025-09-24 11:33:45', 'imagens/bio/690de50df02b6.jpg', 'imagens/usuarios/690de50df1ed4.jpg', '2007-10-10', 'default.png', 0),
-(14, 'wenderson', 'wenderson.souza@gmail.com', '$2y$10$JTjk3KlPbsViCn9Yd9gjCOoDmmLkOp/TEA3pK2q4XkcTusKZxEzN.', '', 'imagens/usuarios/68d2ab46456c1.jpg', NULL, '2025-10-06 08:46:56', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-24 11:33:45', NULL, NULL, NULL, 'default.png', 0),
+(14, 'wenderson', 'wenderson.souza@gmail.com', '$2y$10$JTjk3KlPbsViCn9Yd9gjCOoDmmLkOp/TEA3pK2q4XkcTusKZxEzN.', '', 'imagens/usuarios691afdd9d2ccc.png', NULL, '2025-10-06 08:46:56', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '2025-09-24 11:33:45', '', 'imagens/usuarios/691afdd9d2f42.jpeg', '0000-00-00', 'default.png', 0),
 (89, 'Usuário Teste 1', 'teste1@email.com', '$2y$10$mhwR8xWl79e89JPhVYO4WuImgdM/SUfxi/nNh7i9ljY4zbq7E0Owe', NULL, NULL, NULL, '2025-09-27 21:37:23', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-27 21:37:23', NULL, NULL, NULL, 'default.png', 0),
 (90, 'Usuário Teste 2', 'teste2@email.com', '$2y$10$vvB3M3xD06TLnXv6Br/i8u7/O0yHOMQJRd2eXpyaYbc3taxaJ9Of.', NULL, NULL, NULL, '2025-09-27 21:37:23', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-27 21:37:23', NULL, NULL, NULL, 'default.png', 0),
 (92, 'Ana Marques', 'anabeatrizmarquescezar@gmail.com', '', NULL, NULL, NULL, '2025-11-06 11:34:45', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-06 11:34:45', NULL, NULL, NULL, 'default.png', 0),
@@ -629,52 +492,7 @@ ALTER TABLE `arquivos`
 -- Índices de tabela `chat_grupo`
 --
 ALTER TABLE `chat_grupo`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `resposta_para` (`resposta_para`);
-
---
--- Índices de tabela `chat_grupo_animes`
---
-ALTER TABLE `chat_grupo_animes`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Índices de tabela `chat_grupo_comida`
---
-ALTER TABLE `chat_grupo_comida`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `resposta_para` (`resposta_para`);
-
---
--- Índices de tabela `chat_grupo_costura`
---
-ALTER TABLE `chat_grupo_costura`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Índices de tabela `chat_grupo_desenhos`
---
-ALTER TABLE `chat_grupo_desenhos`
   ADD PRIMARY KEY (`id`);
-
---
--- Índices de tabela `chat_grupo_filmes`
---
-ALTER TABLE `chat_grupo_filmes`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `resposta_para` (`resposta_para`);
-
---
--- Índices de tabela `chat_grupo_jogos`
---
-ALTER TABLE `chat_grupo_jogos`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
 
 --
 -- Índices de tabela `comentarios`
@@ -807,49 +625,13 @@ ALTER TABLE `arquivos`
 -- AUTO_INCREMENT de tabela `chat_grupo`
 --
 ALTER TABLE `chat_grupo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
-
---
--- AUTO_INCREMENT de tabela `chat_grupo_animes`
---
-ALTER TABLE `chat_grupo_animes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT de tabela `chat_grupo_comida`
---
-ALTER TABLE `chat_grupo_comida`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT de tabela `chat_grupo_costura`
---
-ALTER TABLE `chat_grupo_costura`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT de tabela `chat_grupo_desenhos`
---
-ALTER TABLE `chat_grupo_desenhos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT de tabela `chat_grupo_filmes`
---
-ALTER TABLE `chat_grupo_filmes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT de tabela `chat_grupo_jogos`
---
-ALTER TABLE `chat_grupo_jogos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de tabela `comentarios`
 --
 ALTER TABLE `comentarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de tabela `conteudos`
@@ -938,45 +720,6 @@ ALTER TABLE `usuarios`
 --
 -- Restrições para tabelas despejadas
 --
-
---
--- Restrições para tabelas `chat_grupo`
---
-ALTER TABLE `chat_grupo`
-  ADD CONSTRAINT `chat_grupo_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`),
-  ADD CONSTRAINT `chat_grupo_ibfk_2` FOREIGN KEY (`resposta_para`) REFERENCES `chat_grupo` (`id`);
-
---
--- Restrições para tabelas `chat_grupo_animes`
---
-ALTER TABLE `chat_grupo_animes`
-  ADD CONSTRAINT `chat_grupo_animes_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`);
-
---
--- Restrições para tabelas `chat_grupo_comida`
---
-ALTER TABLE `chat_grupo_comida`
-  ADD CONSTRAINT `chat_grupo_comida_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`),
-  ADD CONSTRAINT `chat_grupo_comida_ibfk_2` FOREIGN KEY (`resposta_para`) REFERENCES `chat_grupo_comida` (`id`);
-
---
--- Restrições para tabelas `chat_grupo_costura`
---
-ALTER TABLE `chat_grupo_costura`
-  ADD CONSTRAINT `chat_grupo_costura_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`);
-
---
--- Restrições para tabelas `chat_grupo_filmes`
---
-ALTER TABLE `chat_grupo_filmes`
-  ADD CONSTRAINT `chat_grupo_filmes_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`),
-  ADD CONSTRAINT `chat_grupo_filmes_ibfk_2` FOREIGN KEY (`resposta_para`) REFERENCES `chat_grupo_filmes` (`id`);
-
---
--- Restrições para tabelas `chat_grupo_jogos`
---
-ALTER TABLE `chat_grupo_jogos`
-  ADD CONSTRAINT `chat_grupo_jogos_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`);
 
 --
 -- Restrições para tabelas `notificacoes`
