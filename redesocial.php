@@ -300,7 +300,7 @@ nav ul li a {
 
 <header>
   <div class="bolinhas">
-    <a href="estudos.php">
+    <a href="chat_grupo.php">
       <img src="https://i.pinimg.com/1200x/e4/6d/1a/e46d1add185e813f4cc36b417128647f.jpg" alt="Estudos">
       <span>Estudos</span>
     </a>

@@ -140,6 +140,8 @@ function foto($f) {
 <head>
 <meta charset="UTF-8">
 <title>Cronômetro + Amizades</title>
+<link rel="icon" type="image/png" href="/anotacoes/imagens/icon site.png" sizes="612x612">
+<link rel="stylesheet" href="estilo.css">
 <style>
 body{font-family:Arial,sans-serif;background:#f4fdfb;margin:0;padding:20px;text-align:center;}
 .robo{max-width:380px;width:80%;margin:10px auto;display:block;}
