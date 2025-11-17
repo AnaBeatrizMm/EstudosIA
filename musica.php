@@ -1,4 +1,4 @@
-<?php   
+<?php    
 session_start();
 include 'conexao.php';
 
@@ -12,18 +12,18 @@ $usuario_logado = $_SESSION['usuario_id'];
 /* BUSCAR MENSAGENS PRINCIPAIS */
 $sql = "
 SELECT c.*, u.nome, u.foto
-FROM chat_grupo_desenhos c
+FROM chat_grupo_musica c
 JOIN usuarios u ON c.user_id = u.id
 WHERE c.resposta_para IS NULL
 ORDER BY c.id DESC
 ";
 $mensagens = $conn->query($sql)->fetch_all(MYSQLI_ASSOC);
 
-/* BUSCAR TODAS AS RESPOSTAS */
+/* BUSCAR RESPOSTAS */
 $respostas = [];
 $stmt = $conn->prepare("
     SELECT c.*, u.nome, u.foto
-    FROM chat_grupo_desenhos c
+    FROM chat_grupo_musica c
     JOIN usuarios u ON c.user_id = u.id
     WHERE resposta_para = ?
     ORDER BY c.id ASC
@@ -40,136 +40,70 @@ $stmt->close();
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Chat - Desenhos</title>
+<title>Chat - Música</title>
 <link rel="icon" type="image/png" href="/anotacoes/imagens/icon site.png" sizes="612x612">
   <link rel="stylesheet" href="estilo.css">
 
 <style>
-body {
-    font-family: Arial;
-    background: #e8f5f3;
-    margin: 0;
-    padding: 0;
-}
+body { font-family: Arial; background: #e8f5f3; margin: 0; padding: 0; }
 
-/* HEADER */
 header {
-  position: fixed; 
-  top:0; left:0; 
-  width:100%; 
-  height:70px;
-  background:#ffffffcc; 
-  display:flex; 
-  justify-content:space-between; 
-  align-items:center;
-  padding:0 1.5rem; 
-  box-shadow:0 2px 5px rgba(0,0,0,0.1); 
+  position: fixed; top:0; left:0; width:100%; height:70px;
+  background:#ffffffcc; display:flex; justify-content:space-between;
+  align-items:center; padding:0 1.5rem; box-shadow:0 2px 5px rgba(0,0,0,0.1);
   z-index:1000;
 }
 
-header .logo img{
-  height:55px;
-  width:auto;
-}
+header .logo img{ height:55px; }
 
-nav ul{
-  list-style:none; 
-  display:flex; 
-  align-items:center; 
-  gap:15px; 
-  margin:0;
-}
+nav ul{ list-style:none; display:flex; align-items:center; gap:15px; margin:0; }
 
 nav ul li a{
-  text-decoration:none; 
-  color:black;  
-  padding:6px 12px; 
-  border-radius:8px; 
-  font-size:17px;
-  transition:.3s;
+  text-decoration:none; color:black; padding:6px 12px;
+  border-radius:8px; font-size:17px;
 }
 
-/* CHAT */
 .chat-box {
-    width: 70%;
-    margin: 120px auto 30px auto;
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    border: 4px solid #6bb7a8;
+    width: 70%; margin: 120px auto 30px auto; background: white;
+    padding: 20px; border-radius: 12px; border: 4px solid #6bb7a8;
 }
 
-/* TÍTULO COM IMAGEM */
 .titulo-grupo {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+    display: flex; align-items: center; gap: 15px;
 }
 
 .titulo-grupo img {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    border: 3px solid #6bb7a8;
+    width: 55px; height: 55px; border-radius: 50%; border: 3px solid #6bb7a8;
 }
 
-/* MENSAGEM */
 .msg {
-    border-bottom: 1px solid #ccc;
-    padding: 12px 0;
+    border-bottom: 1px solid #ccc; padding: 12px 0;
 }
 
 .msg img.foto {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    border: 2px solid #6bb7a8;
-    margin-right: 10px;
+    width: 50px; height: 50px; border-radius: 50%;
+    border: 2px solid #6bb7a8; margin-right: 10px;
 }
 
-.msg .nome {
-    font-weight: bold;
-    color: #2d5c54;
-}
+.msg .nome { font-weight: bold; color: #2d5c54; }
 
-/* RESPOSTA */
 .resposta {
-    margin-left: 50px;
-    background: #f4fffb;
-    padding: 10px;
-    border-left: 4px solid #6bb7a8;
-    border-radius: 10px;
-    margin-top: 10px;
+    margin-left: 50px; background: #f4fffb; padding: 10px;
+    border-left: 4px solid #6bb7a8; border-radius: 10px; margin-top: 10px;
 }
 
-/* BOTÕES */
 .botao-responder {
-    background: #6bb7a8;
-    color: white;
-    padding: 6px 14px;
-    font-size: 14px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-top: 10px;
+    background: #6bb7a8; color: white; padding: 6px 14px; font-size: 14px;
+    border: none; border-radius: 10px; cursor: pointer; margin-top: 10px;
 }
 
-.caixa-resposta {
-    display: none;
-    margin-top: 10px;
-}
+.caixa-resposta { display: none; margin-top: 10px; }
 
 .botao-excluir {
-    background: #ff8fa3;
-    color: white;
-    padding: 5px 12px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: .2s;
+    background: #ff8fa3; color: white; padding: 5px 12px;
+    border: none; border-radius: 10px; cursor: pointer;
 }
 .botao-excluir:hover { background: #ff5c77; }
-
 </style>
 
 <script>
@@ -194,14 +128,13 @@ function mostrarResposta(id) {
 <div class="chat-box">
 
 <div class="titulo-grupo">
-    <img src="https://i.pinimg.com/736x/c0/c5/1d/c0c51db66d48aa18dc34ed1f89d68419.jpg">
-    <h2>Desenhos</h2>
+    <img src="https://i.pinimg.com/736x/bb/91/e0/bb91e06701db02de0d2fd2305be68d8c.jpg">
+    <h2>Música</h2>
 </div>
 
 <br>
 
-<!-- FORMULÁRIO PRINCIPAL -->
-<form action="enviar_mensagem_desenhos.php" method="POST" enctype="multipart/form-data">
+<form action="enviar_mensagem_musica.php" method="POST" enctype="multipart/form-data">
     <textarea name="mensagem" placeholder="Digite uma mensagem..." required 
     style="width:100%;height:80px;border-radius:10px;border:2px solid #6bb7a8;padding:10px;"></textarea>
 
@@ -241,12 +174,10 @@ function mostrarResposta(id) {
 
     <br>
 
-    <!-- BOTÃO -->
     <button class="botao-responder" onclick="mostrarResposta(<?= $msg['id'] ?>)">Responder</button>
 
-    <!-- CAIXA DE RESPOSTA -->
     <div id="responder-<?= $msg['id'] ?>" class="caixa-resposta">
-        <form action="enviar_mensagem_desenhos.php" method="POST" enctype="multipart/form-data">
+        <form action="enviar_mensagem_musica.php" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="resposta_para" value="<?= $msg['id'] ?>">
 
             <textarea name="mensagem" placeholder="Responder..." 
@@ -259,15 +190,13 @@ function mostrarResposta(id) {
         </form>
     </div>
 
-    <!-- EXCLUIR -->
     <?php if ($msg['user_id'] == $usuario_logado): ?>
-    <form action="excluir_mensagem_desenhos.php" method="POST" style="display:inline;">
+    <form action="excluir_mensagem_musica.php" method="POST" style="display:inline;">
         <input type="hidden" name="id" value="<?= $msg['id'] ?>">
         <button class="botao-excluir">Excluir</button>
     </form>
     <?php endif; ?>
 
-    <!-- RESPOSTAS -->
     <?php foreach ($respostas[$msg['id']] as $r): ?>
         <div class="resposta">
             <img class="foto" src="<?= $r['foto'] ?>">

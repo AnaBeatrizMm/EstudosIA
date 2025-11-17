@@ -41,6 +41,8 @@ $stmt->close();
 <head>
 <meta charset="UTF-8">
 <title>Chat - Comida</title>
+<link rel="icon" type="image/png" href="/anotacoes/imagens/icon site.png" sizes="612x612">
+  <link rel="stylesheet" href="estilo.css">
 
 <style>
 body {
