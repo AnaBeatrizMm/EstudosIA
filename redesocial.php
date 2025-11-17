@@ -100,6 +100,19 @@ $res = $stmt->get_result();
 $notificacoes = $res->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 ?>
+<?php
+// Buscar amigos do usuário
+$sql_amigos = "SELECT u.id, u.nome, u.foto 
+               FROM usuarios u
+               JOIN amizades a ON (u.id = a.id_usuario1 AND a.id_usuario2 = ?) 
+                               OR (u.id = a.id_usuario2 AND a.id_usuario1 = ?)";
+$stmt = $conn->prepare($sql_amigos);
+$stmt->bind_param("ii", $usuario_logado, $usuario_logado);
+$stmt->execute();
+$res = $stmt->get_result();
+$amigos = $res->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -200,7 +213,13 @@ header {
 }
 
 .wrap{max-width:1100px;margin:24px auto;display:flex;gap:20px;padding:0 12px;}
-.feed{flex:2.6;display:flex;flex-direction:column;gap:18px;}
+.feed {
+    flex: 2.6;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-left: 50px; /* largura da barra + um pequeno espaço */
+}
 .sidebar{flex:1;background:var(--white);border-radius:12px;padding:14px;box-shadow:0 6px 18px rgba(0,0,0,0.06);height:fit-content;border: 12px solid 	#8FBC8F; /* borda visível */}
 .card{background:#fff;padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.06);border: 12px solid 	#8FBC8F; /* borda visível */}
 #novo-post textarea{width:97%;min-height:80px;border-radius:10px;padding:10px;border:1px solid #ddd;resize:vertical;}
@@ -295,6 +314,98 @@ nav ul li a {
   color: #b33;
 }
 </style>
+<style>
+#msg-flutuante {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #3f7c72;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 15px;
+    box-shadow: 0px 4px 10px #00000044;
+    opacity: 0;
+    transition: opacity .3s;
+    z-index: 9999;
+}
+#msg-flutuante.erro { background: #b33; }
+
+#amigos-lateral {
+    position: fixed;       /* barra fixa no canto */
+    top: 100px;            /* distância do topo */
+    left: 0;               /* encostado no canto esquerdo */
+    width: 220px;          /* largura igual aos cards */
+    max-height: 80vh;      /* altura máxima */
+    overflow-y: auto;      /* scroll interno se precisar */
+    background: var(--white);
+    border-radius: 0 12px 12px 0; /* borda arredondada apenas à direita */
+    padding: 16px;
+    box-shadow: 2px 0 18px rgba(0,0,0,0.06); /* sombra igual aos cards, só lateral */
+    border: 12px solid #8FBC8F; /* mesma borda dos cards */
+    z-index: 100;          /* acima do conteúdo */
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    
+}
+
+/* Título da barra */
+#amigos-lateral h3 {
+    margin: 0;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Item de amigo */
+.amigo-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 8px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.amigo-item:hover {
+    background: rgba(63,124,114,0.1);
+}
+
+.amigo-item img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary);
+}
+
+.amigo-item span {
+    font-size: 14px;
+    font-weight: 500;
+    flex: 1;
+}
+</style>
+
+<div id="msg-flutuante"></div>
+
+<script>
+function mostrarMensagem(texto, tipo){
+    const msg = document.getElementById("msg-flutuante");
+
+    msg.textContent = texto;
+
+    msg.classList.remove("erro");
+    if(tipo === "erro") msg.classList.add("erro");
+
+    msg.style.opacity = "1";
+
+    setTimeout(() => {
+        msg.style.opacity = "0";
+    }, 2500);
+}
+</script>
 </head>
 <body>
 
@@ -452,7 +563,20 @@ nav ul li a {
       </div>
     <?php endforeach; ?>
   </div>
-
+  
+  <div id="amigos-lateral">
+    <h3>Amigos</h3>
+    <?php if(!empty($amigos)): ?>
+        <?php foreach($amigos as $amigo): ?>
+            <div class="amigo-item" onclick="abrirPerfil(<?= $amigo['id'] ?>)">
+                <img src="<?= htmlspecialchars($amigo['foto'] ?: 'imagens/usuarios/default.jpg') ?>" alt="">
+                <span><?= htmlspecialchars($amigo['nome']) ?></span>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <div style="font-size:14px;color:#666;">Nenhum amigo adicionado.</div>
+    <?php endif; ?>
+</div>
   <div class="sidebar">
     <h3>Sugestões</h3>
     <?php foreach($sugestoes as $s): ?>
@@ -585,15 +709,22 @@ function adicionarAmigo(destinatario){
   })
   .then(r => r.json())
   .then(data => {
+
+    // Mostra sempre a mensagem recebida
+    mostrarMensagem(data.mensagem, data.status);
+
+    // Se realmente for sucesso, atualiza
     if(data.status === 'sucesso'){
-      alert(data.mensagem);
-      // Opcional: remove a sugestão após adicionar
-      atualizarSugestoes(); 
-    } else {
-      alert(data.mensagem || 'Erro ao adicionar amigo');
+      atualizarSugestoes();
     }
+
+    // NÃO TEM ELSE AQUI
+  })
+  .catch(() => {
+    mostrarMensagem("Erro ao enviar solicitação", "erro");
   });
 }
+
 
 
 function responderSolicitacao(id,resposta){
@@ -607,7 +738,6 @@ function responderSolicitacao(id,resposta){
       }
     });
 }
-function escapeHtml(text){return text.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
 </script>
 <script>
 function abrirModal(usuarioId) {
@@ -707,6 +837,19 @@ function escapeHtml(text) {
   setInterval(function() {
     location.reload();
   }, 60000);
+  let timeoutMsg;
+function mostrarMensagem(texto, tipo) {
+    const msg = document.getElementById("msg-flutuante");
+    msg.textContent = texto;
+    msg.classList.remove("erro");
+    if(tipo === "erro") msg.classList.add("erro");
+    msg.style.opacity = "1";
+
+    clearTimeout(timeoutMsg);
+    timeoutMsg = setTimeout(() => {
+        msg.style.opacity = "0";
+    }, 2500);
+}
 </script>
 
 </body>

@@ -34,20 +34,29 @@ $stmt = $conn->prepare("INSERT INTO solicitacoes_amizade (de_usuario_id, para_us
 $stmt->bind_param("ii", $de_usuario_id, $para_usuario_id);
 
 if ($stmt->execute()) {
-    // Cria notificação para o usuário destinatário
     $id_solicitacao = $conn->insert_id;
     $mensagem = "Você recebeu uma solicitação de amizade";
-    $data_criacao = date('Y-m-d H:i:s'); // Usando PHP para data
+    $data_criacao = date('Y-m-d H:i:s');
 
     $stmt_notif = $conn->prepare("INSERT INTO notificacoes (usuario_id, tipo, mensagem, referencia_id, lida, data_criacao) VALUES (?, 'amizade', ?, ?, 0, ?)");
-    $stmt_notif->bind_param("isis", $para_usuario_id, $mensagem, $id_solicitacao, $data_criacao);
-    $stmt_notif->execute();
-    $stmt_notif->close();
+    if (!$stmt_notif) {
+        echo json_encode(['status'=>'erro','mensagem'=>'Erro no prepare de notificacao: '.$conn->error]);
+        exit;
+    }
 
+    if (!$stmt_notif->bind_param("isis", $para_usuario_id, $mensagem, $id_solicitacao, $data_criacao)) {
+        echo json_encode(['status'=>'erro','mensagem'=>'Erro no bind_param de notificacao: '.$stmt_notif->error]);
+        exit;
+    }
+
+    if (!$stmt_notif->execute()) {
+        echo json_encode(['status'=>'erro','mensagem'=>'Erro no execute de notificacao: '.$stmt_notif->error]);
+        exit;
+    }
+
+    $stmt_notif->close();
     echo json_encode(['status' => 'sucesso', 'mensagem' => 'Solicitação enviada!']);
 } else {
-    echo json_encode(['status' => 'erro', 'mensagem' => 'Erro ao enviar solicitação']);
+    echo json_encode(['status' => 'erro', 'mensagem' => 'Erro ao enviar solicitação: '.$stmt->error]);
 }
-
-$stmt->close();
 ?>
