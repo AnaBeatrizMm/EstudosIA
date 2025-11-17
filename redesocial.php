@@ -330,24 +330,67 @@ nav ul li a {
     z-index: 9999;
 }
 #msg-flutuante.erro { background: #b33; }
+/* Container do botão */
+.amigos-lateral-container {
+  position: fixed;
+  top: 50px; /* ajuste conforme quiser */
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  z-index: 1000;
+}
 
+/* Checkbox escondido */
+.amigos-lateral-container input {
+  display: none;
+}
+
+/* Botão com seta */
+.container {
+  background: white;
+  border: 2px solid #8f7c72;
+  border-radius: 8px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  position: relative;
+  user-select: none;
+}
+
+.container .chevron-right {
+  width: 20px;
+  height: 20px;
+  fill: #8f7c72;
+  transition: transform 0.5s ease;
+}
+
+/* Gira a seta ao clicar */
+input:checked + .container .chevron-right {
+  transform: rotate(180deg);
+}
+
+/* Barra lateral de amigos */
 #amigos-lateral {
-    position: fixed;       /* barra fixa no canto */
-    top: 100px;            /* distância do topo */
-    left: 0;               /* encostado no canto esquerdo */
-    width: 220px;          /* largura igual aos cards */
-    max-height: 80vh;      /* altura máxima */
-    overflow-y: auto;      /* scroll interno se precisar */
-    background: var(--white);
-    border-radius: 0 12px 12px 0; /* borda arredondada apenas à direita */
-    padding: 16px;
-    box-shadow: 2px 0 18px rgba(0,0,0,0.06); /* sombra igual aos cards, só lateral */
-    border: 12px solid #8FBC8F; /* mesma borda dos cards */
-    z-index: 100;          /* acima do conteúdo */
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    
+  position: fixed;
+  top: 0;
+  left: -260px; /* começa escondida */
+  width: 250px;
+  height: 100vh;
+  background: white;
+  border-right: 2px solid #8f7c72;
+  padding: 16px;
+  box-shadow: 4px 0 12px rgba(0,0,0,0.1);
+  transition: left 0.5s ease;
+  overflow-y: auto;
+  z-index: 999;
+}
+/* Mostra a barra ao clicar no checkbox */
+input:checked ~ #amigos-lateral {
+  left: 0;
 }
 
 /* Título da barra */
@@ -358,15 +401,14 @@ nav ul li a {
     font-weight: 600;
 }
 
-/* Item de amigo */
+
+/* Amigos internos */
 .amigo-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 6px 8px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
 }
 
 .amigo-item:hover {
@@ -374,13 +416,12 @@ nav ul li a {
 }
 
 .amigo-item img {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--primary);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #8f7c72;
 }
-
 .amigo-item span {
     font-size: 14px;
     font-weight: 500;
@@ -564,18 +605,31 @@ function mostrarMensagem(texto, tipo){
     <?php endforeach; ?>
   </div>
   
+  <div class="amigos-lateral-container">
+  <!-- Checkbox escondido para controlar animação -->
+  <input type="checkbox" id="toggle-amigos">
+
+  <!-- Botão com a seta -->
+  <label for="toggle-amigos" class="container">
+    Amigos
+    <svg class="chevron-right" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+      <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
+    </svg>
+  </label>
+
+  <!-- Barra lateral de amigos -->
   <div id="amigos-lateral">
     <h3>Amigos</h3>
-    <?php if(!empty($amigos)): ?>
-        <?php foreach($amigos as $amigo): ?>
-            <div class="amigo-item" onclick="abrirPerfil(<?= $amigo['id'] ?>)">
-                <img src="<?= htmlspecialchars($amigo['foto'] ?: 'imagens/usuarios/default.jpg') ?>" alt="">
-                <span><?= htmlspecialchars($amigo['nome']) ?></span>
-            </div>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <div style="font-size:14px;color:#666;">Nenhum amigo adicionado.</div>
-    <?php endif; ?>
+    <div class="amigo-item">
+      <img src="imagens/usuarios/default.jpg" alt="Amigo">
+      <span>Amigo 1</span>
+    </div>
+    <div class="amigo-item">
+      <img src="imagens/usuarios/default.jpg" alt="Amigo">
+      <span>Amigo 2</span>
+    </div>
+    <!-- Adicione mais amigos aqui -->
+  </div>
 </div>
   <div class="sidebar">
     <h3>Sugestões</h3>
