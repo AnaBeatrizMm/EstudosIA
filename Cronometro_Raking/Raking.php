@@ -1654,10 +1654,6 @@ function createBossParticles(element) {
     mostrarPerguntaQuiz();
   }, 1200);
 }
-
 </script>
-
-
-
 </body>
 </html>
