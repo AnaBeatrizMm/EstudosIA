@@ -2558,7 +2558,7 @@ const perguntasQuimicaFaceis = [
 { pergunta: "O que caracteriza um metal alcalino?", opcoes: ["Reatividade alta e 1 elétron na camada externa", "Ponto de fusão alto", "Baixa densidade e gás nobre", "É líquido"], correta: 0 },
 { pergunta: "O que é uma reação endotérmica?", opcoes: ["Absorve energia do ambiente", "Libera energia", "Não troca energia", "Libera gás"], correta: 0 },
 { pergunta: "O que é uma reação exotérmica?", opcoes: ["Libera energia", "Absorve energia", "Não troca energia", "Libera luz apenas"], correta: 0 }
-];
+];   
 const perguntasQuimicaMedias = [
 { pergunta: "Qual é o número atômico do oxigênio?", opcoes: ["6", "7", "8", "9"], correta: 2 },
 { pergunta: "O que é um íon?", opcoes: ["Átomo com elétrons extras ou faltantes", "Molécula neutra", "Elemento instável", "Núcleo sem prótons"], correta: 0 },
