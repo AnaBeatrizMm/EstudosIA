@@ -1,3 +1,79 @@
+<?php
+// ====================== CONEXÃO COM O BANCO ======================
+try {
+    $pdo = new PDO("mysql:host=localhost;dbname=jogo_rankeado", "root", ""); // ajuste usuário e senha
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Erro de conexão: " . $e->getMessage());
+}
+
+// ====================== FUNÇÃO PARA CONVERTER TEMPO ======================
+function hmsParaSegundos($hms) {
+    list($h, $m, $s) = explode(':', $hms);
+    return $h*3600 + $m*60 + $s;
+}
+
+// ====================== FUNÇÃO PARA ATUALIZAR RANKING ======================
+function atualizarRanking($pdo, $nome, $distancia, $inimigos, $tempo) {
+    $tempo_seg = hmsParaSegundos($tempo);
+
+    // Verifica total de jogadores
+    $stmt = $pdo->query("SELECT COUNT(*) as total FROM ranking");
+    $total = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+
+    if ($total < 10) {
+        // Insere direto
+        $stmt = $pdo->prepare("INSERT INTO ranking (nome_usuario, distancia, inimigos_derrotados, tempo_jogado) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$nome, $distancia, $inimigos, $tempo]);
+    } else {
+        // Pega o jogador com o menor tempo
+        $stmt = $pdo->query("SELECT id, TIME_TO_SEC(tempo_jogado) as tempo_seg FROM ranking ORDER BY TIME_TO_SEC(tempo_jogado) ASC LIMIT 1");
+        $menor = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($tempo_seg > $menor['tempo_seg']) {
+            // Substitui o jogador com menor tempo
+            $pdo->prepare("DELETE FROM ranking WHERE id = ?")->execute([$menor['id']]);
+            $stmt = $pdo->prepare("INSERT INTO ranking (nome_usuario, distancia, inimigos_derrotados, tempo_jogado) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$nome, $distancia, $inimigos, $tempo]);
+        }
+    }
+}
+
+// ====================== EXEMPLO: ADICIONAR JOGADOR ======================
+atualizarRanking($pdo, "Jogador1", 500, 20, "00:15:30");
+atualizarRanking($pdo, "Jogador2", 600, 25, "00:12:10");
+atualizarRanking($pdo, "Jogador3", 450, 18, "00:20:05");
+
+// ====================== PEGAR TOP 10 ======================
+$stmt = $pdo->query("
+    SELECT nome_usuario, distancia, inimigos_derrotados, TIME_FORMAT(tempo_jogado, '%H:%i:%s') AS tempo_jogado
+    FROM ranking
+    ORDER BY TIME_TO_SEC(tempo_jogado) DESC
+    LIMIT 10
+");
+
+$top10 = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// ====================== EXIBIR TABELA ======================
+echo "<div class='ranking'>";
+echo "<h2>🏆 Ranking dos Heróis</h2>";
+echo "<table border='1' cellpadding='6' cellspacing='0'>";
+echo "<tr><th>Posição</th><th>Nome</th><th>Distância</th><th>Inimigos</th><th>Tempo</th></tr>";
+$pos = 1;
+foreach ($top10 as $jogador) {
+    echo "<tr>";
+    echo "<td>{$pos}</td>";
+    echo "<td>{$jogador['nome_usuario']}</td>";
+    echo "<td>{$jogador['distancia']}</td>";
+    echo "<td>{$jogador['inimigos_derrotados']}</td>";
+    echo "<td>{$jogador['tempo_jogado']}</td>";
+    echo "</tr>";
+    $pos++;
+}
+echo "</table>";
+echo "</div>";
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -1093,7 +1169,19 @@ nav ul li a:hover {
       </tr>
     </thead>
     <tbody>
-      <!-- Nenhum jogador cadastrado ainda -->
+      <?php
+      $pos = 1;
+      foreach ($rankings as $player) {
+          echo "<tr>";
+          echo "<td>{$pos}</td>";
+          echo "<td>{$player['nome']}</td>";
+          echo "<td>{$player['distancia']}</td>";
+          echo "<td>{$player['inimigos_derrotados']}</td>";
+          echo "<td>{$player['tempo']}</td>";
+          echo "</tr>";
+          $pos++;
+      }
+      ?>
     </tbody>
   </table>
 </div>
@@ -3450,6 +3538,10 @@ if (dificuldadeSelectEl && dificuldadeSelectEl.value) {
   dificuldadeSelecionada = dificuldadeSelectEl.value;
 }
 atualizarPerguntasCombinadas();
+
+/* ==========================================================
+   16. atualização de raking
+   ========================================================== */
 
 /* ==========================================================
    FIM DO SCRIPT
