@@ -879,6 +879,61 @@ nav ul li a:hover {
 }
 
 
+/* ============================
+   🎯 ESTILO DOS FILTROS
+   (Integrado ao estilo do site)
+=============================== */
+
+.info-item,
+.info-item2 {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 0px;
+
+    background: #ffffffcc;
+    padding: 8px 14px;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+
+    font-family: 'SimpleHandmade', cursive;
+    color: #2a5c55;
+}
+
+/* rótulo */
+.info-item label,
+.info-item2 label {
+    font-size: 15px;
+    font-weight: bold;
+    color: #3f7c72;
+}
+
+/* select padrão */
+.info-item select,
+.info-item2 select {
+    padding: 6px 10px;
+    border-radius: 10px;
+    border: 2px solid #bdebe3;
+    background: #fff;
+    color: #2a5c55;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* hover no select */
+.info-item select:hover,
+.info-item2 select:hover {
+
+    background: #bdebe330;
+}
+
+/* Lado a lado + alinhamento */
+.info-item2 {
+  margin-left: 210px;  /* distância lateral que você queria */
+  margin-top: -50px;       /* zera o deslocamento vertical */
+}
+
 
 /* ===== RESPONSIVIDADE ===== */
 @media (max-width: 768px) {
@@ -911,7 +966,7 @@ nav ul li a:hover {
   </div>
   <nav>
     <ul>
-      <li><a href="cronometro.php">Voltar</a></li>
+      <li><a href="/Cronometro_Raking/cronometro.php">Voltar</a></li>
     </ul>
   </nav>
 </header>
@@ -956,14 +1011,14 @@ nav ul li a:hover {
 <div class="info-item">
     <label>Dificuldade:</label>
     <select id="dificuldadeSelect">
-        <option value="">-- selecione --</option>
+        <option value="">-- selecione  --</option>
         <option value="facil">Fácil</option>
         <option value="media">Média</option>
         <option value="dificil">Difícil</option>
     </select>
 </div>
 
-      <div class="info-item">
+      <div class="info-item2">
     <label>Matéria:</label>
     <select id="materiaSelect" onchange="atualizarPerguntasPorMateria()">
         <option value="">-- selecione --</option>
