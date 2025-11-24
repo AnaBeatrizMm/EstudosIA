@@ -211,7 +211,7 @@ h1{
 .btn:active{ transform: translateY(1px) }
 
 .btn.danger {
-  background: linear-gradient(180deg, #912e2e 0%, #641f1f 100%);
+  background: #2a5c55;
   color: #fff;
   padding: 8px 14px;
   font-weight: 700;
@@ -262,41 +262,42 @@ table.table-pdf{
 .table-pdf thead th{ font-weight:700 }
 .table-pdf tbody tr{ border: 1px solid #1e3834ff; }
 .table-pdf tbody tr:hover{ border: 1px solid #1e3834ff; }
-.table-pdf td.nome{ font-weight:700; color:#a94545 }
+.table-pdf td.nome{ font-weight:700; color:#1e3834ff }
 .table-pdf a{ color:inherit; text-decoration:none }
 .table-pdf a:hover{ text-decoration:underline }
 
 /* Upload wrapper */
 .file-upload-wrapper {
+  display: inline-block;  /* evita ocupar a tela inteira */
+  position: relative;
+  overflow: hidden;
   background-color: #2a5c55;
   color: #ffffff;
   transition: background 0.3s;
   padding: 12px 25px;
-  border: none;
   border: 1px solid #1e3834ff;
   font-weight:800; border-radius:999px;
   font-family: 'SimpleHandmade';
   font-size: 22px;
+  cursor: pointer;
 }
+
 .file-upload-wrapper:hover {
   background-color: #1e3834ff;
 }
 .file-upload-wrapper input[type="file"] {
-  font-size: 100px;
   position: absolute;
   left: 0;
   top: 0;
   opacity: 0;
   cursor: pointer;
-  height: 100%;
   width: 100%;
-  border: none;
-  margin: 0;
-  padding: 0;
+  height: 100%;
 }
 
+
 .btn-action {
-  background: linear-gradient(180deg, #6b4c3b 0%, #5a3b2c 100%);
+  background:  #2a5c55 100%;
   color: #fff !important;
   padding: 8px 14px;
   font-weight:700;
@@ -333,6 +334,40 @@ table.table-pdf{
 ::-webkit-scrollbar-thumb:hover {
   background: #2a5c55;
 }
+
+/* ==== MODAL DE CONFIRMAÇÃO ==== */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: none; /* começa invisível */
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+.modal-content {
+  background: #ffffff;
+  padding: 22px;
+  border-radius: 14px;
+  width: 90%;
+  max-width: 380px;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+  font-family: 'SimpleHandmade';
+  color: #1e3834;
+}
+
+.modal-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+}
+
 </style>
 </head>
 <body>

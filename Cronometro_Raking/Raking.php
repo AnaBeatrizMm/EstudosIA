@@ -835,6 +835,50 @@ nav ul li a:hover {
   background: #2a5c55;
 }
 
+/* ====== ALERTA PERSONALIZADO ====== */
+.alert-box {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.55);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+.alert-content {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 15px;
+  max-width: 380px;
+  width: 85%;
+  text-align: center;
+  font-family: 'SimpleHandmade';
+  color: #2a5c55;
+  border: 2px solid #bdebe3;
+}
+
+.alert-btn {
+  margin-top: 20px;
+  background: #3f7c72;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 999px;
+  font-family: 'SimpleHandmade';
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.alert-btn:hover {
+  background: #2a5c55;
+}
+
+
 
 /* ===== RESPONSIVIDADE ===== */
 @media (max-width: 768px) {
@@ -919,6 +963,26 @@ nav ul li a:hover {
     </select>
 </div>
 
+      <div class="info-item">
+    <label>Matéria:</label>
+    <select id="materiaSelect" onchange="atualizarPerguntasPorMateria()">
+        <option value="">-- selecione --</option>
+        <option value="matematica">Matemática</option>
+        <option value="portugues">Português</option>
+        <option value="ingles">Inglês</option>
+        <option value="historia">História</option>
+        <option value="geografia">Geografia</option>
+        <option value="ciencias">Ciências</option>
+        <option value="fisica">Física</option>
+        <option value="quimica">Química</option>
+        <option value="biologia">Biologia</option>
+        <option value="filosofia">Filosofia</option>
+        <option value="sociologia">Sociologia</option>
+        <option value="edfisica">Educação Física</option>
+        <option value="artes">Artes</option>
+    </select>
+</div>
+
 
 <!-- =====================================================
      🧩 QUIZ POPUP (PERGUNTAS)
@@ -960,25 +1024,6 @@ nav ul li a:hover {
 
     </div>
 </div>
-      <div class="info-item">
-    <label>Matéria:</label>
-    <select id="materiaSelect" onchange="atualizarPerguntasPorMateria()">
-        <option value="">-- selecione --</option>
-        <option value="matematica">Matemática</option>
-        <option value="portugues">Português</option>
-        <option value="ingles">Inglês</option>
-        <option value="historia">História</option>
-        <option value="geografia">Geografia</option>
-        <option value="ciencias">Ciências</option>
-        <option value="fisica">Física</option>
-        <option value="quimica">Química</option>
-        <option value="biologia">Biologia</option>
-        <option value="filosofia">Filosofia</option>
-        <option value="sociologia">Sociologia</option>
-        <option value="edfisica">Educação Física</option>
-        <option value="artes">Artes</option>
-    </select>
-</div>
 
     <div class="ranking">
   <h2>🏆 Ranking dos Heróis</h2>
@@ -996,6 +1041,13 @@ nav ul li a:hover {
       <!-- Nenhum jogador cadastrado ainda -->
     </tbody>
   </table>
+</div>
+
+<div id="gameAlert" class="alert-box">
+  <div class="alert-content">
+    <p id="alertMessage"></p>
+    <button id="alertOk" class="alert-btn">OK</button>
+  </div>
 </div>
 
 
@@ -1039,7 +1091,7 @@ const AUTO_ATTACK_COOLDOWN = 700;
 /* Configurações gerais */
 const ENEMY_SPAWN_MS = 4000;
 const GAME_LOOP_MS = 50;
-const BOSS_INTERVAL_SECONDS = 600; // boss a cada 10 minutos (600s)
+const BOSS_INTERVAL_SECONDS = 5; // boss a cada 10 minutos (600s)
 const BOSS_ON_START = false;       // true = boss aparece logo ao iniciar
 
 /* ==========================================================
@@ -1062,15 +1114,15 @@ function updateTimer() {
 function startTimer() {
   // Bloqueia se matéria/dificuldade não escolhidas
   if (!materiaSelecionada) {
-    alert("📘 Escolha uma MATÉRIA antes de iniciar o jogo!");
+    showAlert("📘 Escolha uma MATÉRIA antes de iniciar o jogo!");
     return;
   }
   if (!dificuldadeSelecionada) {
-    alert("🎯 Escolha a DIFICULDADE antes de iniciar o jogo!");
+    showAlert("🎯 Escolha a DIFICULDADE antes de iniciar o jogo!");
     return;
   }
   if (!perguntasQuiz || perguntasQuiz.length === 0) {
-    alert("⚠️ Esta combinação não possui perguntas! Adicione perguntas primeiro.");
+    showAlert("⚠️ Esta combinação não possui perguntas! Adicione perguntas primeiro.");
     return;
   }
 
@@ -1117,6 +1169,20 @@ function resetTimer() {
 
   startBtn.disabled = false;
   pauseBtn.disabled = true;
+}
+
+// ===== ALERTA PERSONALIZADO =====
+function showAlert(msg) {
+  const box = document.getElementById("gameAlert");
+  const msgBox = document.getElementById("alertMessage");
+  const ok = document.getElementById("alertOk");
+
+  msgBox.textContent = msg;
+  box.style.display = "flex";
+
+  ok.onclick = () => {
+    box.style.display = "none";
+  };
 }
 
 /* ==========================================================
@@ -3286,9 +3352,9 @@ function verificarResposta(correta) {
   quizContainer.style.display = 'none';
 
   if (correta) {
-    alert('✅ Resposta correta! Continue a aventura!');
+    showAlert('✅ Resposta correta! Continue a aventura!');
   } else {
-    alert('❌ Resposta errada! Você perdeu 3 minutos!');
+    showAlert('❌ Resposta errada! Você perdeu 3 minutos!');
     timer = Math.max(timer - 180, 0);
     timerDisplay.textContent = formatTime(timer);
   }
