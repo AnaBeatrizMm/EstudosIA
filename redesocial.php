@@ -627,26 +627,29 @@ nav ul li a {
 
 #msg-flutuante.erro { background: #b33; }
 /* Container do botão */
+/* CONTAINER DO BOTÃO DE AMIGOS (AGORA DO LADO DIREITO DO FEED) */
 .amigos-lateral-container {
   position: fixed;
-  top: 300px; /* ajuste conforme quiser */
+  top: 250px;
   left: 0;
+  z-index: 1200;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  z-index: 1000;
-}
+  align-items: center;
+  gap: 0;
+  border-radius: 8px 0 0 8px;
 
-/* Checkbox escondido */
+}
+/* Checkbox */
 .amigos-lateral-container input {
   display: none;
 }
 
-/* Botão com seta */
+/* Botão */
 .container {
   background: white;
-  border: 2px solid #8f7c72;
+  border: 2px solid #3f7c72;
   border-radius: 8px;
+ /* canto esquerdo arredondado */
   padding: 10px 16px;
   display: flex;
   align-items: center;
@@ -654,45 +657,47 @@ nav ul li a {
   cursor: pointer;
   font-weight: 600;
   position: relative;
-  user-select: none;
+  left: 0;
+  transition: left 0.5s ease;
 }
+
 
 .container .chevron-right {
   width: 20px;
   height: 20px;
-  fill: #8f7c72;
+  fill: #3f7c72;
   transition: transform 0.5s ease;
 }
 
-/* Gira a seta ao clicar */
+/* Gira a seta ao abrir */
 input:checked + .container .chevron-right {
   transform: rotate(180deg);
-
-
-
-
 }
 
 
 
-/* Barra lateral de amigos */
+/* Barra lateral (esquerda) */
 #amigos-lateral {
   position: fixed;
   top: 0;
-  left: -260px; /* começa escondida */
+  left: -280px; /* escondida */
   width: 250px;
   height: 100vh;
   background: white;
-  border-right: 2px solid #8f7c72;
+  border-right: 2px solid #3f7c72;
   padding: 16px;
   box-shadow: 4px 0 12px rgba(0,0,0,0.1);
   transition: left 0.5s ease;
   overflow-y: auto;
-  z-index: 999;
+  z-index: 1100;
 }
-/* Mostra a barra ao clicar no checkbox */
+/* Abre a barra */
 input:checked ~ #amigos-lateral {
   left: 0;
+}
+/* Move o botão junto com a barra */
+input:checked + .container {
+  left: 280px; /* largura da barra */
 }
 
 /* Título da barra */
@@ -703,6 +708,19 @@ input:checked ~ #amigos-lateral {
     font-weight: 600;
 }
 
+/* FECHAR COM X OPCIONAL */
+#fechar-amigos {
+  display: block;
+  text-align: right;
+  font-size: 20px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  color: #3f7c72;
+  font-weight: bold;
+}
+#fechar-amigos:hover {
+  color: #334d48ff;
+}
 
 
 /* Amigos internos */
@@ -723,7 +741,7 @@ input:checked ~ #amigos-lateral {
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #8f7c72;
+  border: 2px solid #3f7c72;
 }
 .amigo-item span {
     font-size: 14px;
@@ -810,99 +828,6 @@ function mostrarMensagem(texto, tipo){
   style="cursor:pointer;">
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <nav>
       <ul>
         <li><a href="/inicio.php">Voltar</a></li>
@@ -940,33 +865,6 @@ function mostrarMensagem(texto, tipo){
             style="width:100%;height:100%;border:none;border-radius:12px;"></iframe>
   </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </div>
 <div class="wrap">
   <div class="feed">
@@ -977,22 +875,6 @@ function mostrarMensagem(texto, tipo){
         <input id="imagem" name="imagem" type="file" accept="image/*" style="display:none;">
         <button type="submit">Postar</button>
       </form>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     </div>
 
     <?php foreach($posts as $post): ?>
@@ -1031,109 +913,6 @@ function mostrarMensagem(texto, tipo){
           <button onclick="enviarComentario(<?= $post['post_id'] ?>)">Enviar</button>
         </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         <div class="comentario-list" id="lista-comentarios-<?= $post['post_id'] ?>">
           <?php if(!empty($comentarios_posts[$post['post_id']])): ?>
             <?php foreach($comentarios_posts[$post['post_id']] as $c): ?>
@@ -1150,31 +929,27 @@ function mostrarMensagem(texto, tipo){
     <?php endforeach; ?>
   </div>
   
-  <div class="amigos-lateral-container">
-  <!-- Checkbox escondido para controlar animação -->
-  <input type="checkbox" id="toggle-amigos">
+ <div class="amigos-lateral-container">
+    <input type="checkbox" id="toggle-amigos">
+    <label for="toggle-amigos" class="container">
+        Amigos
+        <svg class="chevron-right" viewBox="0 0 24 24">
+            <path d="M9 6l6 6-6 6"></path>
+        </svg>
+    </label>
 
-  <!-- Botão com a seta -->
-  <label for="toggle-amigos" class="container">
-    Amigos
-    <svg class="chevron-right" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-      <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
-    </svg>
-  </label>
+    <div id="amigos-lateral">
+        
 
-  <!-- Barra lateral de amigos -->
-  <div id="amigos-lateral">
-    <h3>Amigos</h3>
-    <div class="amigo-item">
-      <img src="imagens/usuarios/default.jpg" alt="Amigo">
-      <span>Amigo 1</span>
+        <h3>Seus Amigos</h3>
+
+        <?php foreach($amigos as $a): ?>
+            <div class="amigo-item">
+                <img src="<?= $a['foto'] ?>">
+                <span><?= $a['nome'] ?></span>
+            </div>
+        <?php endforeach; ?>
     </div>
-    <div class="amigo-item">
-      <img src="imagens/usuarios/default.jpg" alt="Amigo">
-      <span>Amigo 2</span>
-    </div>
-    <!-- Adicione mais amigos aqui -->
-  </div>
 </div>
   <div class="sidebar">
     <h3>Sugestões</h3>
@@ -1230,42 +1005,37 @@ function fecharModal(){ document.getElementById('modal').style.display = 'none';
 
 
 
-function curtirPost(id) {
+function curtirPost(postId) {
+    fetch("curtir_ajax.php?post_id=" + postId)
+        .then(r => r.json())
+        .then(data => {
 
-    fetch("curtir_ajax.php?id=" + id)
-
-    .then(r => r.json())
-
-    .then(data => {
-
-        if (data.ok) {
-
-            document.getElementById("curtidas-" + id).innerText = data.curtidas;
-
-
-
-            let icon = document.getElementById("icon-heart-" + id);
-
-
-
-            if (data.curtiu === 1) {
-
-                icon.classList.remove("fa-regular");
-
-                icon.classList.add("fa-solid");
-
-            } else {
-
-                icon.classList.remove("fa-solid");
-
-                icon.classList.add("fa-regular");
-
+            if (data.status !== "sucesso") {
+                console.error(data);
+                return;
             }
 
-        }
+            // Ícone
+            const icone = document.getElementById("icon-heart-" + postId);
 
-    });
+            // Contador
+            const contador = document.getElementById("curtidas-" + postId);
 
+            // Atualiza contador
+            contador.textContent = data.total;
+
+            // Atualiza o ícone
+            if (data.ja_curti == 1) {
+                icone.classList.remove("fa-regular");
+                icone.classList.add("fa-solid");
+                icone.style.color = "#3f7c72";
+            } else {
+                icone.classList.remove("fa-solid");
+                icone.classList.add("fa-regular");
+                icone.style.color = "inherit";
+            }
+        })
+        .catch(e => console.error("Erro:", e));
 }
 
 function abrirPerfil(usuarioId) {
