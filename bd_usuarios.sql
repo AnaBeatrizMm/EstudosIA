@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 25/11/2025 às 16:22
--- Versão do servidor: 10.4.28-MariaDB
--- Versão do PHP: 8.2.4
+-- Tempo de geração: 25/11/2025 às 21:10
+-- Versão do servidor: 10.4.32-MariaDB
+-- Versão do PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -307,7 +307,11 @@ CREATE TABLE `curtidas` (
 
 INSERT INTO `curtidas` (`id`, `id_post`, `id_usuario`, `data_criacao`) VALUES
 (2, 25, 4, '2025-10-06 11:33:09'),
-(3, 29, 4, '2025-10-06 13:47:49');
+(3, 29, 4, '2025-10-06 13:47:49'),
+(8, 41, 13, '2025-11-25 19:19:44'),
+(9, 40, 13, '2025-11-25 19:20:05'),
+(10, 39, 13, '2025-11-25 19:20:12'),
+(11, 38, 13, '2025-11-25 19:22:07');
 
 -- --------------------------------------------------------
 
@@ -320,29 +324,31 @@ CREATE TABLE `eventos` (
   `titulo` varchar(255) NOT NULL,
   `data_evento` date NOT NULL,
   `hora_inicio` time NOT NULL,
-  `hora_fim` time NOT NULL
+  `hora_fim` time NOT NULL,
+  `usuario_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `eventos`
 --
 
-INSERT INTO `eventos` (`id`, `titulo`, `data_evento`, `hora_inicio`, `hora_fim`) VALUES
-(2, 'fsf', '2025-09-01', '03:33:00', '03:33:00'),
-(6, 'dddd', '2025-09-30', '03:33:00', '03:33:00'),
-(7, 'dsdsa', '2025-09-30', '04:55:00', '05:55:00'),
-(8, 'ffff', '2025-09-30', '03:33:00', '03:33:00'),
-(9, '3r3r3', '2025-09-30', '13:11:00', '14:13:00'),
-(10, 'adda', '2025-09-30', '14:13:00', '15:15:00'),
-(11, 'www', '2025-09-23', '06:36:00', '14:15:00'),
-(12, '333', '2025-09-23', '03:33:00', '06:06:00'),
-(13, '333333', '2025-09-16', '03:33:00', '05:35:00'),
-(14, '666', '2025-09-26', '06:59:00', '10:02:00'),
-(15, '333', '2025-09-26', '03:33:00', '04:04:00'),
-(16, '3333', '2025-09-12', '13:18:00', '15:20:00'),
-(17, 'ffffggr', '2025-09-06', '06:59:00', '08:55:00'),
-(18, 'dwddw', '2025-09-05', '03:45:00', '06:59:00'),
-(19, '55555', '2025-10-31', '05:55:00', '07:59:00');
+INSERT INTO `eventos` (`id`, `titulo`, `data_evento`, `hora_inicio`, `hora_fim`, `usuario_id`) VALUES
+(2, 'fsf', '2025-09-01', '03:33:00', '03:33:00', 0),
+(6, 'dddd', '2025-09-30', '03:33:00', '03:33:00', 0),
+(7, 'dsdsa', '2025-09-30', '04:55:00', '05:55:00', 0),
+(8, 'ffff', '2025-09-30', '03:33:00', '03:33:00', 0),
+(9, '3r3r3', '2025-09-30', '13:11:00', '14:13:00', 0),
+(10, 'adda', '2025-09-30', '14:13:00', '15:15:00', 0),
+(11, 'www', '2025-09-23', '06:36:00', '14:15:00', 0),
+(12, '333', '2025-09-23', '03:33:00', '06:06:00', 0),
+(13, '333333', '2025-09-16', '03:33:00', '05:35:00', 0),
+(14, '666', '2025-09-26', '06:59:00', '10:02:00', 0),
+(15, '333', '2025-09-26', '03:33:00', '04:04:00', 0),
+(16, '3333', '2025-09-12', '13:18:00', '15:20:00', 0),
+(17, 'ffffggr', '2025-09-06', '06:59:00', '08:55:00', 0),
+(18, 'dwddw', '2025-09-05', '03:45:00', '06:59:00', 0),
+(19, '55555', '2025-10-31', '05:55:00', '07:59:00', 0),
+(20, 'alla', '2025-11-12', '12:00:00', '13:00:00', 13);
 
 -- --------------------------------------------------------
 
@@ -922,13 +928,13 @@ ALTER TABLE `conteudos`
 -- AUTO_INCREMENT de tabela `curtidas`
 --
 ALTER TABLE `curtidas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de tabela `eventos`
 --
 ALTER TABLE `eventos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de tabela `financas`
