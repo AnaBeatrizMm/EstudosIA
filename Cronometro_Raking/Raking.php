@@ -1,79 +1,4 @@
-<?php
-// ======================= CONFIG BANCO ============================
-$DB_HOST = 'localhost';
-$DB_USER = 'root';
-$DB_PASS = '';
-$DB_NAME = 'bd_usuarios';
 
-try {
-    // Conecta ao banco EXISTENTE
-    $pdo = new PDO("mysql:host=$DB_HOST;dbname=$DB_NAME;charset=utf8mb4", $DB_USER, $DB_PASS);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-} catch (PDOException $e) {
-    die("Erro ao conectar ao banco: " . $e->getMessage());
-}
-
-// ======================= CONVERTER TEMPO ============================
-function tempoParaSeg($tempo) {
-    list($h,$m,$s) = explode(":", $tempo);
-    return ($h*3600) + ($m*60) + $s;
-}
-
-// ======================= ATUALIZAR RANKING ============================
-function atualizarRanking($pdo, $nome, $distancia, $inimigos, $tempo) {
-
-    $tempo_seg = tempoParaSeg($tempo);
-
-    // Conta registros existentes
-    $count = $pdo->query("SELECT COUNT(*) AS total FROM ranking")->fetch(PDO::FETCH_ASSOC)['total'];
-
-    if ($count < 10) {
-
-        // Ainda tem vaga no ranking → insere direto
-        $stmt = $pdo->prepare("
-            INSERT INTO ranking (nome_usuario, distancia, inimigos_derrotados, tempo_jogado)
-            VALUES (?, ?, ?, ?)
-        ");
-        $stmt->execute([$nome, $distancia, $inimigos, $tempo]);
-
-    } else {
-
-        // Seleciona o PIOR jogador (MAIOR tempo)
-        $stmt = $pdo->query("
-            SELECT id, TIME_TO_SEC(tempo_jogado) AS t
-            FROM ranking
-            ORDER BY TIME_TO_SEC(tempo_jogado) DESC
-            LIMIT 1
-        ");
-        $pior = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Só troca se o novo tempo for MELHOR (menor)
-        if ($tempo_seg < $pior['t']) {
-
-            // Apaga o pior
-            $pdo->prepare("DELETE FROM ranking WHERE id = ?")->execute([$pior['id']]);
-
-            // Insere novo
-            $stmt = $pdo->prepare("
-                INSERT INTO ranking (nome_usuario, distancia, inimigos_derrotados, tempo_jogado)
-                VALUES (?, ?, ?, ?)
-            ");
-            $stmt->execute([$nome, $distancia, $inimigos, $tempo]);
-        }
-    }
-}
-
-// ======================= PEGAR TOP 10 (MELHORES TEMPOS) ============================
-$top10 = $pdo->query("
-    SELECT nome_usuario, distancia, inimigos_derrotados, tempo_jogado
-    FROM ranking
-    ORDER BY TIME_TO_SEC(tempo_jogado) ASC
-    LIMIT 10
-")->fetchAll(PDO::FETCH_ASSOC);
-
-
-?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -699,55 +624,84 @@ body {
 }
 
 /* ====== TABELA DO RANKING ====== */
-.ranking {
-  background: #f9f9f9;
-  padding: 30px 20px;
-  border-top: 3px solid #bdebe3;
-  text-align: center;
-  font-family: 'SimpleHandmade', cursive;
+/* ===== TÍTULO ===== */
+h1 {
+    text-align: center;
+    font-size: 2.4rem;
+    margin-bottom: 25px;
+    color: #3f7c72; /* ciano/verde água suave */
+    font-family: Arial, sans-serif;
 }
 
-.ranking h2 {
-  color: #3f7c72;
-  font-size: 2rem;
-  margin-bottom: 20px;
+/* ===== FORMULÁRIO ===== */
+form {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.ranking table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+form button {
+    background: #3f7c72; 
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.12);
 }
 
-.ranking th, .ranking td {
-  padding: 12px 15px;
-  border-bottom: 1px solid #e0e0e0;
-  font-size: 16px;
+form button:hover {
+    background: #4d9489;
 }
 
-.ranking th {
-  background: #3f7c72;
-  color: white;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-size: 14px;
+/* ===== TABELA ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
 }
 
-.ranking tr:hover {
-  background: #f0f8f6;
+/* CABEÇALHO */
+table thead th {
+    background: #3f7c72; /* ciano clássico do seu tema */
+    color: #ffffff;
+    padding: 14px;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.ranking td {
-  color: #333;
+/* CÉLULAS */
+table td {
+    padding: 12px;
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+    border-bottom: 1px solid #e6e6e6;
 }
 
-.ranking td:first-child {
-  font-weight: bold;
-  color: #2a5c55;
+/* ZEBRADO SUAVE */
+table tbody tr:nth-child(odd) {
+    background: #f3faf9; /* ciano ultra suave */
 }
+
+/* HOVER */
+table tbody tr:hover {
+    background: #e9f7f5;
+}
+
+/* PRIMEIRA COLUNA (POSIÇÃO) */
+table td:first-child {
+    font-weight: bold;
+    color: #2a5c55;
+}
+
+
 
 /* ================================
    🧩 Modal de Pergunta (Quiz)
@@ -1007,9 +961,10 @@ nav ul li a:hover {
 
 /* Lado a lado + alinhamento */
 .info-item2 {
-  margin-left: 210px;  /* distância lateral que você queria */
+  margin-left: 230px;  /* distância lateral que você queria */
   margin-top: -50px;       /* zera o deslocamento vertical */
 }
+
 
 
 /* ===== RESPONSIVIDADE ===== */
@@ -1067,6 +1022,30 @@ nav ul li a:hover {
         </div>
       </div>
     </div>
+
+
+
+<script>
+document.getElementById("btnSalvar").addEventListener("click", function() {
+
+    // Pegue o tempo REAL do seu cronômetro
+    let tempo = window.tempoFinal ?? "00:00:00";  
+
+    // Valores padrões caso não tenha variáveis
+    let distancia = window.distanciaFinal ?? 0;
+    let inimigos = window.inimigosDerrotados ?? 0;
+
+    fetch("salvar_tempo.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `tempo=${tempo}&distancia=${distancia}&inimigos=${inimigos}`
+    })
+    .then(r => r.text())
+    .then(t => alert(t));
+});
+</script>
+
+
 
     <div id="game-world" class="game-world day-sunny">
       <div class="bg-layer sky"></div>
@@ -1156,36 +1135,49 @@ nav ul li a:hover {
 
     </div>
 </div>
+<?php
+// Garante que a variável rankings SEMPRE exista
+$rankings = [];
 
-    <div class="ranking">
-  <h2>🏆 Ranking dos Heróis</h2>
-  <table id="rankingTable">
-    <thead>
-      <tr>
-        <th>Posição</th>
-        <th>Nome do Jogador</th>
-        <th>Distância</th>
-        <th>Inimigos Derrotados</th>
-        <th>Tempo Jogado</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php
-      $pos = 1;
-      foreach ($rankings as $player) {
-          echo "<tr>";
-          echo "<td>{$pos}</td>";
-          echo "<td>{$player['nome']}</td>";
-          echo "<td>{$player['distancia']}</td>";
-          echo "<td>{$player['inimigos_derrotados']}</td>";
-          echo "<td>{$player['tempo']}</td>";
-          echo "</tr>";
-          $pos++;
-      }
-      ?>
-    </tbody>
-  </table>
-</div>
+// Se $pdo não existir ainda, cria conexão
+if (!isset($pdo)) {
+    try {
+        $pdo = new PDO("mysql:host=localhost;dbname=bd_usuarios;charset=utf8mb4", "root", "");
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
+        error_log("Erro ao conectar ao banco: " . $e->getMessage());
+    }
+}
+
+// Carrega o ranking apenas se a conexão existir
+if ($pdo) {
+    try {
+        $stmt = $pdo->query("
+            SELECT 
+                nome_usuario AS nome,
+                distancia,
+                inimigos_derrotados,
+                TIME_FORMAT(tempo_jogado, '%H:%i:%s') AS tempo
+            FROM ranking
+            WHERE nome_usuario IS NOT NULL
+            ORDER BY TIME_TO_SEC(tempo_jogado) ASC
+            LIMIT 10
+        ");
+
+        $rankings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!$rankings) {
+            $rankings = [];
+        }
+    } catch (PDOException $e) {
+        error_log("Erro ao carregar ranking: " . $e->getMessage());
+        $rankings = [];
+    }
+}
+?>
+  
+
+
 
 <div id="gameAlert" class="alert-box">
   <div class="alert-content">
