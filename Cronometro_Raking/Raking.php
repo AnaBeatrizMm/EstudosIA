@@ -1,77 +1,78 @@
 <?php
-// ====================== CONEXÃO COM O BANCO ======================
+// ======================= CONFIG BANCO ============================
+$DB_HOST = 'localhost';
+$DB_USER = 'root';
+$DB_PASS = '';
+$DB_NAME = 'bd_usuarios';
+
 try {
-    $pdo = new PDO("mysql:host=localhost;dbname=jogo_rankeado", "root", ""); // ajuste usuário e senha
+    // Conecta ao banco EXISTENTE
+    $pdo = new PDO("mysql:host=$DB_HOST;dbname=$DB_NAME;charset=utf8mb4", $DB_USER, $DB_PASS);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
 } catch (PDOException $e) {
-    die("Erro de conexão: " . $e->getMessage());
+    die("Erro ao conectar ao banco: " . $e->getMessage());
 }
 
-// ====================== FUNÇÃO PARA CONVERTER TEMPO ======================
-function hmsParaSegundos($hms) {
-    list($h, $m, $s) = explode(':', $hms);
-    return $h*3600 + $m*60 + $s;
+// ======================= CONVERTER TEMPO ============================
+function tempoParaSeg($tempo) {
+    list($h,$m,$s) = explode(":", $tempo);
+    return ($h*3600) + ($m*60) + $s;
 }
 
-// ====================== FUNÇÃO PARA ATUALIZAR RANKING ======================
+// ======================= ATUALIZAR RANKING ============================
 function atualizarRanking($pdo, $nome, $distancia, $inimigos, $tempo) {
-    $tempo_seg = hmsParaSegundos($tempo);
 
-    // Verifica total de jogadores
-    $stmt = $pdo->query("SELECT COUNT(*) as total FROM ranking");
-    $total = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    $tempo_seg = tempoParaSeg($tempo);
 
-    if ($total < 10) {
-        // Insere direto
-        $stmt = $pdo->prepare("INSERT INTO ranking (nome_usuario, distancia, inimigos_derrotados, tempo_jogado) VALUES (?, ?, ?, ?)");
+    // Conta registros existentes
+    $count = $pdo->query("SELECT COUNT(*) AS total FROM ranking")->fetch(PDO::FETCH_ASSOC)['total'];
+
+    if ($count < 10) {
+
+        // Ainda tem vaga no ranking → insere direto
+        $stmt = $pdo->prepare("
+            INSERT INTO ranking (nome_usuario, distancia, inimigos_derrotados, tempo_jogado)
+            VALUES (?, ?, ?, ?)
+        ");
         $stmt->execute([$nome, $distancia, $inimigos, $tempo]);
-    } else {
-        // Pega o jogador com o menor tempo
-        $stmt = $pdo->query("SELECT id, TIME_TO_SEC(tempo_jogado) as tempo_seg FROM ranking ORDER BY TIME_TO_SEC(tempo_jogado) ASC LIMIT 1");
-        $menor = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($tempo_seg > $menor['tempo_seg']) {
-            // Substitui o jogador com menor tempo
-            $pdo->prepare("DELETE FROM ranking WHERE id = ?")->execute([$menor['id']]);
-            $stmt = $pdo->prepare("INSERT INTO ranking (nome_usuario, distancia, inimigos_derrotados, tempo_jogado) VALUES (?, ?, ?, ?)");
+    } else {
+
+        // Seleciona o PIOR jogador (MAIOR tempo)
+        $stmt = $pdo->query("
+            SELECT id, TIME_TO_SEC(tempo_jogado) AS t
+            FROM ranking
+            ORDER BY TIME_TO_SEC(tempo_jogado) DESC
+            LIMIT 1
+        ");
+        $pior = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Só troca se o novo tempo for MELHOR (menor)
+        if ($tempo_seg < $pior['t']) {
+
+            // Apaga o pior
+            $pdo->prepare("DELETE FROM ranking WHERE id = ?")->execute([$pior['id']]);
+
+            // Insere novo
+            $stmt = $pdo->prepare("
+                INSERT INTO ranking (nome_usuario, distancia, inimigos_derrotados, tempo_jogado)
+                VALUES (?, ?, ?, ?)
+            ");
             $stmt->execute([$nome, $distancia, $inimigos, $tempo]);
         }
     }
 }
 
-// ====================== EXEMPLO: ADICIONAR JOGADOR ======================
-atualizarRanking($pdo, "Jogador1", 500, 20, "00:15:30");
-atualizarRanking($pdo, "Jogador2", 600, 25, "00:12:10");
-atualizarRanking($pdo, "Jogador3", 450, 18, "00:20:05");
-
-// ====================== PEGAR TOP 10 ======================
-$stmt = $pdo->query("
-    SELECT nome_usuario, distancia, inimigos_derrotados, TIME_FORMAT(tempo_jogado, '%H:%i:%s') AS tempo_jogado
+// ======================= PEGAR TOP 10 (MELHORES TEMPOS) ============================
+$top10 = $pdo->query("
+    SELECT nome_usuario, distancia, inimigos_derrotados, tempo_jogado
     FROM ranking
-    ORDER BY TIME_TO_SEC(tempo_jogado) DESC
+    ORDER BY TIME_TO_SEC(tempo_jogado) ASC
     LIMIT 10
-");
+")->fetchAll(PDO::FETCH_ASSOC);
 
-$top10 = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// ====================== EXIBIR TABELA ======================
-echo "<div class='ranking'>";
-echo "<h2>🏆 Ranking dos Heróis</h2>";
-echo "<table border='1' cellpadding='6' cellspacing='0'>";
-echo "<tr><th>Posição</th><th>Nome</th><th>Distância</th><th>Inimigos</th><th>Tempo</th></tr>";
-$pos = 1;
-foreach ($top10 as $jogador) {
-    echo "<tr>";
-    echo "<td>{$pos}</td>";
-    echo "<td>{$jogador['nome_usuario']}</td>";
-    echo "<td>{$jogador['distancia']}</td>";
-    echo "<td>{$jogador['inimigos_derrotados']}</td>";
-    echo "<td>{$jogador['tempo_jogado']}</td>";
-    echo "</tr>";
-    $pos++;
-}
-echo "</table>";
-echo "</div>";
 ?>
 
 <!DOCTYPE html>

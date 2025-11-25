@@ -546,16 +546,14 @@ CREATE TABLE `tempos` (
 -- Estrutura para tabela `tempos_rankeados`
 --
 
-CREATE TABLE `tempos_rankeados` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `id_usuario` INT(11) NOT NULL,
-  `nome` VARCHAR(100) NOT NULL,
-  `distancia` INT(11) DEFAULT 0,
-  `inimigos_derrotados` INT(11) DEFAULT 0,
-  `tempo` TIME NOT NULL, -- melhor armazenar como TIME para ordenar corretamente
-  `criado_em` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE IF NOT EXISTS ranking (
+  id INT (10) AUTO_INCREMENT PRIMARY KEY,
+  nome_usuario VARCHAR(100) NOT NULL,
+  distancia INT NOT NULL,
+  inimigos_derrotados INT NOT NULL,
+  tempo_jogado TIME NOT NULL,
+  criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 --
