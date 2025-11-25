@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 17/11/2025 às 15:38
+-- Tempo de geração: 25/11/2025 às 16:22
 -- Versão do servidor: 10.4.28-MariaDB
 -- Versão do PHP: 8.2.4
 
@@ -491,6 +491,35 @@ INSERT INTO `posts` (`id`, `usuario_id`, `conteudo`, `imagem`, `data_criacao`, `
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `ranking`
+--
+
+CREATE TABLE `ranking` (
+  `id` int(10) NOT NULL,
+  `nome_usuario` varchar(100) NOT NULL,
+  `distancia` int(11) NOT NULL,
+  `inimigos_derrotados` int(11) NOT NULL,
+  `tempo_jogado` time NOT NULL,
+  `criado_em` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `ranking`
+--
+
+INSERT INTO `ranking` (`id`, `nome_usuario`, `distancia`, `inimigos_derrotados`, `tempo_jogado`, `criado_em`) VALUES
+(21, 'JogadorTeste', 0, 0, '00:00:00', '2025-11-25 15:06:51'),
+(22, 'JogadorTeste', 0, 0, '00:00:00', '2025-11-25 15:11:08'),
+(23, 'JogadorTeste', 0, 0, '00:00:00', '2025-11-25 15:11:23'),
+(24, 'JogadorTeste', 0, 0, '00:00:00', '2025-11-25 15:14:40'),
+(25, 'JogadorTeste', 0, 0, '00:00:00', '2025-11-25 15:15:14'),
+(26, 'JogadorTeste', 0, 0, '00:00:00', '2025-11-25 15:15:38'),
+(27, 'JogadorTeste', 0, 0, '00:00:00', '2025-11-25 15:18:55'),
+(28, 'JogadorTeste', 0, 0, '00:00:00', '2025-11-25 15:19:09');
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `solicitacoes_amizade`
 --
 
@@ -541,20 +570,6 @@ CREATE TABLE `tempos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
-
---
--- Estrutura para tabela `tempos_rankeados`
---
-
-CREATE TABLE IF NOT EXISTS ranking (
-  id INT (10) AUTO_INCREMENT PRIMARY KEY,
-  nome_usuario VARCHAR(100) NOT NULL,
-  distancia INT NOT NULL,
-  inimigos_derrotados INT NOT NULL,
-  tempo_jogado TIME NOT NULL,
-  criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 
 --
 -- Estrutura para tabela `usuarios`
@@ -777,6 +792,12 @@ ALTER TABLE `posts`
   ADD KEY `usuario_id` (`usuario_id`);
 
 --
+-- Índices de tabela `ranking`
+--
+ALTER TABLE `ranking`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Índices de tabela `solicitacoes_amizade`
 --
 ALTER TABLE `solicitacoes_amizade`
@@ -829,7 +850,7 @@ ALTER TABLE `anotacoes`
 -- AUTO_INCREMENT de tabela `arquivos`
 --
 ALTER TABLE `arquivos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de tabela `chat_grupo`
@@ -943,13 +964,19 @@ ALTER TABLE `planejamento`
 -- AUTO_INCREMENT de tabela `planos`
 --
 ALTER TABLE `planos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `posts`
 --
 ALTER TABLE `posts`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+
+--
+-- AUTO_INCREMENT de tabela `ranking`
+--
+ALTER TABLE `ranking`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT de tabela `solicitacoes_amizade`
