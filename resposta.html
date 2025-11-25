@@ -8,85 +8,310 @@
 <link rel="stylesheet" href="estilo.css">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+
 <style>
 :root{
-  --bg: rgb(243, 228, 201);
-  --accent: rgb(192, 98, 98);
-  --accent-2: rgb(139, 80, 80);
+  --bg: #3f7c72;
+  --accent: #3f7c72;
+  --accent-2: #33645c;
   --white: #ffffff;
-  --muted: #6b5a52;
+  --muted: #e6f1ef;
   --radius: 14px;
   --gap: 14px;
 }
+
 *{box-sizing:border-box}
-body{margin:0;font-family:'Inter',system-ui,sans-serif;background:linear-gradient(180deg,var(--bg),#fff);color:#222;padding:32px;display:flex;align-items:center;justify-content:center;min-height:100vh;}
-.card{width:980px;max-width:96vw;background:var(--white);border-radius:20px;box-shadow:0 10px 30px rgba(30,20,10,0.12);overflow:hidden;display:grid;grid-template-columns:320px 1fr;}
-.sidebar{background:linear-gradient(180deg,var(--accent),var(--accent-2));padding:22px;color:var(--white);display:flex;flex-direction:column;gap:18px;}
-.logo{font-family:'Playfair Display',serif;font-size:22px;letter-spacing:0.4px;font-weight:600;}
-.subtitle{font-size:13px;opacity:0.9}
-.history{background: rgba(255,255,255,0.06);padding:10px;border-radius:12px;flex:1;overflow:auto;}
-.history h4{margin:0 0 8px 0;font-size:13px}
-.past-item{padding:8px 10px;border-radius:10px;background:rgba(255,255,255,0.06);margin-bottom:8px;cursor:pointer;font-size:13px;line-height:1.25;}
-.past-item small{opacity:0.85}
+
+body{
+  margin:0;
+  font-family:'Inter',system-ui,sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--white));
+  color:#222;
+  padding:32px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+}
+
+/* CARD */
+.card{
+  margin-top: 50px;
+  width:980px;
+  max-width:96vw;
+  background:var(--white);
+  border-radius:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.15);
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:320px 1fr;
+  
+}
+
+/* SIDEBAR */
+.sidebar{
+  background:linear-gradient(180deg,var(--accent),var(--accent-2));
+  padding:22px;
+  color:var(--white);
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+.logo{
+  font-family:'Playfair Display',serif;
+  font-size:22px;
+  letter-spacing:0.4px;
+  font-weight:600;
+}
+
+.subtitle{
+  font-size:13px;
+  opacity:0.9;
+}
+
+.history{
+  background: rgba(255,255,255,0.06);
+  padding:10px;
+  border-radius:12px;
+  flex:1;
+  overflow:auto;
+}
+
+.history h4{
+  margin:0 0 8px 0;
+  font-size:13px;
+}
+
+.past-item{
+  padding:8px 10px;
+  border-radius:10px;
+  background:rgba(255,255,255,0.08);
+  margin-bottom:8px;
+  cursor:pointer;
+  font-size:13px;
+  line-height:1.25;
+}
+
+/* BOTÕES DA SIDEBAR */
 .controls{display:flex;gap:8px}
-.btn{padding:8px 12px;border-radius:10px;border:none;cursor:pointer;font-weight:600}
-.btn-ghost{background:transparent;color:var(--white);border:1px solid rgba(255,255,255,0.12)}
-.btn-clear{background:var(--white);color:var(--accent-2)}
-.main{padding:24px;display:flex;flex-direction:column;gap:12px;}
-.chat-area{background:linear-gradient(180deg,#fff,#fff);border-radius:12px;padding:18px;height:520px;overflow:auto;border:1px solid rgba(10,10,10,0.03);}
-.msg{max-width:78%;margin-bottom:12px;padding:12px 14px;border-radius:12px;line-height:1.35}
-.user{margin-left:auto;background:var(--bg);border:1px solid rgba(0,0,0,0.04)}
-.bot{background:linear-gradient(180deg,#fff,#f8f4ef);border:1px solid rgba(0,0,0,0.04)}
-.meta{font-size:12px;color:var(--muted);margin-bottom:6px}
-.input-area{display:flex;flex-direction:column;gap:6px;padding-top:6px}
-.examples{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
-.example-btn{background:var(--accent);color:var(--white);border:none;padding:6px 10px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;transition:0.2s}
-.example-btn:hover{opacity:0.85}
-textarea{flex:1;resize:none;padding:12px 14px;border-radius:12px;border:1px solid rgba(0,0,0,0.06);min-height:56px;font-size:14px}
-.send-btn{background:var(--accent);color:var(--white);border:none;padding:12px 16px;border-radius:12px;font-weight:700;cursor:pointer}
-.small-muted{font-size:12px;color:var(--muted)}
-@media(max-width:880px){.card{grid-template-columns:1fr}.sidebar{order:2}.main{order:1}.chat-area{height:420px}}
+
+.btn{
+  padding:8px 12px;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.btn-ghost{
+  background:transparent;
+  color:var(--white);
+  border:1px solid rgba(255,255,255,0.25);
+}
+
+/* MAIN */
+.main{
+  padding:24px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.chat-area{
+  background:#ffffff;
+  border-radius:12px;
+  padding:18px;
+  height:310px;
+  overflow:auto;
+  border:1px solid rgba(0,0,0,0.06);
+}
+
+.msg{
+  max-width:78%;
+  margin-bottom:12px;
+  padding:12px 14px;
+  border-radius:12px;
+  line-height:1.35;
+}
+
+.user{
+  margin-left:auto;
+  background:var(--bg);
+  color:white;
+  border:1px solid rgba(0,0,0,0.04);
+}
+
+.bot{
+  background:#f5fffd;
+  border:1px solid rgba(0,0,0,0.04);
+}
+
+/* INPUT AREA */
+.input-area{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  padding-top:6px;
+}
+
+.examples{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-bottom:6px;
+}
+
+.example-btn{
+  background:var(--accent);
+  color:var(--white);
+  border:none;
+  padding:6px 10px;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:13px;
+  font-weight:600;
+  transition:0.2s;
+}
+.example-btn:hover{
+  opacity:0.85;
+}
+
+textarea{
+  flex:1;
+  resize:none;
+  padding:12px 14px;
+  border-radius:12px;
+  border:1px solid rgba(0,0,0,0.06);
+  min-height:56px;
+  font-size:14px;
+}
+
+.send-btn{
+  background:var(--accent);
+  color:var(--white);
+  border:none;
+  padding:12px 16px;
+  border-radius:12px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.small-muted{
+  font-size:12px;
+  color:#446d65;
+}
+
+/* RESPONSIVO */
+@media(max-width:880px){
+  .card{grid-template-columns:1fr}
+  .sidebar{order:2}
+  .main{order:1}
+  .chat-area{height:420px}
+}
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 70px;
+      background: #ffffffcc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+
+    header .logo img {
+      height: 450px;
+      width: auto;
+      display: block;
+      margin-left: -85px;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin: 0;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: black;
+      padding: 5px 10px;
+      border-radius: 8px;
+      transition: .3s;
+    }
 </style>
 </head>
+
 <body>
+    <header>
+    <div class="logo"><img src="/imagens/logoatual.png" alt="Logo"></div>
+    <nav>
+      <ul>
+        <li><a href="/anotacoes/index.php">Voltar</a></li>
+      </ul>
+    </nav>
+  </header>
 <div class="card" role="application">
+
 <aside class="sidebar">
-<div><div class="logo">EstudosIA</div><div class="subtitle">Simulação IA offline</div></div>
-<div class="history" id="history">
-<h4>Histórico de perguntas</h4>
-<div id="pastList"></div>
-</div>
-<div class="controls">
-<button class="btn btn-ghost" id="clearBtn">Limpar</button>
-</div>
+  <div>
+    <div class="logo">EstudosIA</div>
+    <div class="subtitle">Simulação IA offline</div>
+  </div>
+
+  <div class="history" id="history">
+    <h4>Histórico de perguntas</h4>
+    <div id="pastList"></div>
+  </div>
+
+  <div class="controls">
+    <button class="btn btn-ghost" id="clearBtn">Limpar</button>
+  </div>
 </aside>
+
 <main class="main">
-<div style="display:flex;justify-content:space-between;align-items:center">
-<div><div style="font-weight:700;font-size:16px">Chat — EstudosIA</div><div class="small-muted">Respostas detalhadas por matéria</div></div>
-<div class="small-muted">Offline • Simulação</div>
-</div>
-<div class="chat-area" id="chat"></div>
-<div class="input-area">
-<div class="examples" id="exampleBtns"></div>
-<textarea id="questionInput" placeholder="Digite sua pergunta aqui" aria-label="Pergunta"></textarea>
-<button class="send-btn" id="sendBtn">Enviar</button>
-</div>
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <div>
+      <div style="font-weight:700;font-size:16px">Chat — EstudosIA</div>
+      <div class="small-muted">Respostas detalhadas por matéria</div>
+    </div>
+    <div class="small-muted">Offline • Simulação</div>
+  </div>
+
+  <div class="chat-area" id="chat"></div>
+
+  <div class="input-area">
+    <div class="examples" id="exampleBtns"></div>
+    <textarea id="questionInput" placeholder="Digite sua pergunta aqui" aria-label="Pergunta"></textarea>
+    <button class="send-btn" id="sendBtn">Enviar</button>
+  </div>
 </main>
+
 </div>
+
 <script>
 const TOPICS=[
   {materia:'Matemática',perguntas:[
-    {q:'Quanto é 7 + 8?',r:'7 + 8 = 15'},
-    {q:'Quanto é 9 × 6?',r:'9 × 6 = 54'},
+    {q:'Quanto é 7+8?',r:'7 + 8 = 15'},
+    {q:'Quanto é 9×6?',r:'9 × 6 = 54'},
     {q:'Qual é o dobro de 25?',r:'O dobro de 25 é 50'},
-    {q:'Quanto é 100 ÷ 4?',r:'100 ÷ 4 = 25'},
+    {q:'Quanto é 100÷4?',r:'100 ÷ 4 = 25'},
     {q:'O que é um número primo?',r:'Um número primo só pode ser dividido por 1 e por ele mesmo'},
     {q:'Qual é o menor número primo?',r:'O menor número primo é 2'},
     {q:'Quanto é 12²?',r:'12² = 144'},
     {q:'O que é uma fração?',r:'Uma fração representa partes de um todo'},
     {q:'Quanto é ¾ de 100?',r:'¾ de 100 é 75'},
-    {q:'O que é um triângulo equilátero?',r:'Triângulo com os três lados iguais'}
+    {q:'O que é um triângulo equilátero?',r:'Triângulo com os três lados iguais'},
+    {q:'Quanto é 2+2?',r:'2 + 2 = 4'},
   ]},
+
   {materia:'Português',perguntas:[
     {q:'O que é um substantivo?',r:'É a palavra que nomeia seres, objetos, lugares ou sentimentos'},
     {q:'O que é um verbo?',r:'Indica ação, estado ou fenômeno da natureza'},
@@ -99,6 +324,7 @@ const TOPICS=[
     {q:'Qual é o antônimo de triste?',r:'Feliz'},
     {q:'O que é uma crase?',r:'Fusão da preposição “a” com o artigo “a”'}
   ]},
+
   {materia:'Geografia',perguntas:[
     {q:'Qual é o maior país do mundo?',r:'Rússia'},
     {q:'Qual é o menor país do mundo?',r:'Vaticano'},
@@ -113,6 +339,7 @@ const TOPICS=[
   ]}
 ];
 
+// gerar exemplos
 const allQuestions=[];
 TOPICS.forEach(cat=>cat.perguntas.forEach(p=>allQuestions.push(p.q)));
 const exampleBtnsEl=document.getElementById('exampleBtns');
@@ -125,7 +352,10 @@ function showRandomExamples(){
     const btn=document.createElement('button');
     btn.className='example-btn';
     btn.textContent=text;
-    btn.addEventListener('click',()=>{document.getElementById('questionInput').value=text;document.getElementById('questionInput').focus();});
+    btn.addEventListener('click',()=>{
+      document.getElementById('questionInput').value=text;
+      document.getElementById('questionInput').focus();
+    });
     exampleBtnsEl.appendChild(btn);
   });
 }
@@ -164,7 +394,10 @@ function addHistory(q){
     const div=document.createElement('div');
     div.className='past-item';
     div.textContent=q;
-    div.addEventListener('click',()=>{inputEl.value=q;inputEl.focus();});
+    div.addEventListener('click',()=>{
+      inputEl.value=q;
+      inputEl.focus();
+    });
     pastListEl.appendChild(div);
   });
 }
@@ -179,8 +412,20 @@ sendBtn.addEventListener('click',()=>{
   inputEl.value='';
   inputEl.focus();
 });
-inputEl.addEventListener('keypress',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendBtn.click();}});
-clearBtn.addEventListener('click',()=>{history=[];pastListEl.innerHTML='';chatEl.innerHTML='';});
+
+inputEl.addEventListener('keypress',e=>{
+  if(e.key==='Enter'&&!e.shiftKey){
+    e.preventDefault();
+    sendBtn.click();
+  }
+});
+
+clearBtn.addEventListener('click',()=>{
+  history=[];
+  pastListEl.innerHTML='';
+  chatEl.innerHTML='';
+});
 </script>
+
 </body>
 </html>

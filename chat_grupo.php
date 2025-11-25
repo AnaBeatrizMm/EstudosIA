@@ -45,6 +45,8 @@ $stmt->close();
 <link rel="stylesheet" href="estilo.css">
 
 <style>
+        * { box-sizing: border-box; }
+
 body {
     font-family: Arial;
     background: #e8f5f3;
@@ -52,44 +54,43 @@ body {
     padding: 0;
 }
 
-/* HEADER */
-header {
-  position: fixed; 
-  top:0; left:0; 
-  width:100%; 
-  height:70px;
-  background:#ffffffcc; 
-  display:flex; 
-  justify-content:space-between; 
-  align-items:center;
-  padding:0 1.5rem; 
-  box-shadow:0 2px 5px rgba(0,0,0,0.1); 
-  z-index:1000;
-}
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 70px;
+      background: #ffffffcc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
 
-header .logo img{
-  height:55px;
-  width:auto;
-  display:block;
-  margin-left:0;
-}
+    header .logo img {
+      height: 450px;
+      width: auto;
+      display: block;
+      margin-left: -85px;
+    }
 
-nav ul{
-  list-style:none; 
-  display:flex; 
-  align-items:center; 
-  gap:15px; 
-  margin:0;
-}
+    nav ul {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin: 0;
+    }
 
-nav ul li a{
-  text-decoration:none; 
-  color:black;  
-  padding:6px 12px; 
-  border-radius:8px; 
-  font-size:17px;
-  transition:.3s;
-}
+    nav ul li a {
+      text-decoration: none;
+      color: black;
+      padding: 5px 10px;
+      border-radius: 8px;
+      transition: .3s;
+    }
 
 /* CHAT */
 .chat-box {
