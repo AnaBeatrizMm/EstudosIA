@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 25/11/2025 às 21:10
--- Versão do servidor: 10.4.32-MariaDB
--- Versão do PHP: 8.2.12
+-- Tempo de geração: 26/11/2025 às 02:04
+-- Versão do servidor: 10.4.28-MariaDB
+-- Versão do PHP: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -37,6 +37,14 @@ CREATE TABLE `agenda` (
   `data_criacao` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Despejando dados para a tabela `agenda`
+--
+
+INSERT INTO `agenda` (`id`, `usuario_id`, `dia`, `compromisso`, `horario`, `notas`, `data_criacao`) VALUES
+(2, 94, 'segunda', 'Estudar', '11:32', NULL, '2025-11-25 22:32:54'),
+(3, 92, 'segunda', 'Estudar', '23:53', NULL, '2025-11-26 00:53:24');
+
 -- --------------------------------------------------------
 
 --
@@ -57,7 +65,11 @@ CREATE TABLE `amizades` (
 INSERT INTO `amizades` (`id`, `id_usuario1`, `id_usuario2`, `data_criacao`) VALUES
 (1, 4, 13, '2025-10-06 11:12:37'),
 (3, 13, 14, '2025-10-06 13:41:15'),
-(4, 93, 13, '2025-11-07 08:39:53');
+(4, 93, 13, '2025-11-07 08:39:53'),
+(5, 94, 4, '2025-11-25 22:19:47'),
+(6, 14, 4, '2025-11-25 22:19:51'),
+(7, 94, 14, '2025-11-25 22:20:56'),
+(8, 94, 13, '2025-11-25 22:22:37');
 
 -- --------------------------------------------------------
 
@@ -72,6 +84,13 @@ CREATE TABLE `anotacoes` (
   `data_criacao` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Despejando dados para a tabela `anotacoes`
+--
+
+INSERT INTO `anotacoes` (`id`, `usuario_id`, `conteudo`, `data_criacao`) VALUES
+(1, 94, 'Preciso estudar <font color=\"#d91c1c\"><b>matemática </b></font>para a prova.', '2025-11-25 22:34:49');
+
 -- --------------------------------------------------------
 
 --
@@ -85,6 +104,15 @@ CREATE TABLE `arquivos` (
   `tamanho` int(11) NOT NULL,
   `data_envio` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `arquivos`
+--
+
+INSERT INTO `arquivos` (`id`, `nome_original`, `nome_servidor`, `tamanho`, `data_envio`) VALUES
+(14, 'Atividade_Persona_Profissional_2025_Elegante_20251126_001909_0de473_20251126_003924_6eccfd.pdf', 'Atividade_Persona_Profissional_2025_Elegante_20251126_001909_0de473_20251126_003924_6eccfd_20251126_004856_281a37.pdf', 4440, '2025-11-25 20:48:56'),
+(15, 'Atividade_Persona_Profissional_2025_Elegante.pdf', 'Atividade_Persona_Profissional_2025_Elegante_20251126_012927_ffb2be.pdf', 4440, '2025-11-25 21:29:27'),
+(16, 'Atividade_Persona_Profissional_2025_Elegante_20251126_001909_0de473.pdf', 'Atividade_Persona_Profissional_2025_Elegante_20251126_001909_0de473_20251126_014343_a184cb.pdf', 4440, '2025-11-25 21:43:43');
 
 -- --------------------------------------------------------
 
@@ -221,6 +249,13 @@ CREATE TABLE `chat_grupo_musica` (
   `data_envio` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Despejando dados para a tabela `chat_grupo_musica`
+--
+
+INSERT INTO `chat_grupo_musica` (`id`, `user_id`, `mensagem`, `arquivo`, `resposta_para`, `data_envio`) VALUES
+(2, 94, '0000', NULL, NULL, '2025-11-25 20:42:43');
+
 -- --------------------------------------------------------
 
 --
@@ -263,7 +298,8 @@ CREATE TABLE `comentarios` (
 --
 
 INSERT INTO `comentarios` (`id`, `id_post`, `id_usuario`, `conteudo`, `data_criacao`) VALUES
-(1, 25, 13, 'oii', '2025-10-06 11:10:26');
+(1, 25, 13, 'oii', '2025-10-06 11:10:26'),
+(3, 45, 94, 'Podemos comentar em posts.', '2025-11-25 22:28:09');
 
 -- --------------------------------------------------------
 
@@ -311,7 +347,8 @@ INSERT INTO `curtidas` (`id`, `id_post`, `id_usuario`, `data_criacao`) VALUES
 (8, 41, 13, '2025-11-25 19:19:44'),
 (9, 40, 13, '2025-11-25 19:20:05'),
 (10, 39, 13, '2025-11-25 19:20:12'),
-(11, 38, 13, '2025-11-25 19:22:07');
+(11, 38, 13, '2025-11-25 19:22:07'),
+(14, 44, 94, '2025-11-25 22:27:26');
 
 -- --------------------------------------------------------
 
@@ -348,7 +385,14 @@ INSERT INTO `eventos` (`id`, `titulo`, `data_evento`, `hora_inicio`, `hora_fim`,
 (17, 'ffffggr', '2025-09-06', '06:59:00', '08:55:00', 0),
 (18, 'dwddw', '2025-09-05', '03:45:00', '06:59:00', 0),
 (19, '55555', '2025-10-31', '05:55:00', '07:59:00', 0),
-(20, 'alla', '2025-11-12', '12:00:00', '13:00:00', 13);
+(20, 'alla', '2025-11-12', '12:00:00', '13:00:00', 13),
+(21, 'estudar', '2025-11-26', '11:00:00', '12:00:00', 94),
+(22, 'ler', '2025-11-26', '12:00:00', '13:00:00', 94),
+(23, 'ler', '2025-11-26', '12:00:00', '14:00:00', 94),
+(24, 'ler', '2025-11-26', '12:00:00', '14:00:00', 94),
+(25, 'ler', '2025-11-26', '17:00:00', '18:00:00', 94),
+(26, 'kk', '2025-11-21', '20:00:00', '22:00:00', 94),
+(27, '/~;', '2025-11-26', '22:00:00', '00:00:00', 92);
 
 -- --------------------------------------------------------
 
@@ -364,6 +408,13 @@ CREATE TABLE `financas` (
   `valor` decimal(10,2) NOT NULL,
   `data_criacao` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `financas`
+--
+
+INSERT INTO `financas` (`id`, `usuario_id`, `data`, `descricao`, `valor`, `data_criacao`) VALUES
+(1, 94, '2025-11-13', 'Camiseta', 36.90, '2025-11-25 22:33:17');
 
 -- --------------------------------------------------------
 
@@ -417,7 +468,12 @@ CREATE TABLE `notificacoes` (
 INSERT INTO `notificacoes` (`id`, `usuario_id`, `mensagem`, `tipo`, `referencia_id`, `lida`, `data_criacao`) VALUES
 (1, 1, 'enviou uma solicitação de amizade', 'amizade', 1, 0, '2025-11-06 20:17:46'),
 (4, 90, 'Você recebeu uma solicitação de amizade', 'amizade', 6, 0, '2025-11-07 15:04:40'),
-(6, 1, 'Você recebeu uma solicitação de amizade', 'amizade', 8, 0, '2025-11-07 17:52:24');
+(6, 1, 'Você recebeu uma solicitação de amizade', 'amizade', 8, 0, '2025-11-07 17:52:24'),
+(7, 1, 'Você recebeu uma solicitação de amizade', 'amizade', 9, 0, '2025-11-26 01:53:31'),
+(9, 89, 'Você recebeu uma solicitação de amizade', 'amizade', 11, 0, '2025-11-26 01:53:35'),
+(10, 90, 'Você recebeu uma solicitação de amizade', 'amizade', 12, 0, '2025-11-26 01:53:37'),
+(11, 92, 'Você recebeu uma solicitação de amizade', 'amizade', 13, 0, '2025-11-26 01:53:41'),
+(12, 93, 'Você recebeu uma solicitação de amizade', 'amizade', 14, 0, '2025-11-26 01:53:43');
 
 -- --------------------------------------------------------
 
@@ -432,6 +488,14 @@ CREATE TABLE `planejamento` (
   `texto` text DEFAULT NULL,
   `data_criacao` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `planejamento`
+--
+
+INSERT INTO `planejamento` (`id`, `usuario_id`, `dia`, `texto`, `data_criacao`) VALUES
+(1, 94, 'Segunda-feira', 'Estudar', '2025-11-25 22:33:48'),
+(2, 94, 'Terça-feira', 'Ler', '2025-11-25 22:33:48');
 
 -- --------------------------------------------------------
 
@@ -452,7 +516,10 @@ CREATE TABLE `planos` (
 --
 
 INSERT INTO `planos` (`id`, `usuario_id`, `semana`, `atividades`, `criado_em`) VALUES
-(2, 13, 2, 'tcc E ENEM', '2025-11-07 13:54:58');
+(2, 13, 2, 'tcc E ENEM', '2025-11-07 13:54:58'),
+(4, 94, 3, 'portugues', '2025-11-25 23:18:20'),
+(5, 94, 1, 'prova', '2025-11-26 00:29:00'),
+(6, 92, 7, ',kmj', '2025-11-26 00:55:11');
 
 -- --------------------------------------------------------
 
@@ -474,25 +541,8 @@ CREATE TABLE `posts` (
 --
 
 INSERT INTO `posts` (`id`, `usuario_id`, `conteudo`, `imagem`, `data_criacao`, `data_postagem`) VALUES
-(2, 1, 'oi', NULL, '2025-10-01 23:27:00', '2025-10-03 10:25:53'),
-(3, 2, 'oi', NULL, '2025-10-01 23:33:33', '2025-10-03 10:25:53'),
-(4, 2, NULL, NULL, '2025-10-01 23:33:46', '2025-10-03 10:25:53'),
-(5, 2, 'oi', 'uploads/1759361801_Png ♡.jpeg', '2025-10-01 23:36:41', '2025-10-03 10:25:53'),
-(6, 2, 'oi', 'uploads/1759361889_Png ♡.jpeg', '2025-10-01 23:38:09', '2025-10-03 10:25:53'),
-(7, 2, 'oi', 'uploads/1759361901_Png ♡.jpeg', '2025-10-01 23:38:21', '2025-10-03 10:25:53'),
-(8, 2, 'oi', 'uploads/1759361930_Png ♡.jpeg', '2025-10-01 23:38:50', '2025-10-03 10:25:53'),
-(9, 2, 'd', 'uploads/1759361945_honk shoe.jpeg', '2025-10-01 23:39:05', '2025-10-03 10:25:53'),
-(10, 2, 'd', 'uploads/1759362007_honk shoe.jpeg', '2025-10-01 23:40:07', '2025-10-03 10:25:53'),
-(11, 2, 'fsf', 'uploads/1759362018_Slakkj.jpeg', '2025-10-01 23:40:18', '2025-10-03 10:25:53'),
-(12, 3, 'sou rebelde', NULL, '2025-10-02 00:52:43', '2025-10-03 10:25:53'),
-(21, 13, 'qafs, que ódio', '', '2025-10-06 10:44:35', '2025-10-06 07:44:35'),
-(25, 13, 'y', 'imagens/posts/68e3a39c30c11.jfif', '2025-10-06 11:10:20', '2025-10-06 08:10:20'),
-(29, 4, 'Uma tarde do hora com a best. #capiamigas', 'imagens/posts/68e3c87f3d01e.webp', '2025-10-06 13:47:43', '2025-10-06 10:47:43'),
-(30, 4, 'Eu e minha bebezona da boca inchada querida. #airmandadedasanabeatrizes', 'imagens/posts/68e3c92381944.webp', '2025-10-06 13:50:27', '2025-10-06 10:50:27'),
-(38, 13, 'Eu hoje de madrugada mexendo no tcc', 'imagens/posts/690df2ebc9a1a.jpg', '2025-11-07 13:23:55', '2025-11-07 10:23:55'),
-(39, 4, 'vou me matar', '', '2025-11-12 14:38:02', '2025-11-12 11:38:02'),
-(40, 4, 'g', '', '2025-11-12 15:18:55', '2025-11-12 12:18:55'),
-(41, 4, 'y', '', '2025-11-12 15:28:38', '2025-11-12 12:28:38');
+(44, 94, 'Dá para postar imagem!', 'imagens/posts/69262d168745f.jpg', '2025-11-25 22:26:30', '2025-11-25 19:26:30'),
+(45, 94, 'Olá, bem vindo(a) ao nosso site!', '', '2025-11-25 22:26:58', '2025-11-25 19:26:58');
 
 -- --------------------------------------------------------
 
@@ -546,7 +596,12 @@ INSERT INTO `solicitacoes_amizade` (`id`, `de_usuario_id`, `para_usuario_id`, `s
 (2, 13, 92, 'pendente', '2025-11-07 05:26:40'),
 (3, 13, 93, 'pendente', '2025-11-07 05:26:43'),
 (6, 13, 90, 'pendente', '2025-11-07 08:04:40'),
-(8, 13, 1, 'pendente', '2025-11-07 10:52:24');
+(8, 13, 1, 'pendente', '2025-11-07 10:52:24'),
+(9, 14, 1, 'pendente', '2025-11-25 18:53:31'),
+(11, 14, 89, 'pendente', '2025-11-25 18:53:35'),
+(12, 14, 90, 'pendente', '2025-11-25 18:53:37'),
+(13, 14, 92, 'pendente', '2025-11-25 18:53:41'),
+(14, 14, 93, 'pendente', '2025-11-25 18:53:43');
 
 -- --------------------------------------------------------
 
@@ -561,6 +616,15 @@ CREATE TABLE `tarefas` (
   `usuario_id` int(11) NOT NULL,
   `data_criacao` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `tarefas`
+--
+
+INSERT INTO `tarefas` (`id`, `descricao`, `concluida`, `usuario_id`, `data_criacao`) VALUES
+(1, 'Ler', 1, 94, '2025-11-25 22:35:14'),
+(3, 'Almoçar', 1, 94, '2025-11-25 22:35:38'),
+(4, './;.~/.,', 1, 92, '2025-11-26 00:54:23');
 
 -- --------------------------------------------------------
 
@@ -616,13 +680,14 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `biografia`, `foto`, `arvore_escolhida`, `ultimo_login`, `token`, `expira_token`, `codigo_verificacao`, `verificado`, `username`, `apelido`, `data_nascimento`, `escola`, `foto_pessoal`, `preferencias`, `tags`, `favoritos`, `data_criacao`, `bio_foto`, `banner`, `aniversario`, `avatar`, `online`) VALUES
 (1, 'Ana Marques Cezar', 'anacezar@gmail.com', '$2y$10$tRGB685hxsuEW8mdF/xllOowNZKDibI3FduI1L2sUolsXidbLJ6JO', NULL, 'imagens/usuarios/default.jpg', NULL, '2025-11-06 10:43:13', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-06 10:43:13', NULL, NULL, NULL, 'default.png', 0),
-(4, 'Bia Soares', 'beatriz@gmail.com', '$2y$10$27rg7J1YQ9hSdb59AhTUle94ITQWOuvS6ILvpl7d0MODLB/ExkXbu', 'Study vlogs ', 'imagens/usuarios6913469619ece.png', NULL, '2025-08-18 09:19:03', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'meu namorado lindo, peixes, capivara,sobrenatural', '2025-09-24 11:33:45', 'imagens/bio/691346961a3e7.jpg', 'imagens/usuarios/691346961a5cb.jpg', '2008-03-17', 'default.png', 0),
+(4, 'Bia Soares', 'beatriz@gmail.com', '$2y$10$27rg7J1YQ9hSdb59AhTUle94ITQWOuvS6ILvpl7d0MODLB/ExkXbu', 'Study vlogs ', 'imagens/usuarios69262b73517d2.png', NULL, '2025-08-18 09:19:03', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'meu namorado lindo, peixes, capivara,sobrenatural', '2025-09-24 11:33:45', 'imagens/bio/691346961a3e7.jpg', 'imagens/usuarios/691346961a5cb.jpg', '2008-03-17', 'default.png', 0),
 (13, 'Marques', 'ana@gmail.com', '$2y$10$zPWncJg1miTRLlP.xPZk9efuZPyqymZu793GKnPDUc3fBeQpLdB6.', 'AnaBanana', 'imagens/usuarios690de51c81de3.png', NULL, '2025-08-18 09:19:03', NULL, NULL, NULL, 0, '', NULL, NULL, NULL, NULL, NULL, 'Culinária,Programação', 'Gatos, Stardew Valley, Café, Uva Verde', '2025-09-24 11:33:45', 'imagens/bio/690de50df02b6.jpg', 'imagens/usuarios/690de50df1ed4.jpg', '2007-10-10', 'default.png', 0),
-(14, 'wenderson', 'wenderson.souza@gmail.com', '$2y$10$JTjk3KlPbsViCn9Yd9gjCOoDmmLkOp/TEA3pK2q4XkcTusKZxEzN.', '', 'imagens/usuarios691afdd9d2ccc.png', NULL, '2025-10-06 08:46:56', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '2025-09-24 11:33:45', '', 'imagens/usuarios/691afdd9d2f42.jpeg', '0000-00-00', 'default.png', 0),
+(14, 'wenderson', 'wenderson.souza@gmail.com', '$2y$10$fHkWIhI0Y.bf4pq1v.iRH.KVfYELfUVBvW8z2/4K2sMvpDiGEz6Gm', '', 'imagens/usuarios69262beb44d49.png', NULL, '2025-10-06 08:46:56', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '2025-09-24 11:33:45', '', 'imagens/usuarios/6926286ba4611.jpg', '0000-00-00', 'default.png', 0),
 (89, 'Usuário Teste 1', 'teste1@email.com', '$2y$10$mhwR8xWl79e89JPhVYO4WuImgdM/SUfxi/nNh7i9ljY4zbq7E0Owe', NULL, NULL, NULL, '2025-09-27 21:37:23', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-27 21:37:23', NULL, NULL, NULL, 'default.png', 0),
 (90, 'Usuário Teste 2', 'teste2@email.com', '$2y$10$vvB3M3xD06TLnXv6Br/i8u7/O0yHOMQJRd2eXpyaYbc3taxaJ9Of.', NULL, NULL, NULL, '2025-09-27 21:37:23', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-27 21:37:23', NULL, NULL, NULL, 'default.png', 0),
 (92, 'Ana Marques', 'anabeatrizmarquescezar@gmail.com', '', NULL, NULL, NULL, '2025-11-06 11:34:45', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-06 11:34:45', NULL, NULL, NULL, 'default.png', 0),
-(93, 'Ana Beatriz', 'beatrizava@gmail.com', '$2y$10$znQAINvoqEDoaKmq9N9k6u2Q0Zy2uN2WqMI7xjFErHOKk5qJkhIS.', NULL, 'imagens/usuarios/default.jpg', NULL, '2025-11-07 05:16:28', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-07 05:16:28', NULL, NULL, NULL, 'default.png', 0);
+(93, 'Ana Beatriz', 'beatrizava@gmail.com', '$2y$10$znQAINvoqEDoaKmq9N9k6u2Q0Zy2uN2WqMI7xjFErHOKk5qJkhIS.', NULL, 'imagens/usuarios/default.jpg', NULL, '2025-11-07 05:16:28', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-07 05:16:28', NULL, NULL, NULL, 'default.png', 0),
+(94, 'Apresentação', 'testetcc@gmail.com', '$2y$10$G45FTjsMiCbYBIy17Hg2H.8whZUuBhyLPZhhlN/VqvC0roGfRb8Tm', 'Sua biografia', 'imagens/usuarios69262ac0e7d68.png', NULL, '2025-11-25 19:14:26', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Favorito 1, Favorito 2, Favorito 3', '2025-11-25 19:14:26', 'imagens/bio/69262ac0e8080.jfif', 'imagens/usuarios/69262ac0e824e.jpg', '2025-11-25', 'default.png', 0);
 
 --
 -- Índices para tabelas despejadas
@@ -838,25 +903,25 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de tabela `agenda`
 --
 ALTER TABLE `agenda`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `amizades`
 --
 ALTER TABLE `amizades`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de tabela `anotacoes`
 --
 ALTER TABLE `anotacoes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `arquivos`
 --
 ALTER TABLE `arquivos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de tabela `chat_grupo`
@@ -904,7 +969,7 @@ ALTER TABLE `chat_grupo_jogos`
 -- AUTO_INCREMENT de tabela `chat_grupo_musica`
 --
 ALTER TABLE `chat_grupo_musica`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de tabela `chat_grupo_pintura`
@@ -916,7 +981,7 @@ ALTER TABLE `chat_grupo_pintura`
 -- AUTO_INCREMENT de tabela `comentarios`
 --
 ALTER TABLE `comentarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `conteudos`
@@ -928,19 +993,19 @@ ALTER TABLE `conteudos`
 -- AUTO_INCREMENT de tabela `curtidas`
 --
 ALTER TABLE `curtidas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de tabela `eventos`
 --
 ALTER TABLE `eventos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT de tabela `financas`
 --
 ALTER TABLE `financas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `lancamentos`
@@ -958,25 +1023,25 @@ ALTER TABLE `mensagens`
 -- AUTO_INCREMENT de tabela `notificacoes`
 --
 ALTER TABLE `notificacoes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de tabela `planejamento`
 --
 ALTER TABLE `planejamento`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de tabela `planos`
 --
 ALTER TABLE `planos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT de tabela `ranking`
@@ -988,25 +1053,25 @@ ALTER TABLE `ranking`
 -- AUTO_INCREMENT de tabela `solicitacoes_amizade`
 --
 ALTER TABLE `solicitacoes_amizade`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de tabela `tarefas`
 --
 ALTER TABLE `tarefas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `tempos`
 --
 ALTER TABLE `tempos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 
 --
 -- Restrições para tabelas despejadas
